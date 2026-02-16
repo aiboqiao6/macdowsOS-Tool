@@ -26,8 +26,8 @@ aiboqiao承诺macdowsOS tool永久免费
 
 # 使用指南
 
-[中文](https://github.com/aiboqiao6/macdowsOS-Tool/blob/main/README-Chinese)
-[英文](https://github.com/aiboqiao6/macdowsOS-Tool/blob/main/README-English)
+[中文](https://github.com/aiboqiao6/macdowsOS-Tool/blob/main/README-Chinese.md)
+[英文](https://github.com/aiboqiao6/macdowsOS-Tool/blob/main/README-English.md)
 
 # macdowsOS Tool
 ## Introduction
@@ -57,7 +57,7 @@ aiboqiao promises that macdowsOS tool will be free forever.
 
 # Usage Guide
 
-[Chinese](https://github.com/aiboqiao6/macdowsOS-Tool/blob/main/README-Chinese)
-[English](https://github.com/aiboqiao6/macdowsOS-Tool/blob/main/README-English)
+[Chinese](https://github.com/aiboqiao6/macdowsOS-Tool/blob/main/README-Chinese.md)
+[English](https://github.com/aiboqiao6/macdowsOS-Tool/blob/main/README-English.md)
 
 
