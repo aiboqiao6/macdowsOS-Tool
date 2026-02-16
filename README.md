@@ -26,7 +26,8 @@ aiboqiao承诺macdowsOS tool永久免费
 
 # 使用指南
 
-[中文](https://gitcode.com/aiboqiao/macdowsOStool/blob/main/REDME-Chinese.md)
+[中文](https://github.com/aiboqiao6/macdowsOS-Tool/blob/main/REDME-Chinese)
+[英文](https://github.com/aiboqiao6/macdowsOS-Tool/blob/main/REDME-English)
 
 # macdowsOS Tool
 ## Introduction
@@ -56,6 +57,7 @@ aiboqiao promises that macdowsOS tool will be free forever.
 
 # Usage Guide
 
-[Chinese](https://gitcode.com/aiboqiao/macdowsOStool/blob/main/REDME-Chinese.md)
+[Chinese](https://github.com/aiboqiao6/macdowsOS-Tool/blob/main/REDME-Chinese)
+[English](https://github.com/aiboqiao6/macdowsOS-Tool/blob/main/REDME-English)
 
 
