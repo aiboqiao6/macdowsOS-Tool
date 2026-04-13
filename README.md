@@ -1,6 +1,8 @@
 # macdowsOS Tool UI
+>
+>中文用户在此页请建议不要使用浏览器翻译 微软的翻译过于雷霆可能导致部分信息无法理解
+>
 ##  简介 Introduction
-
 欢迎大家使用macdowsOStool
 
 使用c++编写的自动化windows11仿macOS工具
