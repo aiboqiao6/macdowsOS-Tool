@@ -1,0 +1,136 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="头文件\Tool">
+      <UniqueIdentifier>{11ee6f28-ef30-4285-afcd-74c1f598fb53}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Tool\WinToMac Tool">
+      <UniqueIdentifier>{a785a6a7-db14-4f8e-b74d-f1d775a96a0f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\be">
+      <UniqueIdentifier>{31d1f273-ccd4-42c7-8a81-33c85e8b4f1c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Window">
+      <UniqueIdentifier>{c733847d-8c69-4749-9085-149478ddc89d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\home.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="res\Setting.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="res\WindowsFix.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="res\WindowsToMac.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="res\box.png">
+      <Filter>资源文件</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="LogSystem.h">
+      <Filter>头文件\be</Filter>
+    </ClInclude>
+    <ClInclude Include="DeleteTheme.h">
+      <Filter>头文件\Tool\WinToMac Tool</Filter>
+    </ClInclude>
+    <ClInclude Include="Icon_install.h">
+      <Filter>头文件\Tool\WinToMac Tool</Filter>
+    </ClInclude>
+    <ClInclude Include="mydockfinder_Install.h">
+      <Filter>头文件\Tool\WinToMac Tool</Filter>
+    </ClInclude>
+    <ClInclude Include="restart.h">
+      <Filter>头文件\be</Filter>
+    </ClInclude>
+    <ClInclude Include="Theme_Install_win10.h">
+      <Filter>头文件\Tool\WinToMac Tool</Filter>
+    </ClInclude>
+    <ClInclude Include="Theme_Install_win11.h">
+      <Filter>头文件\Tool\WinToMac Tool</Filter>
+    </ClInclude>
+    <ClInclude Include="Theme_patch_install.h">
+      <Filter>头文件\Tool\WinToMac Tool</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowControl.h">
+      <Filter>头文件\be</Filter>
+    </ClInclude>
+    <ClInclude Include="WinToMacWin10.h">
+      <Filter>头文件\Tool\WinToMac Tool</Filter>
+    </ClInclude>
+    <ClInclude Include="CreateSafePoint.h">
+      <Filter>头文件\Tool</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowsFix.h">
+      <Filter>头文件\Tool</Filter>
+    </ClInclude>
+    <ClInclude Include="MainWindow.h">
+      <Filter>头文件\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="SettingWindow.h">
+      <Filter>头文件\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowConfig.h">
+      <Filter>头文件\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowRound.h">
+      <Filter>头文件\Tool</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowRoundWindow.h">
+      <Filter>头文件\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="AboutWindow.h">
+      <Filter>头文件\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="CeleCraft.h">
+      <Filter>头文件\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="WinToMacWin11.h">
+      <Filter>头文件\Tool\WinToMac Tool</Filter>
+    </ClInclude>
+    <ClInclude Include="All.h">
+      <Filter>头文件\be</Filter>
+    </ClInclude>
+    <ClInclude Include="FinalSetting.h">
+      <Filter>头文件\Tool\WinToMac Tool</Filter>
+    </ClInclude>
+    <ClInclude Include="StartAllBack_Install.h">
+      <Filter>头文件\Tool\WinToMac Tool</Filter>
+    </ClInclude>
+    <ClInclude Include="OldNewExplorerInstall.h">
+      <Filter>头文件\Tool\WinToMac Tool</Filter>
+    </ClInclude>
+    <ClInclude Include="FilesSystem.h">
+      <Filter>头文件\be</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowButtonChange.h">
+      <Filter>头文件\Tool</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="pingfang0.ttf">
+      <Filter>资源文件</Filter>
+    </Font>
+  </ItemGroup>
+</Project>

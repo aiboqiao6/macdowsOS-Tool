@@ -1,0 +1,26 @@
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR})
+
+include(CMakeFindDependencyMacro)
+
+# When installing, save whether SFML was built using system dependencies.
+set(SFML_BUILT_USING_SYSTEM_DEPS OFF)
+
+# start with an empty list
+set(FIND_SFML_DEPENDENCIES_NOTFOUND)
+
+if(SFML_BUILT_USING_SYSTEM_DEPS)
+    find_dependency(Freetype)
+    find_dependency(HarfBuzz)
+else()
+    find_dependency(Freetype CONFIG PATHS "${CMAKE_CURRENT_LIST_DIR}/../../../" NO_DEFAULT_PATH)
+    find_dependency(harfbuzz CONFIG PATHS "${CMAKE_CURRENT_LIST_DIR}/../../../" NO_DEFAULT_PATH)
+
+    # because we broke the link in CMakeLists.txt we have to link FreeType back up to HarfBuzz here
+    # so CMake can solve the circular dependency by adjusting the linker command line
+    set_target_properties(freetype PROPERTIES INTERFACE_LINK_LIBRARIES "harfbuzz::harfbuzz")
+endif()
+
+if(FIND_SFML_DEPENDENCIES_NOTFOUND)
+    set(FIND_SFML_ERROR "SFML found but some of its dependencies are missing (${FIND_SFML_DEPENDENCIES_NOTFOUND})")
+    set(SFML_FOUND OFF)
+endif()

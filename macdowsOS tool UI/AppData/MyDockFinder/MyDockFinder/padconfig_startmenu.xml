@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<pad>
+	<page1>
+		<ico1 path="Microsoft.XboxGamingOverlay_8wekyb3d8bbwe!App">Game Bar</ico1>
+		<ico2 path="c:\windows\system32\iscsicpl.exe">iSCSI 发起程序</ico2>
+		<ico3 path="Microsoft.MicrosoftOfficeHub_8wekyb3d8bbwe!Microsoft.MicrosoftOfficeHub">Microsoft 365 Copilot</ico3>
+		<ico4 path="Clipchamp.Clipchamp_yxz26nhyzhsrt!App">Microsoft Clipchamp</ico4>
+		<ico5 path="C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe">Microsoft Edge</ico5>
+		<ico6 path="Microsoft.WindowsStore_8wekyb3d8bbwe!App">Microsoft Store</ico6>
+		<ico7 path="Microsoft.Todos_8wekyb3d8bbwe!App">Microsoft To Do</ico7>
+		<ico8 path="Microsoft.BingNews_8wekyb3d8bbwe!AppexNews">Microsoft 资讯</ico8>
+		<ico9 path="c:\windows\syswow64\odbcad32.exe">ODBC 数据源(32 位)</ico9>
+		<ico10 path="c:\windows\system32\odbcad32.exe">ODBC 数据源(64 位)</ico10>
+		<ico11 path="C:\Users\aiboqiao6\AppData\Local\Microsoft\OneDrive\OneDrive.exe">OneDrive</ico11>
+		<ico12 path="Microsoft.OutlookForWindows_8wekyb3d8bbwe!Microsoft.OutlookforWindows">Outlook</ico12>
+		<ico13 path="Microsoft.PowerAutomateDesktop_8wekyb3d8bbwe!PAD.Console">Power Automate</ico13>
+		<ico14 path="Microsoft.MicrosoftSolitaireCollection_8wekyb3d8bbwe!App">Solitaire &amp; Casual Games</ico14>
+		<ico15 path="C:\Program Files (x86)\Windows Media Player\wmplayer.exe">Windows Media Player Legacy</ico15>
+		<ico16 path="c:\windows\system32\windowspowershell\v1.0\powershell.exe">Windows PowerShell</ico16>
+		<ico17 path="c:\windows\syswow64\windowspowershell\v1.0\powershell.exe">Windows PowerShell (x86)</ico17>
+		<ico18 path="c:\windows\system32\windowspowershell\v1.0\powershell_ise.exe">Windows PowerShell ISE</ico18>
+		<ico19 path="c:\windows\syswow64\windowspowershell\v1.0\powershell_ise.exe">Windows PowerShell ISE (x86)</ico19>
+		<ico20 path="Microsoft.SecHealthUI_8wekyb3d8bbwe!SecHealthUI">Windows Security</ico20>
+		<ico21 path="MicrosoftWindows.Client.CBS_cw5n1h2txyewy!WindowsBackup">Windows 备份</ico21>
+		<ico22 path="C:\Windows\system32\control.exe">Windows 工具</ico22>
+		<ico23 path="c:\windows\system32\mdsched.exe">Windows 内存诊断</ico23>
+		<ico24 path="Microsoft.GamingApp_8wekyb3d8bbwe!Microsoft.Xbox.App">Xbox</ico24>
+		<ico25 path="C:\Windows\system32\secpol.msc">本地安全策略</ico25>
+		<ico26 path="Microsoft.MicrosoftStickyNotes_8wekyb3d8bbwe!App">便笺</ico26>
+		<ico27 path="c:\windows\system32\psr.exe">步骤记录器</ico27>
+		<ico28 path="c:\windows\system32\cleanmgr.exe">磁盘清理</ico28>
+		<ico29 path="c:\windows\system32\printmanagement.msc">打印管理</ico29>
+		<ico30 path="MicrosoftWindows.Client.CoreAI_cw5n1h2txyewy!ClickToDoApp">单击以执行</ico30>
+		<ico31 path="Microsoft.WindowsFeedbackHub_8wekyb3d8bbwe!App">反馈中心</ico31>
+		<ico32 path="c:\windows\system32\magnify.exe">放大镜</ico32>
+		<ico33 path="c:\windows\system32\services.msc">服务</ico33>
+		<ico34 path="c:\windows\system32\wf.msc">高级安全 Windows Defender 防火墙</ico34>
+		<ico35 path="Microsoft.Paint_8wekyb3d8bbwe!App">画图</ico35>
+	</page1>
+	<page2>
+		<ico1 path="c:\windows\system32\recoverydrive.exe">恢复驱动器</ico1>
+		<ico2 path="Microsoft.GetHelp_8wekyb3d8bbwe!App">获取帮助</ico2>
+		<ico3 path="C:\Windows\system32\compmgmt.msc">计算机管理</ico3>
+		<ico4 path="Microsoft.WindowsCalculator_8wekyb3d8bbwe!App">计算器</ico4>
+		<ico5 path="Microsoft.WindowsNotepad_8wekyb3d8bbwe!App">记事本</ico5>
+		<ico6 path="c:\windows\system32\narrator.exe">讲述人</ico6>
+		<ico7 path="Microsoft.ScreenSketch_8wekyb3d8bbwe!App">截图工具</ico7>
+		<ico8 path="Microsoft.Windows.DevHome_8wekyb3d8bbwe!App">开发人员主页</ico8>
+		<ico9 path="::{5399E694-6CE5-4D6C-8FCE-1D8870FDCBA0}">控制面板</ico9>
+		<ico10 path="MicrosoftCorporationII.QuickAssist_8wekyb3d8bbwe!App">快速助手</ico10>
+		<ico11 path="Microsoft.WindowsSoundRecorder_8wekyb3d8bbwe!App">录音机</ico11>
+		<ico12 path="Microsoft.ZuneMusic_8wekyb3d8bbwe!Microsoft.ZuneMusic">媒体播放器</ico12>
+		<ico13 path="c:\windows\system32\cmd.exe">命令提示符</ico13>
+		<ico14 path="c:\windows\system32\osk.exe">屏幕键盘</ico14>
+		<ico15 path="C:\Windows\system32\taskmgr.exe">任务管理器</ico15>
+		<ico16 path="C:\Windows\system32\taskschd.msc">任务计划程序</ico16>
+		<ico17 path="MicrosoftWindows.Client.CBS_cw5n1h2txyewy!WebExperienceHost">入门</ico17>
+		<ico18 path="windows.immersivecontrolpanel_cw5n1h2txyewy!microsoft.windows.immersivecontrolpanel">设置</ico18>
+		<ico19 path="Microsoft.WindowsAlarms_8wekyb3d8bbwe!App">时钟</ico19>
+		<ico20 path="c:\windows\system32\livecaptions.exe">实时字幕</ico20>
+		<ico21 path="C:\Windows\system32\eventvwr.msc">事件查看器</ico21>
+		<ico22 path="Microsoft.YourPhone_8wekyb3d8bbwe!App">手机连接</ico22>
+		<ico23 path="c:\windows\system32\dfrgui.exe">碎片整理和优化驱动器</ico23>
+		<ico24 path="Microsoft.BingWeather_8wekyb3d8bbwe!App">天气</ico24>
+		<ico25 path="c:\windows\system32\msconfig.exe">系统配置</ico25>
+		<ico26 path="c:\windows\system32\msinfo32.exe">系统信息</ico26>
+		<ico27 path="Microsoft.WindowsCamera_8wekyb3d8bbwe!App">相机</ico27>
+		<ico28 path="C:\Windows\system32\perfmon.msc">性能监视器</ico28>
+		<ico29 path="c:\windows\system32\voiceaccess.exe">语音访问</ico29>
+		<ico30 path="C:\Windows\system32\mstsc.exe">远程桌面连接</ico30>
+		<ico31 path="::{2559A1F3-21D7-11D4-BDAF-00C04F60B9F0}">运行</ico31>
+		<ico32 path="Microsoft.Windows.Photos_8wekyb3d8bbwe!App">照片</ico32>
+		<ico33 path="Microsoft.WindowsTerminal_8wekyb3d8bbwe!App">终端</ico33>
+		<ico34 path="c:\windows\regedit.exe">注册表编辑器</ico34>
+		<ico35 path="C:\Windows\system32\perfmon.exe">资源监视器</ico35>
+	</page2>
+	<page3>
+		<ico1 path="c:\windows\system32\charmap.exe">字符映射表</ico1>
+		<ico2 path="c:\windows\system32\comexp.msc">组件服务</ico2>
+	</page3>
+</pad>

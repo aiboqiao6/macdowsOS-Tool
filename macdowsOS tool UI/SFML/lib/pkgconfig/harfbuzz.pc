@@ -1,0 +1,13 @@
+prefix=C:/Dev/buildbot/windows-vc17-64/install
+exec_prefix=${prefix}
+libdir=${prefix}/lib
+includedir=${prefix}/include
+
+Name: harfbuzz
+Description: HarfBuzz text shaping library
+Version: 10.2.0
+
+Libs: -L${libdir} -lharfbuzz
+Libs.private: -lm 
+Requires.private: freetype2 >= 12.0.6
+Cflags: -I${includedir}/harfbuzz
