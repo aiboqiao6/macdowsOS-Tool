@@ -133,4 +133,15 @@
       <Filter>资源文件</Filter>
     </Font>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\README.md">
+      <Filter>源文件</Filter>
+    </None>
+    <None Include="..\README-Chinese.md">
+      <Filter>源文件</Filter>
+    </None>
+    <None Include="..\README-English.md">
+      <Filter>源文件</Filter>
+    </None>
+  </ItemGroup>
 </Project>
