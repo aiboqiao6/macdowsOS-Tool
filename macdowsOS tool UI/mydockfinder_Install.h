@@ -121,6 +121,7 @@ bool mydockfinder_install() {
     INFO_(L"[mydockfinder安装组件]运行组件");
     //文件路径
     INFO_(L"[mydockfinder安装组件]读取路径");
+    MessageBox(NULL, (LPCTSTR)L"请在选择安装目录时不要选择C盘目录或无效目录", (LPCTSTR)L" mydockfinder安装组件", MB_OK);
     wstring InstallFolder_temp = BrowseFolder(L" 请选择mydockfinder安装目录（不要选C盘）");
     // 检查路径可用
     wchar_t driveLetter = towupper(InstallFolder_temp[0]);

@@ -16,8 +16,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         initialized = true;
     }
 
-    test();
-    /*ChuiZhiTongBu = true;
+    //test();
+    ChuiZhiTongBu = true;
     Window_xx = 2;
     open_debug_window = false;
     freopen("log.txt", "w", stdout);
@@ -25,6 +25,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     INFO_(L"调用声明组件");
     shenm();
     INFO_(L"调用主窗口");
-    home_window_();*/
+    home_window_();
     return 0;
 }
