@@ -16,7 +16,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         initialized = true;
     }
 
-    test();
+    buttonchangemain();
     /**
     ChuiZhiTongBu = true;
     Window_xx = 2;
