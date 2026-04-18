@@ -10,8 +10,8 @@ void test() {
     SetProcessDpiAwarenessContext(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
     
     sf::ContextSettings settings;
-    settings.antiAliasingLevel = 8;
-    sf::RenderWindow window(sf::VideoMode({ 300, 70 }), L"macdowsOS Tool test", sf::Style::None);
+    settings.antiAliasingLevel = 800;
+    sf::RenderWindow window(sf::VideoMode({ 300, 70 }), L"macdowsOS Tool test", sf::Style::None, sf::State::Windowed, settings);
     // 2. 窗口永久置顶
     HWND hWnd = window.getNativeHandle();
     // 3. 配置窗口透明与鼠标穿透
@@ -31,16 +31,19 @@ void test() {
     op_button_red.setFillColor(sf::Color(245, 0, 0));
     op_button_red.setOutlineThickness(0.2);
     op_button_red.setOutlineColor(sf::Color(0, 0, 0));
+    op_button_red.setPointCount(10000);
     //黄
     sf::CircleShape op_button_yellow(15);
     op_button_yellow.setFillColor(sf::Color(255, 215, 0));
     op_button_yellow.setOutlineThickness(0.2);
     op_button_yellow.setOutlineColor(sf::Color(0, 0, 0));
+    op_button_yellow.setPointCount(10000);
     //绿
     sf::CircleShape op_button_green(15);
     op_button_green.setFillColor(sf::Color(0, 245, 0));
     op_button_green.setOutlineThickness(0.2);
     op_button_green.setOutlineColor(sf::Color(0, 0, 0));
+    op_button_green.setPointCount(10000);
 
     op_button_green.setPosition({ 15, 15 });
     op_button_yellow.setPosition({ 84, 15 });
@@ -51,6 +54,7 @@ void test() {
     button1.setPointCount(100);
     button1.setPosition({ 1,1 });
     button1.setFillColor(sf::Color(64, 64, 64));
+    button1.setPointCount(10000);
 
     sf::RectangleShape button2({ 139.5,60 });
     button2.setPosition({ 30,1 });
@@ -60,6 +64,7 @@ void test() {
     button3.setPointCount(100);
     button3.setPosition({ 140,1 });
     button3.setFillColor(sf::Color(64, 64, 64));
+    button3.setPointCount(10000);
 
 
     window.clear(sf::Color::Black);
@@ -81,7 +86,7 @@ void test() {
     HWND hWnd_Window;
 
     int top=0, right=0;
-    LPCTSTR changeapp = L"RGB颜色代码表🎨 和另外 1 个页面 - 个人 - Microsoft​ Edge";
+    LPCTSTR changeapp = L"QQ";
     hWnd_Window = FindWindowW(NULL, changeapp);
     while (hWnd_Window == NULL) {
         hWnd_Window = FindWindowW(NULL, changeapp);
@@ -97,7 +102,7 @@ void test() {
        int outtime = 0;
        while (hWnd_Window == NULL||(top == windowRect.top && right == windowRect.right)) {
            //10s强制同步一次
-           if (outtime == 10000) {
+           if (outtime == 2000) {
                SetWindowPos(hWnd, hWnd_Window, right - 210, top + 15, 0, 0, SWP_NOSIZE | SWP_NOACTIVATE);
                SetWindowPos(hWnd_Window, hWnd, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
                outtime = 0;
