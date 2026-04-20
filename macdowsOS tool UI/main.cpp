@@ -6,8 +6,8 @@
 #include"WindowButtonChange.h"
 //https://gitcode.com/aiboqiao/sendmessage/releases/download/12/AppData.zip
 
-//int main(){
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
+int main(){
+//int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
     //控制台格式
     static bool initialized = false;
     if (!initialized) {
@@ -15,7 +15,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         setlocale(LC_ALL, "chs");
         initialized = true;
     }
-
+    
     buttonchangemain();
     /**
     ChuiZhiTongBu = true;

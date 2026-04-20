@@ -39,7 +39,7 @@ void SettingWindow_() {
 	}
 	INFO_(L"[设置]设置组件");
 //红绿灯
-	//红
+	//红3
 	sf::CircleShape op_button_red(15);
 	op_button_red.setFillColor(sf::Color(255, 0, 0));
 	op_button_red.setPosition({ 30,30 });
