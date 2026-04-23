@@ -139,7 +139,7 @@
       <TreatWarningAsError>false</TreatWarningAsError>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>D:\DEV\macdowsOS tool UI\macdowsOS tool UI\SFML\lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>sfml-audio.lib;sfml-graphics.lib;sfml-network.lib;sfml-system.lib;sfml-window.lib;%(AdditionalDependencies)</AdditionalDependencies>
