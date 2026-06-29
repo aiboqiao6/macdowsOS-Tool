@@ -1,38 +1,39 @@
 #pragma once
-#include<bits/stdc++.h>
 #include<windows.h>
+#include<string>
+#include<cstdlib>
+#include<cwchar>
 #include"LogSystem.h"
-using namespace std;
-//»Ø³µ
+//å›è½¦
 void enter_key() {
-    INFO_(L"[´°¿Ú¿ØÖÆ×é¼ş]·¢ËÍ»Ø³µµã»÷ĞÅÏ¢");
-    // ¶¨ÒåÊäÈëÊÂ¼ş£¨°´ÏÂ + ÊÍ·Å£¬¹²2¸öÊÂ¼ş£©
+    INFO_(L"[çª—å£æ§åˆ¶å·¥å…·]å‘é€å›è½¦æŒ‰é”®");
+    // æ¨¡æ‹ŸæŒ‰é”®æŒ‰ä¸‹ + é‡Šæ”¾ï¼Œå…±2ä¸ªäº‹ä»¶
     INPUT inputs[2] = {};
 
-    // 1. Ä£Äâ»Ø³µ¼ü°´ÏÂ£¨VK_RETURNÊÇ»Ø³µ¼üµÄĞéÄâ¼üÂë£©
+    // 1. æ¨¡æ‹Ÿå›è½¦æŒ‰ä¸‹ï¼šVK_RETURNæ˜¯å›è½¦é”®è™šæ‹Ÿé”®ç 
     inputs[0].type = INPUT_KEYBOARD;
     inputs[0].ki.wVk = VK_RETURN;
     inputs[0].ki.dwFlags = 0;
 
-    // 2. Ä£Äâ»Ø³µ¼üÊÍ·Å
+    // 2. æ¨¡æ‹Ÿå›è½¦é‡Šæ”¾
     inputs[1].type = INPUT_KEYBOARD;
     inputs[1].ki.wVk = VK_RETURN;
     inputs[1].ki.dwFlags = KEYEVENTF_KEYUP;
 
-    // ·¢ËÍÊäÈëÊÂ¼ş
+    // å‘é€æŒ‰é”®äº‹ä»¶
     SendInput(_countof(inputs), inputs, sizeof(INPUT));
 }
-//²éÕÒ
+//æŸ¥æ‰¾
 HWND FindChildControlExact(HWND hParent, const wchar_t* targetTitle) {
     bool recursive = true;
     if (!hParent || !targetTitle) return NULL;
-    // ±ê×¼»¯Ä¿±ê±êÌâ£¨ÒÆ³ı&·ûºÅºÍ¶àÓà¿Õ¸ñ£©
+    // æ ‡å‡†åŒ–ç›®æ ‡æ ‡é¢˜ï¼ˆç§»é™¤&ç¬¦å·å’Œå¤šä½™ç©ºæ ¼ï¼‰
     wchar_t normalizedTarget[256] = { 0 };
     int destIndex = 0;
     for (int i = 0; targetTitle[i] && destIndex < 255; i++) {
-        // Ìø¹ıµ¥¸ö&£¨Í¨³£ÓÃÓÚ¿ì½İ¼ü±ê¼Ç£¬Èç"I &accept"ÖĞµÄ&£©
+        // è·³è¿‡&ç¬¦å·ï¼ˆé€šå¸¸ç”¨äºçª—å£å¿«æ·é”®æ ‡è¯†ï¼Œå¦‚"I &accept"ä¸­çš„&ï¼‰
         if (targetTitle[i] == L'&' && targetTitle[i + 1] != L'&') continue;
-        // ´¦Àí¿Õ¸ñ£¨Á¬Ğø¿Õ¸ñºÏ²¢Îªµ¥¸ö£¬¿ªÍ·/½áÎ²¿Õ¸ñÈ¥³ı£©
+        // å¤„ç†ç©ºæ ¼ï¼šåˆå¹¶è¿ç»­ç©ºæ ¼ä¸ºé¦–ä¸ªï¼Œé¦–å°¾ç©ºæ ¼å»é™¤
         if (iswspace(targetTitle[i])) {
             if (destIndex > 0 && !iswspace(normalizedTarget[destIndex - 1])) {
                 normalizedTarget[destIndex++] = L' ';
@@ -42,13 +43,13 @@ HWND FindChildControlExact(HWND hParent, const wchar_t* targetTitle) {
         normalizedTarget[destIndex++] = targetTitle[i];
     }
     normalizedTarget[destIndex] = L'\0';
-    // ±éÀú¸¸´°¿ÚµÄËùÓĞ×Ó´°¿Ú
+    // éå†å½“å‰çˆ¶çª—å£çš„æ‰€æœ‰å­æ§ä»¶
     HWND hChild = GetWindow(hParent, GW_CHILD);
     while (hChild) {
-        // »ñÈ¡×Ó´°¿Ú±êÌâ
+        // è·å–å­çª—å£æ ‡é¢˜
         wchar_t childText[256] = { 0 };
         GetWindowTextW(hChild, childText, 256);
-        // ±ê×¼»¯×Ó´°¿Ú±êÌâ£¨Í¬Ä¿±ê±êÌâ´¦ÀíÂß¼­£©
+        // æ ‡å‡†åŒ–å­çª—å£æ ‡é¢˜ï¼ˆåŒç›®æ ‡æ ‡é¢˜å¤„ç†é€»è¾‘ï¼‰
         wchar_t normalizedChild[256] = { 0 };
         int childIndex = 0;
         for (int i = 0; childText[i] && childIndex < 255; i++) {
@@ -62,119 +63,119 @@ HWND FindChildControlExact(HWND hParent, const wchar_t* targetTitle) {
             normalizedChild[childIndex++] = childText[i];
         }
         normalizedChild[childIndex] = L'\0';
-        // ±êÌâÆ¥ÅäÔò·µ»Ø¿Ø¼ş¾ä±ú
+        // ç²¾ç¡®åŒ¹é…åˆ™è¿”å›æ§ä»¶å¥æŸ„
         if (wcscmp(normalizedChild, normalizedTarget) == 0) return hChild;
-        // µİ¹é²éÕÒ×Ó´°¿ÚµÄ×Ó¿Ø¼ş£¨Éî¶ÈÓÅÏÈ£©
+        // é€’å½’æŸ¥æ‰¾å­çª—å£çš„å­æ§ä»¶ï¼ˆæ·±åº¦ä¼˜å…ˆï¼‰
         if (recursive) {
             HWND hFound = FindChildControlExact(hChild, targetTitle);
             if (hFound) return hFound;
         }
-        // ²éÕÒÏÂÒ»¸öĞÖµÜ´°¿Ú
+        // ç»§ç»­æŸ¥æ‰¾ä¸‹ä¸€ä¸ªå…„å¼Ÿæ§ä»¶
         hChild = GetWindow(hChild, GW_HWNDNEXT);
     }
-    return NULL;  // Î´ÕÒµ½Ä¿±ê¿Ø¼ş
+    return NULL;  // æœªæ‰¾åˆ°ç›®æ ‡æ§ä»¶
 }
-//Ä£ÄâÊó±êÕæÊµµã»÷
+//æ¨¡æ‹Ÿé¼ æ ‡çœŸå®ç‚¹å‡»
 void RealisticClick(HWND hwnd) {
     if (!hwnd) return;
 
-    // ¼¤»î´°¿Ú
+    // ç½®é¡¶çª—å£
     SetForegroundWindow(GetAncestor(hwnd, GA_ROOT));
-    // »ñÈ¡¿Ø¼şÎ»ÖÃºÍ´óĞ¡
+    // è·å–æ§ä»¶ä½ç½®å’Œå¤§å°
     RECT rc;
     GetWindowRect(hwnd, &rc);
-    int x = (rc.left + rc.right) / 2;  // ¿Ø¼şÖĞĞÄx×ø±ê
-    int y = (rc.top + rc.bottom) / 2;  // ¿Ø¼şÖĞĞÄy×ø±ê
-    MESSAGE_(L"[macdowsOS Tool´°¿Ú¿ØÖÆ×é¼ş]¿Ø¼şx×ø±ê", x);
-    MESSAGE_(L"[macdowsOS Tool´°¿Ú¿ØÖÆ×é¼ş]¿Ø¼şy×ø±ê", y);
+    int x = (rc.left + rc.right) / 2;  // æ§ä»¶ä¸­å¿ƒxåæ ‡
+    int y = (rc.top + rc.bottom) / 2;  // æ§ä»¶ä¸­å¿ƒyåæ ‡
+    MESSAGE_(L"[macdowsOS Toolçª—å£æ§åˆ¶å·¥å…·]æ§ä»¶xåæ ‡", x);
+    MESSAGE_(L"[macdowsOS Toolçª—å£æ§åˆ¶å·¥å…·]æ§ä»¶yåæ ‡", y);
 
-    // ±£´æÔ­Ê¼Êó±êÎ»ÖÃ£¬²Ù×÷Íê³Éºó»Ö¸´
+    // ä¿å­˜åŸå§‹é¼ æ ‡ä½ç½®ï¼Œå®Œæˆåæ¢å¤
     POINT origPos;
     GetCursorPos(&origPos);
-    SetCursorPos(x, y);  // ÒÆ¶¯Êó±êµ½¿Ø¼şÖĞĞÄ
-
-    // ×¼±¸Êó±êÊäÈëÊÂ¼ş
+    SetCursorPos(x, y);  // ç§»åŠ¨é¼ æ ‡åˆ°æ§ä»¶ä¸­å¿ƒ
+    // å‡†å¤‡é¼ æ ‡ç‚¹å‡»äº‹ä»¶
     INPUT inputs[4] = {};
-    // 1. ÒÆ¶¯Êó±êµ½¾ø¶ÔÎ»ÖÃ
+    // 1. ç§»åŠ¨é¼ æ ‡åˆ°ç›®æ ‡ä½ç½®
     inputs[0].type = INPUT_MOUSE;
-    inputs[0].mi.dx = static_cast<LONG>(x * (65535.0 / GetSystemMetrics(SM_CXSCREEN)));  // ×ª»»Îª0-65535·¶Î§
+    inputs[0].mi.dx = static_cast<LONG>(x * (65535.0 / GetSystemMetrics(SM_CXSCREEN)));  // è½¬æ¢ä¸º0-65535èŒƒå›´
     inputs[0].mi.dy = static_cast<LONG>(y * (65535.0 / GetSystemMetrics(SM_CYSCREEN)));
     inputs[0].mi.dwFlags = MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_MOVE;
 
-    // 2. ×ó¼ü°´ÏÂ
+    // 2. é¼ æ ‡æŒ‰ä¸‹
     inputs[1].type = INPUT_MOUSE;
     inputs[1].mi.dwFlags = MOUSEEVENTF_LEFTDOWN;
 
-    // 3. ×ó¼üÊÍ·Å£¨ÑÓ³Ù50msÄ£ÄâÕæÊµµã»÷£©
+    // 3. é¼ æ ‡é‡Šæ”¾ï¼ˆå»¶è¿Ÿ50msæ¨¡æ‹ŸçœŸå®ç‚¹å‡»ï¼‰
     inputs[2].type = INPUT_MOUSE;
     inputs[2].mi.dwFlags = MOUSEEVENTF_LEFTUP;
     inputs[2].mi.time = 50;
 
-    // 4. »Ö¸´Êó±êµ½Ô­Ê¼Î»ÖÃ
+    // 4. æ¢å¤é¼ æ ‡åˆ°åŸå§‹ä½ç½®
     inputs[3].type = INPUT_MOUSE;
     inputs[3].mi.dx = static_cast<LONG>(origPos.x * (65535.0 / GetSystemMetrics(SM_CXSCREEN)));
     inputs[3].mi.dy = static_cast<LONG>(origPos.y * (65535.0 / GetSystemMetrics(SM_CYSCREEN)));
     inputs[3].mi.dwFlags = MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_MOVE;
 
-    // ·¢ËÍÊó±êÊäÈë
+    // å‘é€æ‰€æœ‰é¼ æ ‡äº‹ä»¶
     SendInput(4, inputs, sizeof(INPUT));
 }
-//»ñÈ¡×îºóÒ»¸ö×Ó´°¿ÚID
+//è·å–æœ€åä¸€ä¸ªå­çª—å£ID
 HWND GetLastChildWindow(HWND hParent) {
     HWND hChild = GetWindow(hParent, GW_CHILD);
     if (!hChild) return NULL;
 
     HWND hLast = hChild;
-    // ±éÀúµ½×îºóÒ»¸ö×Ó´°¿Ú
+    // éå†æ‰¾åˆ°æœ€åä¸€ä¸ªå­çª—å£
     while ((hChild = GetWindow(hChild, GW_HWNDNEXT)) != NULL) {
         hLast = hChild;
     }
     return hLast;
 }
 
+// ==================== å†…éƒ¨çª—å£æŸ¥æ‰¾å·¥å…· ====================
 namespace {
-    HWND findwindow(HWND hwnd_window, wstring pack_name, wstring button_name) {
+    HWND findwindow(HWND hwnd_window, std::wstring pack_name, std::wstring button_name) {
         SYSTEMTIME now;
         GetLocalTime(&now);
-        INFO_(L"[" + pack_name + L"]" + L"ÕıÔÚ²éÕÒ×é¼ş" + button_name);
+        INFO_(L"[" + pack_name + L"]" + L"å¼€å§‹æŸ¥æ‰¾" + button_name);
         const wchar_t* button_ = button_name.data();
         HWND temp = FindChildControlExact(hwnd_window, button_);
         while (temp == NULL) {
             SYSTEMTIME now_temp;
             GetLocalTime(&now_temp);
             if (now_temp.wSecond - now.wSecond >= 20) {
-                ERROR_(L"[" + pack_name + L"]" + L"²éÕÒ×é¼ş³¬Ê± " + button_name);
-                MessageBox(NULL, (LPCTSTR)L" ²éÕÒ×é¼ş³¬Ê± ´°¿Ú¿ÉÄÜÃ»ÓĞÆô¶¯»òÕıÈ·¼ÓÔØ", (LPCTSTR)L" macdowsOS tool ´°¿Ú¿ØÖÆºËĞÄ×é¼ş", MB_OK);
+                ERROR_(L"[" + pack_name + L"]" + L"è¶…æ—¶æœªæ‰¾åˆ°" + button_name);
+                MessageBox(NULL, (LPCTSTR)L" æœªæ‰¾åˆ°æŒ‰é’®ï¼Œçª—å£å¯èƒ½æ²¡æœ‰å‡ºç°ï¼Œè¯·é‡è¯•", (LPCTSTR)L" macdowsOS tool çª—å£æ§åˆ¶å·¥å…·", MB_OK);
             }
             temp = FindChildControlExact(hwnd_window, button_);
         }
-        INFO_(L"[" + pack_name + L"]" + L"³É¹¦²éÕÒµ½" + button_name);
+        INFO_(L"[" + pack_name + L"]" + L"æˆåŠŸæ‰¾åˆ°" + button_name);
         return temp;
     }
 }
-//Ö±½Ó·¢ËÍµã»÷ÏûÏ¢
-void ClickButtonMode1(HWND hwnd_window, wstring pack_name, wstring button_name) {
+// ==================== æŒ‰é’®ç‚¹å‡»æ“ä½œ ====================
+void ClickButtonMode1(HWND hwnd_window, std::wstring pack_name, std::wstring button_name) {
     HWND temp = findwindow(hwnd_window, pack_name, button_name);
     SetForegroundWindow(hwnd_window);
     SendMessageW(temp, BM_CLICK, 0, 0);
     return;
 }
-//Ä£ÄâÊó±êµã»÷
-void ClickButtonMode2(HWND hwnd_window, wstring pack_name, wstring button_name) {
+//æ¨¡æ‹Ÿç‚¹å‡»
+void ClickButtonMode2(HWND hwnd_window, std::wstring pack_name, std::wstring button_name) {
     HWND temp = findwindow(hwnd_window, pack_name, button_name);
     SetForegroundWindow(hwnd_window);
     RealisticClick(temp);
     return;
 }
-//»Ø³µµã»÷
-void ClickButtonMode3(HWND hwnd_window, wstring pack_name, wstring button_name) {
+//å›è½¦ç‚¹å‡»
+void ClickButtonMode3(HWND hwnd_window, std::wstring pack_name, std::wstring button_name) {
     HWND temp = findwindow(hwnd_window, pack_name, button_name);
     SetForegroundWindow(hwnd_window);
     enter_key();
     return;
 }
-//¿ª¹Ø
-void TurnOffOn(bool OffOn, HWND hwnd_window, wstring pack_name, wstring button_name) {
+// ==================== å¼€å…³æ§ä»¶ ====================
+void TurnOffOn(bool OffOn, HWND hwnd_window, std::wstring pack_name, std::wstring button_name) {
     HWND temp = findwindow(hwnd_window, pack_name, button_name);
     SetForegroundWindow(hwnd_window);
     if ((SendMessageW(temp, BM_GETCHECK, 0, 0) == BST_CHECKED) != OffOn) {

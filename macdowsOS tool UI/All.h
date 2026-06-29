@@ -1,159 +1,130 @@
 #pragma once
-#include<bits/stdc++.h>
-#include<Windows.h>
-#include"LogSystem.h"
-#include <shellapi.h> 
-#include <tlhelp32.h> 
-#include <tchar.h>  
+
+#include <Windows.h>
+#include <shellapi.h>
+#include <tlhelp32.h>
+#include <tchar.h>
 #include <shlobj_core.h>
-#include"WindowControl.h"
-using namespace std;
-//ÔËĞĞ
-bool RunBatchSilentlyNative(const std::wstring& batchFilePath) {
+#include <string>
+#include <algorithm>
+
+#include "LogSystem.h"
+#include "WindowControl.h"
+
+// é™é»˜è¿è¡Œæ‰¹å¤„ç†æ–‡ä»¶
+inline bool RunBatchSilentlyNative(const std::wstring& batchFilePath) {
     STARTUPINFOW si = { sizeof(si) };
     PROCESS_INFORMATION pi;
-
-    // ×¼±¸ÃüÁîĞĞ£ºcmd /c "ÄãµÄÅú´¦ÀíÎÄ¼ş"
     std::wstring cmdLine = L"cmd /c \"" + batchFilePath + L"\"";
-
-    // ´´½¨½ø³Ì£¬µ«ÏÈ²»ÏÔÊ¾´°¿Ú
     if (!CreateProcessW(NULL, &cmdLine[0], NULL, NULL, FALSE,
         CREATE_NO_WINDOW | CREATE_NEW_CONSOLE,
         NULL, NULL, &si, &pi)) {
         return false;
     }
-
     CloseHandle(pi.hThread);
     CloseHandle(pi.hProcess);
     return true;
 }
-// ½áÊø½ø³Ì
-void killapp(wstring appname) {
-    MESSAGE_(L"[macdowsOS Tool¸¨Öú×é¼ş]½áÊø½ø³Ì",appname);
-    //´´½¨½ø³Ì¿ìÕÕ
+
+// ç»ˆæ­¢è¿›ç¨‹
+inline void killapp(const std::wstring& appname) {
+    MESSAGE_(L"[macdowsOS Tool] æ­£åœ¨ç»ˆæ­¢è¿›ç¨‹:", appname);
     HANDLE hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
     if (hSnapshot == INVALID_HANDLE_VALUE) {
-        ERROR_(L"[macdowsOS Tool¸¨Öú×é¼ş]´´½¨½ø³Ì¿ìÕÕÊ±³öÏÖ´íÎó");
-        MessageBox(NULL, (LPCTSTR)L" ½áÊø½ø³ÌÊ±³öÏÖ´íÎó ´íÎó1", (LPCTSTR)L" macdowsOS tool ¸¨Öú×é¼ş", MB_OK | MB_ICONERROR);
+        ERROR_(L"[macdowsOS Tool] åˆ›å»ºè¿›ç¨‹å¿«ç…§æ—¶å‡ºç°é”™è¯¯");
+        MessageBoxW(NULL, L" ç»ˆæ­¢è¿›ç¨‹æ—¶å‡ºç°é”™è¯¯ é”™è¯¯1", L" macdowsOS tool è¿›ç¨‹ç®¡ç†", MB_OK | MB_ICONERROR);
         return;
     }
     PROCESSENTRY32W pe32{};
-    pe32.dwSize = sizeof(PROCESSENTRY32W);  // ±ØĞë³õÊ¼»¯´óĞ¡
-    //»ñÈ¡µÚÒ»¸ö½ø³ÌĞÅÏ¢
+    pe32.dwSize = sizeof(PROCESSENTRY32W);
     if (!Process32FirstW(hSnapshot, &pe32)) {
-        ERROR_(L"[macdowsOS Tool¸¨Öú×é¼ş]½ø³ÌĞÅÏ¢Îª¿Õ");
-        MessageBox(NULL, (LPCTSTR)L" ½áÊø½ø³ÌÊ±³öÏÖ´íÎó ´íÎó2", (LPCTSTR)L" macdowsOS tool ¸¨Öú×é¼ş", MB_OK | MB_ICONERROR);
-        CloseHandle(hSnapshot);  // ÊÍ·Å¿ìÕÕ¾ä±ú
+        ERROR_(L"[macdowsOS Tool] è¿›ç¨‹ä¿¡æ¯ä¸ºç©º");
+        MessageBoxW(NULL, L" ç»ˆæ­¢è¿›ç¨‹æ—¶å‡ºç°é”™è¯¯ é”™è¯¯2", L" macdowsOS tool è¿›ç¨‹ç®¡ç†", MB_OK | MB_ICONERROR);
+        CloseHandle(hSnapshot);
         return;
     }
-    //±éÀúËùÓĞ½ø³Ì£¬É¸Ñ¡
     do {
-        // ½ø³ÌÃû×ªÎª×Ö·û´®
-        wstring processName(pe32.szExeFile);
+        std::wstring processName(pe32.szExeFile);
         if (processName == appname) {
-            //´ò¿ª½ø³Ì
             HANDLE hProcess = OpenProcess(PROCESS_TERMINATE, FALSE, pe32.th32ProcessID);
-            if (hProcess == nullptr) {
-                continue;
-            }
-            //ÖÕÖ¹½ø³Ì
-            if (TerminateProcess(hProcess, 0)) {
-                ;
-            }
-            // ÊÍ·Å½ø³Ì¾ä±ú
+            if (hProcess == nullptr) continue;
+            TerminateProcess(hProcess, 0);
             CloseHandle(hProcess);
         }
-    } while (Process32NextW(hSnapshot, &pe32));  // ±éÀúÏÂÒ»¸ö½ø³Ì
-    // ÊÍ·Å¿ìÕÕ¾ä±ú
+    } while (Process32NextW(hSnapshot, &pe32));
     CloseHandle(hSnapshot);
-    INFO_(L"[macdowsOS Tool¸¨Öú×é¼ş]·µ»Ø");
-    return;
+    INFO_(L"[macdowsOS Tool] ç»ˆæ­¢å®Œæˆ");
 }
 
-// Ìí¼Ó×ÔÆô¶¯Ïî
-void AddAutoStart(const std::wstring& targetPath, const std::wstring& shortcutName) {
-   // Í³Ò»Â·¾¶·Ö¸ô·ûÎª Windows ±ê×¼¸ñÊ½
-    wstring normalizedTarget = targetPath;
-    replace(normalizedTarget.begin(), normalizedTarget.end(), L'/', L'\\');
-    // »ñÈ¡ Startup ÎÄ¼ş¼ĞÂ·¾¶
+// æ·»åŠ å¼€æœºè‡ªå¯åŠ¨
+inline void AddAutoStart(const std::wstring& targetPath, const std::wstring& shortcutName) {
+    std::wstring normalizedTarget = targetPath;
+    std::replace(normalizedTarget.begin(), normalizedTarget.end(), L'/', L'\\');
+
     PWSTR startupPath = nullptr;
     HRESULT hr = SHGetKnownFolderPath(FOLDERID_Startup, 0, nullptr, &startupPath);
     if (FAILED(hr) || !startupPath) {
-        ERROR_(L"[macdowsOS Tool¸¨Öú×é¼ş]´´½¨×ÔÆô¶¯ÏîÊ±³öÏÖ´íÎó ÎŞ·¨»ñÈ¡startupÎÄ¼ş¼ĞÂ·¾¶");
-        MessageBox(NULL, (LPCTSTR)L" ´´½¨×ÔÆô¶¯ÏîÊ±³öÏÖ´íÎó ´íÎó1", (LPCTSTR)L" macdowsOS tool ¸¨Öú×é¼ş", MB_OK | MB_ICONERROR);
+        ERROR_(L"[macdowsOS Tool] æ·»åŠ å¼€æœºè‡ªå¯åŠ¨æ—¶å‡ºç°é”™è¯¯ æ— æ³•è·å–startupæ–‡ä»¶å¤¹è·¯å¾„");
+        MessageBoxW(NULL, L" æ·»åŠ å¼€æœºè‡ªå¯åŠ¨æ—¶å‡ºç°é”™è¯¯ é”™è¯¯1", L" macdowsOS tool è¿›ç¨‹ç®¡ç†", MB_OK | MB_ICONERROR);
         return;
     }
-    // ¹¹½¨ÍêÕûµÄ¿ì½İ·½Ê½Â·¾¶
-    wstring shortcutPath = startupPath;
+    std::wstring shortcutPath = startupPath;
     shortcutPath += L"\\";
     shortcutPath += shortcutName;
     shortcutPath += L".lnk";
-    // Í³Ò»¿ì½İ·½Ê½Â·¾¶µÄ·Ö¸ô·û
-    replace(shortcutPath.begin(), shortcutPath.end(), L'/', L'\\');
+    std::replace(shortcutPath.begin(), shortcutPath.end(), L'/', L'\\');
     CoTaskMemFree(startupPath);
-    // ³õÊ¼»¯ COM£¨µ¥Ïß³Ì£©
+
     hr = CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED);
     if (FAILED(hr) && hr != RPC_E_CHANGED_MODE) {
-        ERROR_(L"[macdowsOS Tool¸¨Öú×é¼ş]´´½¨×ÔÆô¶¯ÏîÊ±³öÏÖ´íÎó ÎŞ·¨³õÊ¼»¯COM");
-        MessageBox(NULL, (LPCTSTR)L" ´´½¨×ÔÆô¶¯ÏîÊ±³öÏÖ´íÎó ´íÎó2", (LPCTSTR)L" macdowsOS tool ¸¨Öú×é¼ş", MB_OK | MB_ICONERROR);
+        ERROR_(L"[macdowsOS Tool] æ·»åŠ å¼€æœºè‡ªå¯åŠ¨æ—¶å‡ºç°é”™è¯¯ æ— æ³•åˆå§‹åŒ–COM");
+        MessageBoxW(NULL, L" æ·»åŠ å¼€æœºè‡ªå¯åŠ¨æ—¶å‡ºç°é”™è¯¯ é”™è¯¯2", L" macdowsOS tool è¿›ç¨‹ç®¡ç†", MB_OK | MB_ICONERROR);
         return;
     }
     bool success = false;
-    IShellLink* pShellLink = nullptr;
+    IShellLinkW* pShellLink = nullptr;
     IPersistFile* pPersistFile = nullptr;
     do {
-        // ´´½¨ IShellLink ¶ÔÏó
         hr = CoCreateInstance(CLSID_ShellLink, nullptr, CLSCTX_INPROC_SERVER,
-            IID_IShellLink, reinterpret_cast<LPVOID*>(&pShellLink));
-        if (FAILED(hr) || !pShellLink)
-            break;
-        // ÉèÖÃÄ¿±êÂ·¾¶
+            IID_IShellLinkW, reinterpret_cast<LPVOID*>(&pShellLink));
+        if (FAILED(hr) || !pShellLink) break;
+
         hr = pShellLink->SetPath(normalizedTarget.c_str());
-        if (FAILED(hr))
-            break;
-        // ÉèÖÃ¹¤×÷Ä¿Â¼ÎªÄ¿±ê³ÌĞòËùÔÚÄ¿Â¼
+        if (FAILED(hr)) break;
+
         size_t lastSlash = normalizedTarget.find_last_of(L'\\');
-        if (lastSlash != std::wstring::npos)
-        {
+        if (lastSlash != std::wstring::npos) {
             std::wstring workingDir = normalizedTarget.substr(0, lastSlash);
             pShellLink->SetWorkingDirectory(workingDir.c_str());
         }
-        // »ñÈ¡ IPersistFile ½Ó¿Ú
         hr = pShellLink->QueryInterface(IID_IPersistFile, reinterpret_cast<LPVOID*>(&pPersistFile));
-        if (FAILED(hr) || !pPersistFile)
-            break;
-        // ±£´æ¿ì½İ·½Ê½
+        if (FAILED(hr) || !pPersistFile) break;
+
         hr = pPersistFile->Save(shortcutPath.c_str(), TRUE);
         success = SUCCEEDED(hr);
     } while (false);
-    // ÇåÀí×ÊÔ´
-    if (pPersistFile)
-        pPersistFile->Release();
-    if (pShellLink)
-        pShellLink->Release();
+
+    if (pPersistFile) pPersistFile->Release();
+    if (pShellLink) pShellLink->Release();
     CoUninitialize();
-    return;
 }
 
-// ÉèÖÃ×ÀÃæÍ¼±êÓÀ¾ÃÏÔÊ¾/Òş²Ø
-void SetDesktopIconsPermanent(bool show) {
+// è®¾ç½®æ¡Œé¢å›¾æ ‡å¯è§æ€§
+inline void SetDesktopIconsPermanent(bool show) {
     HKEY hKey = NULL;
-    DWORD dwValue = show ? 0 : 1;  // 0=ÏÔÊ¾£¬1=Òş²Ø
+    DWORD dwValue = show ? 0 : 1;
     DWORD dwSize = sizeof(DWORD);
-    // ´ò¿ª»ò´´½¨×¢²á±íÏî
-    LONG result = RegCreateKeyEx(HKEY_CURRENT_USER,(L"Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced"),0,NULL,REG_OPTION_NON_VOLATILE,KEY_WRITE,NULL,&hKey,NULL);
+    LONG result = RegCreateKeyExW(HKEY_CURRENT_USER,
+        L"Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
+        0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hKey, NULL);
     if (result != ERROR_SUCCESS) {
-        ERROR_(L"[macdowsOS Tool¸¨Öú×é¼ş]ĞŞ¸Ä×¢²á±íÊ±³öÏÖ´íÎó ÎŞ·¨´´½¨×¢²á±íÏî");
-        MessageBox(NULL, (LPCTSTR)L" ĞŞ¸Ä×ÀÃæÍ¼±ê¿É¼ûĞÔÊ±³öÏÖ´íÎó ´íÎó1", (LPCTSTR)L" macdowsOS tool ¸¨Öú×é¼ş", MB_OK | MB_ICONERROR);
+        ERROR_(L"[macdowsOS Tool] ä¿®æ”¹æ³¨å†Œè¡¨æ—¶å‡ºç°é”™è¯¯ æ— æ³•æ‰“å¼€æ³¨å†Œè¡¨é¡¹");
         return;
     }
-    // ÉèÖÃ HideIcons Öµ
-    result = RegSetValueEx(hKey,(L"HideIcons"),0,REG_DWORD,(const BYTE*)&dwValue,dwSize);
+    result = RegSetValueExW(hKey, L"HideIcons", 0, REG_DWORD,
+        (const BYTE*)&dwValue, dwSize);
     RegCloseKey(hKey);
     if (result != ERROR_SUCCESS) {
-        ERROR_(L"[macdowsOS Tool¸¨Öú×é¼ş]ĞŞ¸Ä×¢²á±íÊ±³öÏÖ´íÎó ÎŞ·¨ĞŞ¸Ä×¢²á±íÖµ");
-        MessageBox(NULL, (LPCTSTR)L" ĞŞ¸Ä×ÀÃæÍ¼±ê¿É¼ûĞÔÊ±³öÏÖ´íÎó ´íÎó2", (LPCTSTR)L" macdowsOS tool ¸¨Öú×é¼ş", MB_OK | MB_ICONERROR);
-        return;
+        ERROR_(L"[macdowsOS Tool] ä¿®æ”¹æ³¨å†Œè¡¨æ—¶å‡ºç°é”™è¯¯ æ— æ³•ä¿®æ”¹æ³¨å†Œè¡¨å€¼");
     }
-    return;
 }

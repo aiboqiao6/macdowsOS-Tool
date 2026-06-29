@@ -1,10 +1,14 @@
 #pragma once
+// ============================================================
+// WindowRound.h
+// æè¿°ï¼šçª—å£åœ†è§’ä¿®æ”¹å·¥å…·ï¼Œæä¾›ä¿®æ”¹çª—å£åœ†è§’åŠå¾„çš„åŠŸèƒ½
+//      é€šè¿‡ DWM API å’ŒåŒºåŸŸè£å‰ªå®ç°çª—å£åœ†è§’æ•ˆæœ
+// ============================================================
 #include<Windows.h>
-#include<bits/stdc++.h>
 #include<dwmapi.h>
-#include"WindowControl.h"
+#include<fstream>
+#include<cstdlib>
 #include"LogSystem.h"
-using namespace std;
 void WindowRoundMain(wchar_t window_name[], bool WindowSizeFix,bool DEFC) {
 	HWND hWnd_Window = FindWindowW(NULL, window_name);
 	/*
@@ -18,7 +22,7 @@ void WindowRoundMain(wchar_t window_name[], bool WindowSizeFix,bool DEFC) {
 		DwmExtendFrameIntoClientArea(hWnd_Window, &shadow);
 	}
     RECT rect;
-	//¼ìË÷´°¿Ú´óĞ¡
+	//è·å–çª—å£å¤§å°
 	GetWindowRect(hWnd_Window, &rect);
 	int width = rect.right - rect.left;
     int height = rect.bottom - rect.top;
@@ -27,19 +31,23 @@ void WindowRoundMain(wchar_t window_name[], bool WindowSizeFix,bool DEFC) {
 		height *= 2;
 	}
 	HRGN hRgn = CreateRoundRectRgn(0, 0, width, height, 90, 90);
-	//¼ôÇĞ´°¿Ú
+	//åº”ç”¨åŒºåŸŸ
 	SetWindowRgn(hWnd_Window, hRgn, TRUE);
-	DeleteObject(hRgn); // ¼ÇµÃÉ¾³ıÇøÓò¶ÔÏó[citation:8]
+	DeleteObject(hRgn); // è®°å¾—åˆ é™¤åŒºåŸŸå¯¹è±¡[citation:8]
 
 	return;
 }
 void WindowRound() {
-	FILE* fp;
-	fp = freopen("./config/WindowRound.txt", "r", stdin);
+	std::wifstream fin("./config/WindowRound.txt");
+	if (!fin.is_open()) {
+		ERROR_(L"[çª—å£åœ†è§’ä¿®æ”¹å·¥å…·]è¯»å–é…ç½®æ–‡ä»¶æ—¶å‡ºç°é”™è¯¯");
+		MessageBox(NULL, (LPCTSTR)L" è¯»å–é…ç½®æ–‡ä»¶æ—¶å‡ºç°é”™è¯¯ ç¨‹åºå°†é€€å‡º", (LPCTSTR)L" macdowsOS tool çª—å£åœ†è§’ä¿®æ”¹å·¥å…·", MB_OK | MB_ICONERROR);
+		exit(0);
+	}
 	int temp1=0, temp2=0;
 	wchar_t temp[1000];
 	wchar_t ovc = '!',ovc1=' ';
-	while (wcin >> temp) {
+	while (fin >> temp) {
 		bool oc1, oc2;
 		if (temp[0] == ovc||temp[0]==ovc1) return;
 		if (temp1 == 1) {
@@ -49,19 +57,12 @@ void WindowRound() {
 			oc1 = false;
 		}
 		if (temp2 == 1) {
-			oc1 = true;
+			oc2 = true;
 		}
 		else {
 			oc2 = false;
 		}
 		WindowRoundMain(temp, oc1, oc2);
 	}
-	if (fp == NULL){
-		ERROR(L"[´°¿ÚÔ²½ÇĞŞ¸Ä×é¼ş]¶ÁÈ¡ÅäÖÃÎÄ¼şÊ±³öÏÖ´íÎó");
-		MessageBox(NULL, (LPCTSTR)L" ¶ÁÈ¡ÅäÖÃÎÄ¼şÊ±³öÏÖ´íÎó Ö÷³ÌĞòÍË³ö", (LPCTSTR)L" macdowsOS tool ´°¿ÚÔ²½ÇĞŞ¸Ä×é¼ş", MB_OK | MB_ICONERROR);
-		exit(0);
-
-	}
-	fclose(fp);
 	return;
 }

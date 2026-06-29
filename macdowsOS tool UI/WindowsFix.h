@@ -1,29 +1,32 @@
 #pragma once
+// ============================================================
+// WindowsFix.h
+// æè¿°ï¼šWindows ç³»ç»Ÿä¿®å¤å·¥å…·ï¼Œæä¾›ç³»ç»Ÿæ–‡ä»¶æ£€æŸ¥ä¸ä¿®å¤åŠŸèƒ½
+//      åŒ…æ‹¬ä½¿ç”¨ DISM å’Œ SFC å‘½ä»¤ä¿®å¤ç³»ç»Ÿæ–‡ä»¶çš„å‡½æ•°
+// ============================================================
 #include<windows.h>
-#include<bits/stdc++.h>
 #include"restart.h"
 #include"LogSystem.h"
-using namespace std;
-void WindowsFix() {
-	INFO_(L"[ÏµÍ³ĞŞ¸´×é¼ş]Æô¶¯");
-	if (MessageBox(NULL, (LPCTSTR)L"µã»÷È·¶¨ÒÔ¿ªÊ¼ĞŞ¸´ÏµÍ³ ĞŞ¸´½«»áµ¼ÖÂ¼¸ºõÈ«²¿¶ÔÓÚÏµÍ³ÎÄ¼şµÄĞŞ¸ÄÊ§Ğ§", (LPCTSTR)L" macdowsOS tool ÏµÍ³ĞŞ¸´×é¼ş", MB_YESNO)==6) {
-		INFO_(L"[ÏµÍ³ĞŞ¸´×é¼ş]ÏµÍ³ĞŞ¸´");
+inline void WindowsFix() {
+	INFO_(L"[ç³»ç»Ÿä¿®å¤å·¥å…·]è¿›å…¥");
+	if (MessageBox(NULL, (LPCTSTR)L"æ‰§è¡Œä¿®å¤åå°†ä¼šå¯¼è‡´å·²å®‰è£…çš„éƒ¨åˆ†ç¾åŒ–è½¯ä»¶å¤±æ•ˆ ", (LPCTSTR)L" macdowsOS tool ç³»ç»Ÿä¿®å¤å·¥å…·", MB_YESNO)==6) {
+		INFO_(L"[ç³»ç»Ÿä¿®å¤å·¥å…·]ç³»ç»Ÿä¿®å¤");
 		system("Dism.exe /Online /Cleanup-image /CheckHealth");
 		system("DISM.exe /Online /Cleanup-image /Scanhealth");
 		system("DISM.exe /Online /Cleanup-image /Restorehealth");
 		system("sfc /scannow");
-		INFO_(L"[ÏµÍ³ĞŞ¸´×é¼ş]½áÊø");
+		INFO_(L"[ç³»ç»Ÿä¿®å¤å·¥å…·]å®Œæˆ");
 		restart_();
 	}
-	INFO_(L"[ÏµÍ³ĞŞ¸´×é¼ş]ÍË³ö");
+	INFO_(L"[ç³»ç»Ÿä¿®å¤å·¥å…·]é€€å‡º");
 	return;
 }
-void WindowsFix_nowindow() {
-	INFO_(L"[ÏµÍ³ĞŞ¸´×é¼ş]ÏµÍ³ĞŞ¸´");
+inline void WindowsFix_nowindow() {
+	INFO_(L"[ç³»ç»Ÿä¿®å¤å·¥å…·]ç³»ç»Ÿä¿®å¤");
 	system("Dism.exe /Online /Cleanup-image /CheckHealth");
 	system("DISM.exe /Online /Cleanup-image /Scanhealth");
 	system("DISM.exe /Online /Cleanup-image /Restorehealth");
 	system("sfc /scannow");
-	INFO_(L"[ÏµÍ³ĞŞ¸´×é¼ş]½áÊø");
+	INFO_(L"[ç³»ç»Ÿä¿®å¤å·¥å…·]å®Œæˆ");
 	return;
 }

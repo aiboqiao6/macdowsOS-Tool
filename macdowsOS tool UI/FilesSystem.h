@@ -1,579 +1,68 @@
 #pragma once
-#include <filesystem>
-#include <iostream>
+// ============================================================
+// FilesSystem.h â€” æ–‡ä»¶ç³»ç»Ÿå·¥å…·å‡½æ•°
+// æä¾›æ–‡ä»¶å¤åˆ¶ã€æ–‡ä»¶å¤¹é€‰æ‹©ã€æ–‡ä»¶å­˜åœ¨æ€§æ£€æŸ¥ç­‰åŠŸèƒ½
+// ============================================================
+
 #include <string>
-#include <shobjidl.h>
-#include <chrono>
-#include <thread>
-#include <Windows.h>
 #include <vector>
-#include <shlwapi.h>
-#include <psapi.h>
-#include <restartmanager.h>
-#include <tlhelp32.h>
-#include <algorithm>
-#include <locale>
-#include <codecvt>
-#include <cwchar>
-#include <AclAPI.h>
-#include <sddl.h>
-#include <memory>
-#include <format>
-#include <stdexcept>
-#include <span>
-#include <utility>
-#include "LogSystem.h"
-#pragma comment(lib, "shlwapi.lib")
-#pragma comment(lib, "Rstrtmgr.lib")
-#pragma comment(lib, "advapi32.lib")
-#pragma comment(lib, "psapi.lib")
+#include <windows.h>
+#include <shlobj_core.h>
+#include <fileapi.h>
 
-namespace fs = std::filesystem;
-using namespace std;
-
-// ===================== ¹¤¾ßº¯Êı£ºchar* ×ª wstring =====================
-inline std::wstring CharToWstring(const char* str) {
-    if (str == nullptr) return L"";
-    int len = MultiByteToWideChar(CP_UTF8, 0, str, -1, nullptr, 0);
-    std::wstring wstr(len, 0);
-    MultiByteToWideChar(CP_UTF8, 0, str, -1, &wstr[0], len);
-    return wstr;
-}
-
-// ===================== ¹¤¾ßº¯Êı£ºÍ¨¹ı½ø³ÌID»ñÈ¡½ø³ÌÃû£¨²»ÒÀÀµRM_PROCESS_INFO£© =====================
-inline std::wstring GetProcessNameById(DWORD dwProcessId) {
-    std::wstring procName = L"unknown_process";
-
-    // ´ò¿ª½ø³Ì£¨½ö»ñÈ¡ĞÅÏ¢È¨ÏŞ£©
-    HANDLE hProcess = OpenProcess(
-        PROCESS_QUERY_LIMITED_INFORMATION,
-        FALSE,
-        dwProcessId
-    );
-
-    if (hProcess != NULL) {
-        WCHAR szImagePath[MAX_PATH] = { 0 };
-        DWORD dwSize = MAX_PATH;
-
-        // »ñÈ¡½ø³ÌÍêÕûÂ·¾¶
-        if (QueryFullProcessImageNameW(
-            hProcess,
-            0,
-            szImagePath,
-            &dwSize
-        )) {
-            // ÌáÈ¡ÎÄ¼şÃû£¨Èç C:\Windows\explorer.exe ¡ú explorer.exe£©
-            fs::path path(szImagePath);
-            procName = path.filename().wstring();
-        }
-        CloseHandle(hProcess);
-    }
-
-    return procName;
-}
-
-// ===================== ¹¤¾ßº¯Êı£º¼ì²éÊÇ·ñÒÔ¹ÜÀíÔ±Éí·İÔËĞĞ =====================
-bool IsRunAsAdmin() {
-    BOOL bElevated = FALSE;
-    HANDLE hToken = NULL;
-    if (OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, &hToken)) {
-        TOKEN_ELEVATION elevation;
-        DWORD dwSize = sizeof(TOKEN_ELEVATION);
-        if (GetTokenInformation(hToken, TokenElevation, &elevation, dwSize, &dwSize)) {
-            bElevated = elevation.TokenIsElevated;
-        }
-        CloseHandle(hToken);
-    }
-    return bElevated == TRUE;
-}
-
-// ===================== ¹¤¾ßº¯Êı£ºÖØÆô³ÌĞò²¢ÌáÈ¨ =====================
-void RelaunchAsAdmin() {
-    WCHAR szPath[MAX_PATH] = { 0 };
-    if (GetModuleFileNameW(NULL, szPath, ARRAYSIZE(szPath))) {
-        SHELLEXECUTEINFOW sei = { sizeof(sei) };
-        sei.lpVerb = L"runas";          // ÒÔ¹ÜÀíÔ±Éí·İÔËĞĞ
-        sei.lpFile = szPath;            // µ±Ç°³ÌĞòÂ·¾¶
-        sei.hwnd = NULL;
-        sei.nShow = SW_SHOWNORMAL;      // Õı³£ÏÔÊ¾´°¿Ú
-
-        if (!ShellExecuteExW(&sei)) {
-            DWORD dwErr = GetLastError();
-            ERROR_(L"ÌáÈ¨Ê§°Ü£¬´íÎóÂë: " + to_wstring(dwErr));
-            if (dwErr == ERROR_CANCELLED) {
-                ERROR_(L"ÓÃ»§¾Ü¾øÁË¹ÜÀíÔ±È¨ÏŞÇëÇó");
-            }
-        }
+// æ–‡ä»¶ç³»ç»Ÿå‘½åç©ºé—´
+namespace fs {
+    inline bool exists(const std::wstring& path) {
+        DWORD attr = GetFileAttributesW(path.c_str());
+        return attr != INVALID_FILE_ATTRIBUTES;
     }
 }
 
-// ===================== ¹¤¾ßº¯Êı£ºÆôÓÃÖ¸¶¨µÄÏµÍ³ÌØÈ¨ =====================
-bool EnablePrivilege(const wstring& privilegeName) {
-    HANDLE hToken = NULL;
-    TOKEN_PRIVILEGES tp = { 0 };
+// é€’å½’å¤åˆ¶ç›®å½•/æ–‡ä»¶
+inline void copyPath(const std::wstring& src, const std::wstring& dst) {
+    // æ£€æŸ¥æºè·¯å¾„æ˜¯å¦å­˜åœ¨
+    DWORD srcAttr = GetFileAttributesW(src.c_str());
+    if (srcAttr == INVALID_FILE_ATTRIBUTES) return;
 
-    // ´ò¿ª½ø³ÌÁîÅÆ
-    if (!OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken)) {
-        ERROR_(L"OpenProcessTokenÊ§°Ü£¬´íÎóÂë: " + to_wstring(GetLastError()));
-        return false;
+    // å¦‚æœæ˜¯ç›®å½•
+    if (srcAttr & FILE_ATTRIBUTE_DIRECTORY) {
+        // åˆ›å»ºç›®æ ‡ç›®å½•
+        CreateDirectoryW(dst.c_str(), NULL);
+
+        // æšä¸¾æºç›®å½•ä¸­çš„æ–‡ä»¶
+        WIN32_FIND_DATAW findData;
+        HANDLE hFind = FindFirstFileW((src + L"\\*").c_str(), &findData);
+        if (hFind != INVALID_HANDLE_VALUE) {
+            do {
+                if (wcscmp(findData.cFileName, L".") == 0 ||
+                    wcscmp(findData.cFileName, L"..") == 0) continue;
+
+                std::wstring subSrc = src + L"\\" + findData.cFileName;
+                std::wstring subDst = dst + L"\\" + findData.cFileName;
+                copyPath(subSrc, subDst);
+            } while (FindNextFileW(hFind, &findData));
+            FindClose(hFind);
+        }
+    } else {
+        // å¤åˆ¶æ–‡ä»¶
+        CopyFileW(src.c_str(), dst.c_str(), FALSE);
     }
-
-    // »ñÈ¡ÌØÈ¨LUID
-    if (!LookupPrivilegeValueW(NULL, privilegeName.c_str(), &tp.Privileges[0].Luid)) {
-        ERROR_(L"LookupPrivilegeValueWÊ§°Ü£¬ÌØÈ¨: " + privilegeName + L", ´íÎóÂë: " + to_wstring(GetLastError()));
-        CloseHandle(hToken);
-        return false;
-    }
-
-    tp.PrivilegeCount = 1;
-    tp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
-
-    // ÆôÓÃÌØÈ¨
-    BOOL bResult = AdjustTokenPrivileges(
-        hToken,
-        FALSE,
-        &tp,
-        sizeof(TOKEN_PRIVILEGES),
-        NULL,
-        NULL
-    );
-
-    DWORD dwErr = GetLastError();
-    CloseHandle(hToken);
-
-    if (!bResult || dwErr != ERROR_SUCCESS) {
-        ERROR_(L"AdjustTokenPrivilegesÊ§°Ü£¬ÌØÈ¨: " + privilegeName + L", ´íÎóÂë: " + to_wstring(dwErr));
-        return false;
-    }
-
-    INFO_(L"³É¹¦ÆôÓÃÌØÈ¨: " + privilegeName);
-    return true;
 }
 
-// ===================== ¹¤¾ßº¯Êı£º½â³ıÎÄ¼şÕ¼ÓÃ£¨ÍêÈ«ÒÆ³ıstrProcessNameÒÀÀµ£© =====================
-bool ReleaseFileLock(const wstring& filePath) {
-    DWORD dwSessionHandle = 0;
-    WCHAR szSessionKey[CCH_RM_SESSION_KEY + 1] = { 0 };
+// æµè§ˆæ–‡ä»¶å¤¹å¯¹è¯æ¡†
+inline std::wstring BrowseFolder(const std::wstring& title) {
+    std::wstring result;
+    BROWSEINFOW bi = { 0 };
+    bi.lpszTitle = title.c_str();
+    bi.ulFlags = BIF_RETURNONLYFSDIRS | BIF_NEWDIALOGSTYLE;
 
-    // ´´½¨ÖØÆô¹ÜÀíÆ÷»á»°
-    DWORD dwResult = RmStartSession(&dwSessionHandle, 0, szSessionKey);
-    if (dwResult != ERROR_SUCCESS) {
-        ERROR_(L"RmStartSessionÊ§°Ü£¬´íÎóÂë: " + to_wstring(dwResult));
-        return false;
+    LPITEMIDLIST pidl = SHBrowseForFolderW(&bi);
+    if (pidl != NULL) {
+        wchar_t path[MAX_PATH];
+        if (SHGetPathFromIDListW(pidl, path)) {
+            result = path;
+        }
+        CoTaskMemFree(pidl);
     }
-
-    // Ìí¼ÓÒªÊÍ·ÅµÄÎÄ¼ş
-    PCWSTR pszFilePaths[] = { filePath.c_str() };
-    dwResult = RmRegisterResources(dwSessionHandle, 1, pszFilePaths, 0, NULL, 0, NULL);
-    if (dwResult != ERROR_SUCCESS) {
-        ERROR_(L"RmRegisterResourcesÊ§°Ü£¬´íÎóÂë: " + to_wstring(dwResult));
-        RmEndSession(dwSessionHandle);
-        return false;
-    }
-
-    // »ñÈ¡Õ¼ÓÃÎÄ¼şµÄ½ø³Ì
-    UINT nProcInfoNeeded = 0;
-    UINT nProcInfo = 0;
-    RM_PROCESS_INFO* pProcessInfo = NULL;
-    dwResult = RmGetList(dwSessionHandle, &nProcInfoNeeded, &nProcInfo, NULL, NULL);
-
-    if (dwResult == ERROR_MORE_DATA) {
-        pProcessInfo = (RM_PROCESS_INFO*)LocalAlloc(LPTR, nProcInfoNeeded * sizeof(RM_PROCESS_INFO));
-        if (!pProcessInfo) {
-            ERROR_(L"LocalAllocÊ§°Ü£¬ÎŞ·¨»ñÈ¡½ø³ÌĞÅÏ¢");
-            RmEndSession(dwSessionHandle);
-            return false;
-        }
-
-        nProcInfo = nProcInfoNeeded;
-        dwResult = RmGetList(dwSessionHandle, &nProcInfoNeeded, &nProcInfo, pProcessInfo, NULL);
-
-        if (dwResult == ERROR_SUCCESS) {
-            // ÖÕÖ¹Õ¼ÓÃÎÄ¼şµÄ·ÇÏµÍ³¹Ø¼ü½ø³Ì£¨½öÖÕÖ¹explorer.exe£©
-            for (UINT i = 0; i < nProcInfo; i++) {
-                // ºËĞÄĞŞ¸´£ºÍêÈ«Í¨¹ı½ø³ÌID»ñÈ¡½ø³ÌÃû£¬²»·ÃÎÊRM_PROCESS_INFOµÄÈÎºÎ½ø³ÌÃû³ÉÔ±
-                DWORD dwPid = pProcessInfo[i].Process.dwProcessId;
-                std::wstring procName = GetProcessNameById(dwPid);
-
-                HANDLE hProcess = OpenProcess(PROCESS_TERMINATE, FALSE, dwPid);
-                if (hProcess) {
-                    // Ö»ÖÕÖ¹ explorer.exe£¨ÎÄ¼ş×ÊÔ´¹ÜÀíÆ÷£©
-                    if (procName.find(L"explorer.exe") != wstring::npos) {
-                        INFO_(L"ÖÕÖ¹Õ¼ÓÃÎÄ¼şµÄ½ø³Ì: " + procName + L" (PID: " + to_wstring(dwPid) + L")");
-                        TerminateProcess(hProcess, 0);
-                        WaitForSingleObject(hProcess, 3000); // µÈ´ı3Ãë
-                    }
-                    CloseHandle(hProcess);
-                }
-            }
-        }
-        LocalFree(pProcessInfo);
-    }
-
-    RmEndSession(dwSessionHandle);
-    return dwResult == ERROR_SUCCESS;
-}
-
-// ===================== ºËĞÄ¸´ÖÆº¯Êı£ºĞŞ¸´È¨ÏŞ´¦Àí + ÌáÈ¨Âß¼­ =====================
-void copyPath(const std::wstring& A, const std::wstring& B) {
-    namespace fs = std::filesystem;
-    HANDLE hToken = nullptr;
-    PTOKEN_USER pTokenUser = nullptr;
-    PACL pNewDACL = nullptr;
-    PSID pSid = nullptr;
-    wchar_t* pDstPath = nullptr;
-    PVOID OldValue = nullptr;
-    bool bWow64RedirectDisabled = false;
-
-    // ========== ºËĞÄ¹¤¾ß£º±ê×¼»¯Â·¾¶£¨ĞŞ¸´CÅÌ¸ùÄ¿Â¼½âÎöÎÊÌâ£© ==========
-    auto normalizePath = [](const std::wstring& rawPath) -> fs::path {
-        std::wstring tempPath = rawPath;
-        std::replace(tempPath.begin(), tempPath.end(), L'/', L'\\');
-
-        // ¹Ø¼üĞŞ¸´1£º±£ÁôÅÌ·ûºóµÄ¸ùÄ¿Â¼·´Ğ±¸Ü£¨´¦Àí C: ¡ú C:\£©
-        if (tempPath.size() == 2 && tempPath[1] == L':' && tempPath[0] >= L'A' && tempPath[0] <= L'Z') {
-            tempPath += L'\\'; // C: ¡ú C:\
-                    }
-                    // ´¦Àí C:/ ¡ú C:\
-                    else if (tempPath.size() >= 3 && tempPath[1] == L':' && tempPath[2] == L'\\') {
-                        // ÒÑÊÇ¸ùÄ¿Â¼£¬ÎŞĞèĞŞ¸Ä
-        }
-        // ´¦Àí C:\xxx ¡ú ±£Áô½á¹¹
-        else if (tempPath.size() >= 3 && tempPath[1] == L':' && tempPath[2] != L'\\') {
-            // ·Ç¸ùÄ¿Â¼£¬Õı³£´¦Àí
-        }
-
-        // ºÏ²¢Á¬Ğø·´Ğ±¸Ü£¨±ÜÃâ C:\\\\xxx ¡ú C:\xxx£©
-        std::wstring normalized;
-        bool lastIsSlash = false;
-        for (wchar_t c : tempPath) {
-            if (c == L'\\') {
-                if (!lastIsSlash) {
-                    normalized += c;
-                    lastIsSlash = true;
-                }
-            }
-            else {
-                normalized += c;
-                lastIsSlash = false;
-            }
-        }
-
-        // ¹Ø¼üĞŞ¸´2£º¸ùÄ¿Â¼²»É¾³ıÄ©Î²·´Ğ±¸Ü£¨C:\ ¡ú ±£Áô£¬¶ø·Ç C:£©
-        bool isRootDir = false;
-        if (normalized.size() == 3 && normalized[1] == L':' && normalized[2] == L'\\') {
-            isRootDir = true; // Æ¥Åä C:\¡¢D:\ µÈ¸ùÄ¿Â¼
-        }
-        // ·Ç¸ùÄ¿Â¼²ÅÉ¾³ıÄ©Î²·´Ğ±¸Ü
-        if (!isRootDir && !normalized.empty() && normalized.back() == L'\\') {
-            normalized.pop_back();
-        }
-
-        // ´¦Àí¿ªÍ·¶àÓà·´Ğ±¸Ü£¨½ö·Ç¸ùÄ¿Â¼Ê±£©
-        if (!isRootDir && !normalized.empty() && normalized[0] == L'\\' &&
-            !(normalized.size() >= 2 && normalized[1] == L':')
-            ) {
-            normalized = normalized.substr(1);
-        }
-
-        fs::path stdPath(normalized);
-        stdPath = stdPath.lexically_normal();
-
-        INFO_(L"Â·¾¶±ê×¼»¯Íê³É - Ô­Ê¼: " + rawPath + L", ±ê×¼»¯: " + stdPath.wstring());
-        return stdPath;
-        };
-
-    try {
-        // ========== µÚÒ»²½£º¼ì²é²¢ÌáÈ¨ ==========
-        if (!IsRunAsAdmin()) {
-            INFO_(L"µ±Ç°½ø³ÌÎŞ¹ÜÀíÔ±È¨ÏŞ£¬³¢ÊÔÌáÈ¨...");
-            RelaunchAsAdmin();
-            return; // ÌáÈ¨ºóÖØÆô³ÌĞò£¬µ±Ç°µ÷ÓÃÍË³ö
-        }
-
-        // ÆôÓÃĞŞ¸ÄÏµÍ³ÎÄ¼ş±ØĞèµÄÌØÈ¨
-        EnablePrivilege(SE_BACKUP_NAME);
-        EnablePrivilege(SE_RESTORE_NAME);
-        EnablePrivilege(SE_TAKE_OWNERSHIP_NAME);
-        EnablePrivilege(SE_SECURITY_NAME);
-
-        // ========== µÚ¶ş²½£º±ê×¼»¯Â·¾¶ ==========
-        fs::path srcPath = normalizePath(A);
-        fs::path dstDirPath = normalizePath(B);
-
-        // ========== ½ûÓÃWOW64ÖØ¶¨Ïò£¨¼ÇÂ¼×´Ì¬£¬È·±£ºóĞø»Ö¸´£© ==========
-        if (Wow64DisableWow64FsRedirection(&OldValue)) {
-            bWow64RedirectDisabled = true;
-        }
-
-        // ========== ×ªÎª¾ø¶ÔÂ·¾¶ ==========
-        if (srcPath.is_relative()) {
-            srcPath = fs::absolute(srcPath);
-            INFO_(L"Ô´Â·¾¶×ªÎª¾ø¶ÔÂ·¾¶: " + srcPath.wstring());
-        }
-        if (dstDirPath.is_relative()) {
-            dstDirPath = fs::absolute(dstDirPath);
-            INFO_(L"Ä¿±êÎÄ¼ş¼Ğ×ªÎª¾ø¶ÔÂ·¾¶: " + dstDirPath.wstring());
-        }
-
-        // Ç°ÖÃ¼ì²é£ºÔ´ÎÄ¼ş´æÔÚ
-        if (!fs::exists(srcPath)) {
-            wstring errMsg = L"Ô´Â·¾¶²»´æÔÚ: " + srcPath.wstring();
-            ERROR_(errMsg);
-            throw runtime_error("Source path does not exist");
-        }
-
-        // ========== Æ´½ÓÄ¿±êÍêÕûÂ·¾¶ ==========
-        fs::path dstFullPath = dstDirPath / srcPath.filename();
-        if (!fs::exists(dstDirPath)) {
-            fs::create_directories(dstDirPath);
-            INFO_(L"Ä¿±êÎÄ¼ş¼Ğ´´½¨³É¹¦: " + dstDirPath.wstring());
-        }
-
-        INFO_(L"copyPathº¯ÊıÆô¶¯ - Ô´Â·¾¶: " + srcPath.wstring() + L", Ä¿±êÎÄ¼ş¼Ğ: " + dstDirPath.wstring());
-        INFO_(L"×îÖÕÄ¿±êÂ·¾¶£¨ÕıÈ·Æ´½Ó£©: " + dstFullPath.wstring());
-
-        // ========== µÚÈı²½£º´¦ÀíÄ¿±êÎÄ¼ş£¨É¾³ı/¸ÄÈ¨ÏŞ£© ==========
-        if (fs::exists(dstFullPath)) {
-            INFO_(L"Ä¿±êÂ·¾¶ÒÑ´æÔÚ£¬³¢ÊÔÉ¾³ı: " + dstFullPath.wstring());
-            BOOL bDeleteSuccess = FALSE;
-
-            try {
-                // ÏÈ³¢ÊÔÆÕÍ¨É¾³ı
-                if (fs::is_directory(dstFullPath)) {
-                    fs::remove_all(dstFullPath);
-                }
-                else {
-                    fs::remove(dstFullPath);
-                }
-                bDeleteSuccess = TRUE;
-                INFO_(L"Ä¿±êÂ·¾¶É¾³ı³É¹¦: " + dstFullPath.wstring());
-            }
-            catch (const fs::filesystem_error& e) {
-                // ĞŞ¸´£ºchar* ×ª wstring
-                if (e.code().value() == ERROR_ACCESS_DENIED || e.code().value() == ERROR_SHARING_VIOLATION) {
-                    INFO_(L"É¾³ıÊ§°Ü£¨È¨ÏŞ/Õ¼ÓÃ£©£¬³¢ÊÔ£º1.½â³ıÎÄ¼şÕ¼ÓÃ 2.ĞŞ¸ÄÈ¨ÏŞ");
-
-                    // µÚÒ»²½£º½â³ıÎÄ¼şÕ¼ÓÃ
-                    ReleaseFileLock(dstFullPath.wstring());
-
-                    // µÚ¶ş²½£ºĞŞ¸ÄÎÄ¼şËùÓĞÈ¨
-                    if (!OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, &hToken)) {
-                        DWORD dwErr = GetLastError();
-                        ERROR_(L"OpenProcessTokenÊ§°Ü£¬´íÎóÂë: " + to_wstring(dwErr));
-                        throw runtime_error("OpenProcessToken failed");
-                    }
-
-                    DWORD dwSize = 0;
-                    GetTokenInformation(hToken, TokenUser, nullptr, 0, &dwSize);
-                    pTokenUser = (PTOKEN_USER)LocalAlloc(LPTR, dwSize);
-                    if (!pTokenUser) {
-                        ERROR_(L"LocalAlloc·ÖÅäTokenUserÄÚ´æÊ§°Ü");
-                        CloseHandle(hToken);
-                        hToken = nullptr;
-                        throw runtime_error("LocalAlloc failed for TOKEN_USER");
-                    }
-
-                    if (!GetTokenInformation(hToken, TokenUser, pTokenUser, dwSize, &dwSize)) {
-                        DWORD dwErr = GetLastError();
-                        ERROR_(L"GetTokenInformationÊ§°Ü£¬´íÎóÂë: " + to_wstring(dwErr));
-                        LocalFree(pTokenUser);
-                        pTokenUser = nullptr;
-                        CloseHandle(hToken);
-                        hToken = nullptr;
-                        throw runtime_error("GetTokenInformation failed");
-                    }
-                    pSid = pTokenUser->User.Sid;
-                    CloseHandle(hToken);
-                    hToken = nullptr;
-                    INFO_(L"³É¹¦»ñÈ¡µ±Ç°½ø³ÌSID");
-
-                    // ĞŞ¸ÄËùÓĞÈ¨£¨¹Ø¼ü£ºÏµÍ³ÎÄ¼şĞèÒªÏÈ»ñÈ¡ËùÓĞÈ¨£©
-                    pDstPath = const_cast<wchar_t*>(dstFullPath.c_str());
-                    DWORD dwResult = SetNamedSecurityInfoW(
-                        pDstPath,
-                        SE_FILE_OBJECT,
-                        OWNER_SECURITY_INFORMATION | WRITE_OWNER, // Ôö¼ÓWRITE_OWNER±êÖ¾
-                        pSid,
-                        nullptr,
-                        nullptr,
-                        nullptr
-                    );
-                    if (dwResult != ERROR_SUCCESS) {
-                        ERROR_(L"SetNamedSecurityInfoW(ËùÓĞÈ¨)Ê§°Ü£¬´íÎóÂë: " + to_wstring(dwResult));
-                        LocalFree(pTokenUser);
-                        pTokenUser = nullptr;
-                        throw runtime_error("SetNamedSecurityInfoW failed (Owner)");
-                    }
-                    INFO_(L"³É¹¦ĞŞ¸ÄÄ¿±êÂ·¾¶ËùÓĞÈ¨: " + dstFullPath.wstring());
-
-                    // ÉèÖÃÍêÈ«¿ØÖÆÈ¨ÏŞ
-                    EXPLICIT_ACCESS ea = { 0 };
-                    ea.grfAccessPermissions = GENERIC_ALL;
-                    ea.grfAccessMode = SET_ACCESS;
-                    ea.grfInheritance = SUB_CONTAINERS_AND_OBJECTS_INHERIT;
-                    ea.Trustee.TrusteeForm = TRUSTEE_IS_SID;
-                    ea.Trustee.TrusteeType = TRUSTEE_IS_USER;
-                    ea.Trustee.ptstrName = const_cast<LPWSTR>(reinterpret_cast<LPCWSTR>(pSid));
-
-                    dwResult = SetEntriesInAclW(1, &ea, nullptr, &pNewDACL);
-                    if (dwResult != ERROR_SUCCESS) {
-                        ERROR_(L"SetEntriesInAclWÊ§°Ü£¬´íÎóÂë: " + to_wstring(dwResult));
-                        LocalFree(pTokenUser);
-                        pTokenUser = nullptr;
-                        throw runtime_error("SetEntriesInAclW failed");
-                    }
-
-                    dwResult = SetNamedSecurityInfoW(
-                        pDstPath,
-                        SE_FILE_OBJECT,
-                        DACL_SECURITY_INFORMATION | WRITE_DAC, // Ôö¼ÓWRITE_DAC±êÖ¾
-                        nullptr,
-                        nullptr,
-                        pNewDACL,
-                        nullptr
-                    );
-                    if (dwResult != ERROR_SUCCESS) {
-                        ERROR_(L"SetNamedSecurityInfoW(ACL)Ê§°Ü£¬´íÎóÂë: " + to_wstring(dwResult));
-                        LocalFree(pNewDACL);
-                        pNewDACL = nullptr;
-                        LocalFree(pTokenUser);
-                        pTokenUser = nullptr;
-                        throw runtime_error("SetNamedSecurityInfoW failed (DACL)");
-                    }
-                    INFO_(L"³É¹¦ÉèÖÃÄ¿±êÂ·¾¶ÍêÈ«¿ØÖÆÈ¨ÏŞ: " + dstFullPath.wstring());
-
-                    // ÖØĞÂÉ¾³ı
-                    if (fs::is_directory(dstFullPath)) {
-                        fs::remove_all(dstFullPath);
-                    }
-                    else {
-                        fs::remove(dstFullPath);
-                    }
-                    if (!fs::exists(dstFullPath)) {
-                        bDeleteSuccess = TRUE;
-                        INFO_(L"ĞŞ¸ÄÈ¨ÏŞºóÄ¿±êÂ·¾¶É¾³ı³É¹¦: " + dstFullPath.wstring());
-                    }
-                    else {
-                        ERROR_(L"ĞŞ¸ÄÈ¨ÏŞºóÈÔÎŞ·¨É¾³ıÄ¿±êÂ·¾¶");
-                        LocalFree(pNewDACL);
-                        pNewDACL = nullptr;
-                        LocalFree(pTokenUser);
-                        pTokenUser = nullptr;
-                        throw runtime_error("Failed to delete path after permission change");
-                    }
-
-                    // ÊÍ·ÅÄÚ´æ
-                    LocalFree(pNewDACL);
-                    pNewDACL = nullptr;
-                    LocalFree(pTokenUser);
-                    pTokenUser = nullptr;
-                }
-                else {
-                    // ĞŞ¸´£ºchar* ×ª wstring
-                    std::wstring errWhat = CharToWstring(e.what());
-                    ERROR_(L"É¾³ıÊ§°Ü£¨·ÇÈ¨ÏŞÎÊÌâ£©: " + errWhat + L", ´íÎóÂë: " + to_wstring(e.code().value()));
-                    throw;
-                }
-            }
-
-            if (!bDeleteSuccess) {
-                ERROR_(L"Ä¿±êÂ·¾¶É¾³ı×îÖÕÊ§°Ü: " + dstFullPath.wstring());
-                throw runtime_error("Failed to delete target path");
-            }
-        }
-        else {
-            INFO_(L"Ä¿±êÂ·¾¶²»´æÔÚ£¬ÎŞĞèÉ¾³ı: " + dstFullPath.wstring());
-        }
-
-        // ========== µÚËÄ²½£ºÖ´ĞĞ¸´ÖÆ ==========
-        INFO_(L"¿ªÊ¼¸´ÖÆ - Ô´: " + srcPath.wstring() + L", Ä¿±ê: " + dstFullPath.wstring());
-        if (fs::is_directory(srcPath)) {
-            fs::copy(srcPath, dstFullPath, fs::copy_options::recursive | fs::copy_options::overwrite_existing | fs::copy_options::copy_symlinks);
-            MESSAGE_(L"ÎÄ¼ş¼Ğ¸´ÖÆÍê³É", srcPath.wstring());
-        }
-        else {
-            fs::copy(srcPath, dstFullPath, fs::copy_options::overwrite_existing | fs::copy_options::copy_symlinks);
-            MESSAGE_(L"ÎÄ¼ş¸´ÖÆÍê³É", srcPath.wstring());
-        }
-        INFO_(L"¸´ÖÆ³É¹¦: " + srcPath.wstring() + L" -> " + dstFullPath.wstring());
-
-    }
-    catch (const std::exception& e) {
-        // ĞŞ¸´£ºchar* ×ª wstring
-        std::wstring errWhat = CharToWstring(e.what());
-        wstring errMsg = L"copyPathÖ´ĞĞÒì³£: " + errWhat;
-        ERROR_(errMsg);
-    }
-    catch (...) {
-        ERROR_(L"copyPath·¢ÉúÎ´ÖªÒì³££¨ÎŞÀàĞÍ£©£¬¿ÉÄÜÊÇÄÚ´æ´íÎó»òAPIµ÷ÓÃÊ§°Ü");
-    }
-
-    // ========== ×îÖÕÇåÀí£º±Ø×ö ==========
-    // »Ö¸´WOW64ÖØ¶¨Ïò
-    if (bWow64RedirectDisabled) {
-        Wow64RevertWow64FsRedirection(OldValue);
-        bWow64RedirectDisabled = false;
-        INFO_(L"WOW64ÖØ¶¨ÏòÒÑ»Ö¸´");
-    }
-    // ÊÍ·Å×ÊÔ´
-    if (hToken) CloseHandle(hToken);
-    if (pTokenUser) LocalFree(pTokenUser);
-    if (pNewDACL) LocalFree(pNewDACL);
-
-    INFO_(L"copyPathº¯ÊıÖ´ĞĞÍê³É");
-}
-
-// ===================== µ¯´°Ñ¡ÔñÎÄ¼ş¼Ğ =====================
-wstring BrowseFolder(const wstring& title) {
-    wstring result;
-    INFO_(L"[ÎÄ¼ş²Ù×÷×é¼ş]×é¼şÔËĞĞ");
-
-    HRESULT hr = CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
-    if (FAILED(hr)) {
-        ERROR_(L"[ÎÄ¼ş²Ù×÷×é¼ş]ÎŞ·¨³õÊ¼»¯ ÍË³ö£¬´íÎóÂë: " + to_wstring(hr));
-        return result;
-    }
-
-    IFileDialog* pFileDialog = nullptr;
-    INFO_(L"[ÎÄ¼ş²Ù×÷×é¼ş]´´½¨¶Ô»°¿ò");
-
-    hr = CoCreateInstance(CLSID_FileOpenDialog, nullptr, CLSCTX_ALL, IID_IFileDialog, reinterpret_cast<void**>(&pFileDialog));
-
-    if (SUCCEEDED(hr) && pFileDialog) {
-        INFO_(L"[ÎÄ¼ş²Ù×÷×é¼ş]ÉèÖÃ¶Ô»°¿òĞÅÏ¢");
-        DWORD options;
-        pFileDialog->GetOptions(&options);
-        pFileDialog->SetOptions(options | FOS_PICKFOLDERS | FOS_FORCEFILESYSTEM); // ½öÑ¡ÔñÎÄ¼şÏµÍ³ÎÄ¼ş¼Ğ
-
-        pFileDialog->SetTitle(title.c_str());
-        INFO_(L"[ÎÄ¼ş²Ù×÷×é¼ş]ÏÔÊ¾¶Ô»°¿ò");
-
-        hr = pFileDialog->Show(nullptr);
-        if (SUCCEEDED(hr)) {
-            IShellItem* pShellItem = nullptr;
-            hr = pFileDialog->GetResult(&pShellItem);
-            if (SUCCEEDED(hr) && pShellItem) {
-                wchar_t* pszFilePath = nullptr;
-                hr = pShellItem->GetDisplayName(SIGDN_FILESYSPATH, &pszFilePath);
-                if (SUCCEEDED(hr) && pszFilePath) {
-                    result = pszFilePath;
-                    CoTaskMemFree(pszFilePath);
-                    INFO_(L"[ÎÄ¼ş²Ù×÷×é¼ş]Ñ¡ÔñµÄÎÄ¼ş¼Ğ: " + result);
-                }
-                pShellItem->Release();
-            }
-        }
-        else {
-            ERROR_(L"[ÎÄ¼ş²Ù×÷×é¼ş]¶Ô»°¿òÏÔÊ¾Ê§°Ü£¬´íÎóÂë: " + to_wstring(hr));
-        }
-        pFileDialog->Release();
-    }
-    else {
-        ERROR_(L"[ÎÄ¼ş²Ù×÷×é¼ş]´´½¨¶Ô»°¿òÊ§°Ü£¬´íÎóÂë: " + to_wstring(hr));
-    }
-
-    INFO_(L"[ÎÄ¼ş²Ù×÷×é¼ş]»Ø´«Â·¾¶ ÍË³ö");
-    CoUninitialize();
     return result;
 }

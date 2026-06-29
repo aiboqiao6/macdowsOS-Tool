@@ -1,59 +1,58 @@
 #pragma once
-#include<bits/stdc++.h>
+#include <cstdlib>
 #include<windows.h>
 #include"WindowControl.h"
 #include"LogSystem.h"
-using namespace std;
-void theme_path_install() {
-    INFO_(L"[Ö÷Ìâ²¹¶¡°²×°×é¼ş]Æô¶¯");
+inline void theme_path_install() {
+    INFO_(L"[ä¸»é¢˜è¡¥ä¸å®‰è£…å·¥å…·]å¼€å§‹");
     HWND temp,temp1;
-    //Æô¶¯
-    INFO_(L"[Ö÷Ìâ²¹¶¡°²×°×é¼ş]ÔËĞĞ°²×°³ÌĞò");
+    //å®‰è£…
+    INFO_(L"[ä¸»é¢˜è¡¥ä¸å®‰è£…å·¥å…·]å¼€å§‹å®‰è£…ç¨‹åº");
     system("start AppData\\Theme\\Theme_Patcher.exe");
-    //µÈ´ıÓ¦ÓÃÆô¶¯&&¼ÌĞø-²éÕÒ
-    INFO_(L"[Ö÷Ìâ²¹¶¡°²×°×é¼ş]µÈ´ı´°¿ÚÆô¶¯");
+    //ç­‰å¾…åº”ç”¨ç¨‹åº&&æŸ¥æ‰¾-å®‰è£…
+    INFO_(L"[ä¸»é¢˜è¡¥ä¸å®‰è£…å·¥å…·]ç­‰å¾…åº”ç”¨ç¨‹åº");
     HWND hWnd_Window = FindWindowW(NULL, L"UltraUXThemePatcher 4.5.0 from https://mhoefs.eu");
     while (hWnd_Window==NULL) {
         hWnd_Window = FindWindowW(NULL, L"UltraUXThemePatcher 4.5.0 from https://mhoefs.eu");
     }
-    INFO_(L"[Ö÷Ìâ²¹¶¡°²×°×é¼ş]²éÕÒµ½´°¿Ú");
-    //Ç°ÖÃ
+    INFO_(L"[ä¸»é¢˜è¡¥ä¸å®‰è£…å·¥å…·]å·²æ‰¾åˆ°çª—å£");
+    //å‰ç½®
     SetForegroundWindow(hWnd_Window);
     SetWindowPos(hWnd_Window, NULL, 0, 0, 0, 0, SWP_NOSIZE);
 
-    ClickButtonMode3(hWnd_Window, L"Ö÷Ìâ²¹¶¡°²×°×é¼ş", L"&Next >");
-    ClickButtonMode1(hWnd_Window, L"Ö÷Ìâ²¹¶¡°²×°×é¼ş", L"I &accept the terms of the License Agreement");
-    ClickButtonMode3(hWnd_Window, L"Ö÷Ìâ²¹¶¡°²×°×é¼ş", L"&Next >");
-    ClickButtonMode3(hWnd_Window, L"Ö÷Ìâ²¹¶¡°²×°×é¼ş", L"I &Agree");
-    ClickButtonMode3(hWnd_Window, L"Ö÷Ìâ²¹¶¡°²×°×é¼ş", L"&Install");
-    ClickButtonMode3(hWnd_Window, L"Ö÷Ìâ²¹¶¡°²×°×é¼ş", L"Installation Complete");
-    ClickButtonMode3(hWnd_Window, L"Ö÷Ìâ²¹¶¡°²×°×é¼ş", L"&Next >");
+    ClickButtonMode3(hWnd_Window, L"ä¸»é¢˜è¡¥ä¸å®‰è£…å·¥å…·", L"&Next >");
+    ClickButtonMode1(hWnd_Window, L"ä¸»é¢˜è¡¥ä¸å®‰è£…å·¥å…·", L"I &accept the terms of the License Agreement");
+    ClickButtonMode3(hWnd_Window, L"ä¸»é¢˜è¡¥ä¸å®‰è£…å·¥å…·", L"&Next >");
+    ClickButtonMode3(hWnd_Window, L"ä¸»é¢˜è¡¥ä¸å®‰è£…å·¥å…·", L"I &Agree");
+    ClickButtonMode3(hWnd_Window, L"ä¸»é¢˜è¡¥ä¸å®‰è£…å·¥å…·", L"&Install");
+    ClickButtonMode3(hWnd_Window, L"ä¸»é¢˜è¡¥ä¸å®‰è£…å·¥å…·", L"Installation Complete");
+    ClickButtonMode3(hWnd_Window, L"ä¸»é¢˜è¡¥ä¸å®‰è£…å·¥å…·", L"&Next >");
 
-    INFO_(L"[Ö÷Ìâ²¹¶¡°²×°×é¼ş]²éÕÒ ÉÔºóÖØÆô");
-    //ÉÔºóÖØÆô-²éÕÒ
+    INFO_(L"[ä¸»é¢˜è¡¥ä¸å®‰è£…å·¥å…·]æŸ¥æ‰¾ ç¨åé‡å¯");
+    //ç¨åé‡å¯-æŸ¥æ‰¾
     temp = FindChildControlExact(hWnd_Window, L"I want to manually reboot later");
     temp1= FindChildControlExact(hWnd_Window, L"Donation via Paypal");
     while (temp == NULL) {
         temp = FindChildControlExact(hWnd_Window, L"I want to manually reboot later");
         temp1 = FindChildControlExact(hWnd_Window, L"Donation via Paypal");
         if (temp1!=NULL) {
-            INFO_(L"[Ö÷Ìâ²¹¶¡°²×°×é¼ş]²éÕÒµ½ ¾èÔù°´Å¥");
-            INFO_(L"[Ö÷Ìâ²¹¶¡°²×°×é¼ş]Ö÷Ìâ²¹¶¡¿ÉÄÜÒÑ°²×°»ò²»¼æÈİ ÍË³ö");
-            //Ç°ÖÃ
+            INFO_(L"[ä¸»é¢˜è¡¥ä¸å®‰è£…å·¥å…·]å·²æ‰¾åˆ° æèµ æŒ‰é’®");
+            INFO_(L"[ä¸»é¢˜è¡¥ä¸å®‰è£…å·¥å…·]ä¸»é¢˜è¡¥ä¸å·²å®‰è£…æˆ–ä¸å…¼å®¹ é€€å‡º");
+            //å‰ç½®
             SetForegroundWindow(hWnd_Window);
             enter_key();
             return;
         }
         
     }
-    INFO_(L"[Ö÷Ìâ²¹¶¡°²×°×é¼ş]²éÕÒµ½ ÉÔºóÖØÆô");
-    //Ç°ÖÃ
+    INFO_(L"[ä¸»é¢˜è¡¥ä¸å®‰è£…å·¥å…·]å·²æ‰¾åˆ° ç¨åé‡å¯");
+    //å‰ç½®
     SetForegroundWindow(hWnd_Window);
-    //µã»÷
+    //é€‰ä¸­
     SendMessageW(temp, BM_CLICK, 0, 0);
 
     
-    ClickButtonMode3(hWnd_Window, L"Ö÷Ìâ²¹¶¡°²×°×é¼ş", L"&Finish");
-    INFO_(L"[Ö÷Ìâ²¹¶¡°²×°×é¼ş]ÍË³ö");
+    ClickButtonMode3(hWnd_Window, L"ä¸»é¢˜è¡¥ä¸å®‰è£…å·¥å…·", L"&Finish");
+    INFO_(L"[ä¸»é¢˜è¡¥ä¸å®‰è£…å·¥å…·]é€€å‡º");
     return;
 }

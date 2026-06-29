@@ -1,19 +1,20 @@
 #pragma once
-#include<iostream>
-#include<cstdio>
-#include <string.h>
+// ============================================================
+// DeleteTheme.h
+// æè¿°ï¼šä¸»é¢˜åˆ é™¤å·¥å…·ï¼Œæä¾›åˆ é™¤å·²å®‰è£…çš„ macOS ä¸»é¢˜æ–‡ä»¶çš„åŠŸèƒ½
+//      æ¸…ç† Windows Resources\Themes ç›®å½•ä¸‹çš„ç›¸å…³æ–‡ä»¶
+// ============================================================
 #include<Windows.h>
 #include <filesystem>
 #include"LogSystem.h"
-using namespace std;
-void Delete_theme(){
-    INFO_(L"[Ö÷ÌâÉ¾³ı×é¼ş]Æô¶¯×é¼ş");
-    filesystem::remove_all("C:\\Windows\\Resources\\Themes\\Big Sur"); INFO_(L"[Ö÷ÌâÉ¾³ı×é¼ş]É¾³ıBig Sur");
-    filesystem::remove_all("C:\\Windows\\Resources\\Themes\\Tahoe"); INFO_(L"[Ö÷ÌâÉ¾³ı×é¼ş]É¾³ıTahoe");
-    filesystem::remove_all("C:\\Windows\\Resources\\Themes\\Big Sur Dark Mode.theme"); INFO_(L"[Ö÷ÌâÉ¾³ı×é¼ş]É¾³ıBig Sur Dark Mode.theme");
-    filesystem::remove_all("C:\\Windows\\Resources\\Themes\\Big Sur Day.theme"); INFO_(L"[Ö÷ÌâÉ¾³ı×é¼ş]É¾³ıBig Sur Day.theme");
-    filesystem::remove_all("C:\\Windows\\Resources\\Themes\\Big Sur Night.theme"); INFO_(L"[Ö÷ÌâÉ¾³ı×é¼ş]É¾³ıBig Sur Night.theme");
-    filesystem::remove_all("C:\\Windows\\Resources\\Themes\\Tahoe - Light.theme"); INFO_(L"[Ö÷ÌâÉ¾³ı×é¼ş]É¾³ıTahoe - Light.theme");
-    filesystem::remove_all("C:\\Windows\\Resources\\Themes\\Tahoe - Night.theme"); INFO_(L"[Ö÷ÌâÉ¾³ı×é¼ş]É¾³ıTahoe - Night.theme");
+inline void Delete_theme(){
+    INFO_(L"[ä¸»é¢˜åˆ é™¤å·¥å…·]å¼€å§‹åˆ é™¤");
+    std::filesystem::remove_all("C:\\Windows\\Resources\\Themes\\Big Sur"); INFO_(L"[ä¸»é¢˜åˆ é™¤å·¥å…·]åˆ é™¤Big Sur");
+    std::filesystem::remove_all("C:\\Windows\\Resources\\Themes\\Tahoe"); INFO_(L"[ä¸»é¢˜åˆ é™¤å·¥å…·]åˆ é™¤Tahoe");
+    std::filesystem::remove_all("C:\\Windows\\Resources\\Themes\\Big Sur Dark Mode.theme"); INFO_(L"[ä¸»é¢˜åˆ é™¤å·¥å…·]åˆ é™¤Big Sur Dark Mode.theme");
+    std::filesystem::remove_all("C:\\Windows\\Resources\\Themes\\Big Sur Day.theme"); INFO_(L"[ä¸»é¢˜åˆ é™¤å·¥å…·]åˆ é™¤Big Sur Day.theme");
+    std::filesystem::remove_all("C:\\Windows\\Resources\\Themes\\Big Sur Night.theme"); INFO_(L"[ä¸»é¢˜åˆ é™¤å·¥å…·]åˆ é™¤Big Sur Night.theme");
+    std::filesystem::remove_all("C:\\Windows\\Resources\\Themes\\Tahoe - Light.theme"); INFO_(L"[ä¸»é¢˜åˆ é™¤å·¥å…·]åˆ é™¤Tahoe - Light.theme");
+    std::filesystem::remove_all("C:\\Windows\\Resources\\Themes\\Tahoe - Night.theme"); INFO_(L"[ä¸»é¢˜åˆ é™¤å·¥å…·]åˆ é™¤Tahoe - Night.theme");
     return;
 }

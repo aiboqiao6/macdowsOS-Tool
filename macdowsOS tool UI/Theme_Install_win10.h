@@ -1,23 +1,22 @@
 #pragma once
-#include<bits/stdc++.h>
+#include <string>
 #include"WindowControl.h"
 #include <tlhelp32.h> 
 #include <tchar.h>  
 #include <shellapi.h> 
 #include"LogSystem.h"
 #include"FilesSystem.h"
-using namespace std;
-// ¾²Ä¬ÉèÖÃÖ÷ÌâÎÄ¼şÔÚÖØÆôºó´ò¿ªÒ»´Î
+// å°†ä¸»é¢˜è®¾ç½®ä¸ºå¼€æœºåè‡ªåŠ¨åº”ç”¨
 bool SetThemeToOpenAfterReboot_win10(const std::wstring& themeFilePath) {
     HKEY hKey = nullptr;
     bool success = false;
 
-    // 1. ¹¹½¨´ò¿ªÖ÷ÌâÎÄ¼şµÄÃüÁî
-    // Ê¹ÓÃ"start"ÃüÁîÈ·±£Í¨¹ıÄ¬ÈÏ¹ØÁª³ÌĞò´ò¿ª
+    // 1. æ„å»ºæ‰“å¼€ä¸»é¢˜æ–‡ä»¶çš„å‘½ä»¤
+    // ä½¿ç”¨"start"æ¥ç¡®ä¿é€šè¿‡é»˜è®¤å…³è”ç¨‹åºæ‰“å¼€
     std::wstring command = L"cmd /c start \"\" \"" + themeFilePath + L"\"";
 
-    // 2. ´ò¿ªµ±Ç°ÓÃ»§µÄRunOnce×¢²á±í¼ü
-    // Ê¹ÓÃ KEY_WOW64_64KEY È·±£ÔÚ64Î»ÏµÍ³ÉÏ·ÃÎÊÕıÈ·µÄ×¢²á±íÎ»ÖÃ
+    // 2. æ‰“å¼€å½“å‰ç”¨æˆ·çš„RunOnceæ³¨å†Œè¡¨é¡¹
+    // ä½¿ç”¨ KEY_WOW64_64KEY ç¡®ä¿64ä½ç³»ç»Ÿä¸Šè®¿é—®æ­£ç¡®çš„æ³¨å†Œè¡¨ä½ç½®
     LONG result = RegOpenKeyExW(
         HKEY_CURRENT_USER,
         L"Software\\Microsoft\\Windows\\CurrentVersion\\RunOnce",
@@ -27,10 +26,10 @@ bool SetThemeToOpenAfterReboot_win10(const std::wstring& themeFilePath) {
     );
 
     if (result == ERROR_SUCCESS && hKey != nullptr) {
-        // 3. ´´½¨Ò»¸öÎ¨Ò»µÄÖµÃû³Æ£¨Ê¹ÓÃ¹Ì¶¨Ãû³Æ£©
+        // 3. åˆ›å»ºä¸€ä¸ªå”¯ä¸€çš„å€¼çš„åç§°ï¼Œä½¿ç”¨å›ºå®šåç§°
         const wchar_t* valueName = L"ApplyThemeOnStartup";
 
-        // 4. ½«ÃüÁîĞ´Èë×¢²á±í
+        // 4. å°†å‘½ä»¤å†™å…¥æ³¨å†Œè¡¨
         result = RegSetValueExW(
             hKey,
             valueName,
@@ -49,39 +48,38 @@ bool SetThemeToOpenAfterReboot_win10(const std::wstring& themeFilePath) {
 
     return success;
 }
-void theme_install_win10() {
-    INFO_(L"[Ö÷Ìâ°²×°×é¼ş]ÔËĞĞ×é¼ş");
-    INFO_(L"[Ö÷Ìâ°²×°×é¼ş]¸´ÖÆÎÄ¼ş");
-    //¸´ÖÆ
-    wstring res = L"AppData/Theme/WIndows 10 Themes/Big Sur";
-    wstring res1 = L"AppData/Theme/WIndows 10 Themes/Big Sur Day.theme";
-    wstring res2 = L"AppData/Theme/WIndows 10 Themes/Big Sur Night.theme";
-    wstring topath = L"C:\\Windows\\Resources\\Themes";
+inline void theme_install_win10() {
+    INFO_(L"[ä¸»é¢˜å®‰è£…å·¥å…·]å¼€å§‹å®‰è£…");
+    INFO_(L"[ä¸»é¢˜å®‰è£…å·¥å…·]å¤åˆ¶æ–‡ä»¶");
+    //èµ„æº
+    std::wstring res = L"AppData/Theme/WIndows 10 Themes/Big Sur";
+    std::wstring res1 = L"AppData/Theme/WIndows 10 Themes/Big Sur Day.theme";
+    std::wstring res2 = L"AppData/Theme/WIndows 10 Themes/Big Sur Night.theme";
+    std::wstring topath = L"C:\\Windows\\Resources\\Themes";
     copyPath(res, topath);
     copyPath(res1, topath);
     copyPath(res2, topath);
-    //Ó¦ÓÃÖ÷Ìâ
-    INFO_(L"[Ö÷Ìâ°²×°×é¼ş]Ó¦ÓÃÖ÷Ìâ");
+    //åº”ç”¨ä¸»é¢˜
+    INFO_(L"[ä¸»é¢˜å®‰è£…å·¥å…·]åº”ç”¨ä¸»é¢˜");
     HINSTANCE result = ShellExecuteW(NULL, L"open", L"C:\\Windows\\Resources\\Themes\\Big Sur Day.theme", NULL, NULL, SW_SHOWNORMAL);
-    // ¼ì²éÖ´ĞĞ½á¹û
-    if ((DWORD)result <= 32) {
-        ERROR_(L"[Ö÷Ìâ°²×°×é¼ş]ÎŞ·¨Ó¦ÓÃÖ÷Ìâ");
-        MessageBox(NULL, (LPCTSTR)L"ÎŞ·¨Ó¦ÓÃÖ÷Ìâ Çë¼ì²éÖ÷ÌâÓ¦ÓÃ²Ù×÷ÊÇ·ñ±»É±¶¾Èí¼şÀ¹½Ø»ò¼ì²éµ±Ç°ÏµÍ³¼æÈİĞÔºÍÍêÕûĞÔ", (LPCTSTR)L" macdowsOS tool Ö÷Ìâ°²×°×é¼ş", MB_OK | MB_ICONERROR);
+    // æ£€æŸ¥æ‰§è¡Œç»“æœ
+    if ((INT_PTR)result <= 32) {
+        ERROR_(L"[ä¸»é¢˜å®‰è£…å·¥å…·]æ— æ³•åº”ç”¨ä¸»é¢˜");
+        MessageBox(NULL, (LPCTSTR)L"æ— æ³•åº”ç”¨ä¸»é¢˜ è¯·æ£€æŸ¥åº”ç”¨æ˜¯å¦è¢«å®‰å…¨è½¯ä»¶æ‹¦æˆªæˆ–é‡å¯å½“å‰ç³»ç»Ÿåå†è¯•", (LPCTSTR)L" macdowsOS tool ä¸»é¢˜å®‰è£…å·¥å…·", MB_OK | MB_ICONERROR);
         HINSTANCE result1 = ShellExecuteW(NULL, L"open", L"ms-settings:themes", NULL, NULL, SW_SHOWNORMAL);
         if ((INT_PTR)result1 <= 32) {
-            ERROR_(L"[Ö÷Ìâ°²×°×é¼ş]ÎŞ·¨´ò¿ªÏµÍ³ÉèÖÃ");
-            MessageBox(NULL, (LPCTSTR)L"ÎŞ·¨´ò¿ªÏµÍ³ÉèÖÃ Çë¼ì²é²Ù×÷ÊÇ·ñ±»É±¶¾Èí¼şÀ¹½Ø»ò¼ì²éÏµÍ³ÍêÕûĞÔ", (LPCTSTR)L" macdowsOS tool Ö÷Ìâ°²×°×é¼ş", MB_OK | MB_ICONERROR);
-            MessageBox(NULL, (LPCTSTR)L"ÇëÊÖ¶¯´ò¿ªÉèÖÃÓ¦ÓÃÖ÷Ìâ", (LPCTSTR)L" macdowsOS tool Ö÷Ìâ°²×°×é¼ş", MB_OK);
+            ERROR_(L"[ä¸»é¢˜å®‰è£…å·¥å…·]æ— æ³•æ‰“å¼€ç³»ç»Ÿè®¾ç½®");
+            MessageBox(NULL, (LPCTSTR)L"æ— æ³•æ‰“å¼€ç³»ç»Ÿè®¾ç½® è¯·æ£€æŸ¥æ˜¯å¦è¢«å®‰å…¨è½¯ä»¶æ‹¦æˆªæˆ–é‡å¯ç³»ç»Ÿé‡è¯•", (LPCTSTR)L" macdowsOS tool ä¸»é¢˜å®‰è£…å·¥å…·", MB_OK | MB_ICONERROR);
+            MessageBox(NULL, (LPCTSTR)L"è¯·æ‰‹åŠ¨æ‰“å¼€ä¸»é¢˜åº”ç”¨", (LPCTSTR)L" macdowsOS tool ä¸»é¢˜å®‰è£…å·¥å…·", MB_OK);
         }
         else {
             Sleep(500);
-            INFO_(L"[Ö÷Ìâ°²×°×é¼ş]´ò¿ªÏµÍ³ÉèÖÃ");
-            MessageBox(NULL, (LPCTSTR)L"Çë³¢ÊÔÔÚÉèÖÃÖĞÊÖ¶¯Ó¦ÓÃÖ÷Ìâ", (LPCTSTR)L" macdowsOS tool Ö÷Ìâ°²×°×é¼ş", MB_OK);
+            INFO_(L"[ä¸»é¢˜å®‰è£…å·¥å…·]å·²æ‰“å¼€ç³»ç»Ÿè®¾ç½®");
+            MessageBox(NULL, (LPCTSTR)L"è¯·å°è¯•æœç´¢ä¸»é¢˜å¹¶æ‰‹åŠ¨åº”ç”¨ä¸»é¢˜", (LPCTSTR)L" macdowsOS tool ä¸»é¢˜å®‰è£…å·¥å…·", MB_OK);
         }
     }
-    INFO_(L"[Ö÷Ìâ°²×°×é¼ş]ÉèÖÃÖØÆôºó´ò¿ª");
+    INFO_(L"[ä¸»é¢˜å®‰è£…å·¥å…·]è®¾ç½®å¼€æœºè‡ªåŠ¨åº”ç”¨ä¸»é¢˜");
     SetThemeToOpenAfterReboot_win10(L"C:\\Windows\\Resources\\Themes\\Big Sur Day.theme");
-    INFO_(L"[Ö÷Ìâ°²×°×é¼ş]ÍË³ö");
+    INFO_(L"[ä¸»é¢˜å®‰è£…å·¥å…·]é€€å‡º");
     return;
 }
-

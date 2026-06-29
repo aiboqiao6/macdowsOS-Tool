@@ -1,113 +1,112 @@
 #pragma once
-#include<bits/stdc++.h>
+#include <string>
+#include <filesystem>
+#include <cstdlib>
 #include<Windows.h>
 #include"LogSystem.h"
 #include"WindowControl.h"
 #include"All.h"
-using namespace std;
 bool StartAllBack_Config(int mode) {
-    INFO_(L"[StartAllBackÅäÖÃ×é¼ş]Æô¶¯");
-    HWND temp;
-    INFO_(L"[StartAllBackÅäÖÃ×é¼ş]ÔËĞĞÅäÖÃ³ÌĞò");
+    INFO_(L"[StartAllBacké…ç½®å™¨]å¼€å§‹");
+    INFO_(L"[StartAllBacké…ç½®å™¨]å¯åŠ¨é…ç½®ç¨‹åº");
     if (mode == 1) {
         ShellExecuteW(NULL, L"open", L"C:\\Program Files\\StartAllBack\\StartAllBackCfg.exe", NULL, NULL, SW_SHOWNORMAL);
     }
     else if (mode == 2) {
-        //»ñÈ¡ÓÃ»§Ãû
+        //è·å–ç”¨æˆ·å
         wchar_t username[10000];
         DWORD username_len = 10000;
         GetUserName(username, &username_len);
-        wstring user_name = username;
-        MESSAGE_(L"[StartAllBackÅäÖÃ×é¼ş]¼ì²âµ½ÓÃ»§Ãû", user_name);
+        std::wstring user_name = username;
+        MESSAGE_(L"[StartAllBacké…ç½®å™¨]æ£€æµ‹åˆ°ç”¨æˆ·å", user_name);
 
-        wstring configprogrampath = L"C:\\Users\\" + user_name + L"\\AppData\\Local\\StartAllBack\\StartAllBackCfg.exe";
+        std::wstring configprogrampath = L"C:\\Users\\" + user_name + L"\\AppData\\Local\\StartAllBack\\StartAllBackCfg.exe";
         const wchar_t* path_temp = configprogrampath.data();
         //
         ShellExecuteW(NULL, L"open", path_temp, NULL, NULL, SW_SHOWNORMAL);
     }
     else {
-        MessageBox(NULL, (LPCTSTR)L"¼ì²â°²×°Ä£Ê½Ê±³öÏÖ´íÎó Çë½«°²×°ÈÕÖ¾·¢ËÍ¸ø¿ª·¢Õß·´À¡´ËÎÊÌâ StartAllBackÅäÖÃ½ø³ÌÍË³ö", (LPCTSTR)L" StartAllBackÅäÖÃ×é¼ş", MB_OK | MB_ICONERROR);
+        MessageBox(NULL, (LPCTSTR)L"æ£€æµ‹å®‰è£…æ¨¡å¼æ—¶å‡ºç°é”™è¯¯ï¼Œè¯·å°†å®‰è£…æ—¥å¿—å‘é€ç»™å¼€å‘è€…å¤„ç† StartAllBacké…ç½®ç¨‹åºé€€å‡º", (LPCTSTR)L" StartAllBacké…ç½®å™¨", MB_OK | MB_ICONERROR);
         return false;
     }
 
-    HWND hWnd_Window = FindWindowW(NULL, L"ÉèÖÃ StartAllBack");
+    HWND hWnd_Window = FindWindowW(NULL, L"é…ç½® StartAllBack");
     while (hWnd_Window == NULL) {
-        hWnd_Window = FindWindowW(NULL, L"ÉèÖÃ StartAllBack");
+        hWnd_Window = FindWindowW(NULL, L"é…ç½® StartAllBack");
     }
-    INFO_(L"[StartAllBackÅäÖÃ×é¼ş]²éÕÒµ½´°¿Ú");
+    INFO_(L"[StartAllBacké…ç½®å™¨]å·²æ‰¾åˆ°çª—å£");
     SetForegroundWindow(hWnd_Window);
     SetWindowPos(hWnd_Window, NULL, 0, 0, 0, 0, SWP_NOSIZE);
 
-    ClickButtonMode1(hWnd_Window, L"StartAllBackÅäÖÃ×é¼ş", L"Windows 7 Ö÷ÌâÑùÊ½");
-    TurnOffOn(false, hWnd_Window, L"StartAllBackÅäÖÃ×é¼ş", L"¾­µä¿ªÊ¼²Ëµ¥·ç¸ñ");
-    TurnOffOn(false, hWnd_Window, L"StartAllBackÅäÖÃ×é¼ş", L"ÔöÇ¿ĞÍ¾­µäÈÎÎñÀ¸");
-    TurnOffOn(true , hWnd_Window, L"StartAllBackÅäÖÃ×é¼ş", L"»Ö¸´¿ØÖÆÃæ°åĞ¡³ÌĞò");
-    TurnOffOn(false, hWnd_Window, L"StartAllBackÅäÖÃ×é¼ş", L"Ñ¡ÖĞ±³¾°ÏÔÊ¾Ç¿µ÷É«");
-    TurnOffOn(true , hWnd_Window, L"StartAllBackÅäÖÃ×é¼ş", L"¾­µäÑùÊ½µÄÓÒ¼ü²Ëµ¥");
-    TurnOffOn(false, hWnd_Window, L"StartAllBackÅäÖÃ×é¼ş", L"¾­µäÇı¶¯Æ÷·Ö×é");
-    TurnOffOn(true , hWnd_Window, L"StartAllBackÅäÖÃ×é¼ş", L"È«ĞÂ¹¤¾ßÀ¸Í¼±ê");
-    TurnOffOn(false, hWnd_Window, L"StartAllBackÅäÖÃ×é¼ş", L"µ×²¿ÏêÏ¸ĞÅÏ¢À¸");
-    TurnOffOn(false, hWnd_Window, L"StartAllBackÅäÖÃ×é¼ş", L"ÓÒ²à¾­µäËÑË÷¿ò");
-    TurnOffOn(true , hWnd_Window, L"StartAllBackÅäÖÃ×é¼ş", L"±êÌâÀ¸ÔÆÄ¸Ğ§¹û");
+    ClickButtonMode1(hWnd_Window, L"StartAllBacké…ç½®å™¨", L"Windows 7 èµ„æºç®¡ç†å™¨æ ·å¼");
+    TurnOffOn(false, hWnd_Window, L"StartAllBacké…ç½®å™¨", L"æ˜¾ç¤ºå¼€å§‹æŒ‰é’®");
+    TurnOffOn(false, hWnd_Window, L"StartAllBacké…ç½®å™¨", L"å¢å¼ºå‹ä»»åŠ¡ç®¡ç†å™¨");
+    TurnOffOn(true , hWnd_Window, L"StartAllBacké…ç½®å™¨", L"æ¢å¤ä¼ ç»Ÿå³é”®èœå•");
+    TurnOffOn(false, hWnd_Window, L"StartAllBacké…ç½®å™¨", L"é€‰ä¸­æ—¶æ˜¾ç¤ºå¼ºè°ƒè‰²");
+    TurnOffOn(true , hWnd_Window, L"StartAllBacké…ç½®å™¨", L"èµ„æºç®¡ç†å™¨å¼å³é”®èœå•");
+    TurnOffOn(false, hWnd_Window, L"StartAllBacké…ç½®å™¨", L"ç¦ç”¨å¤§å›¾æ ‡èµ„æºç®¡ç†å™¨");
+    TurnOffOn(true , hWnd_Window, L"StartAllBacké…ç½®å™¨", L"å…¨æ–°å…³æœºå›¾æ ‡");
+    TurnOffOn(false, hWnd_Window, L"StartAllBacké…ç½®å™¨", L"åº•éƒ¨è¯¦ç»†ä¿¡æ¯æ ");
+    TurnOffOn(false, hWnd_Window, L"StartAllBacké…ç½®å™¨", L"å³ä¾§è¯¦ç»†ä¿¡æ¯æ ");
+    TurnOffOn(true , hWnd_Window, L"StartAllBacké…ç½®å™¨", L"å¯ç”¨æœç´¢å­—æ¯æ•ˆæœ");
 
-    INFO_(L"[StartAllBackÅäÖÃ×é¼ş]ÅäÖÃÍê³É ÖØÆôÎÄ¼ş×ÊÔ´¹ÜÀíÆ÷");
+    INFO_(L"[StartAllBacké…ç½®å™¨]é…ç½®å®Œæˆ é‡å¯æ–‡ä»¶èµ„æºç®¡ç†å™¨");
     system("taskkill /f /im explorer.exe");
     system("start explorer");
     return true;
 }
 bool StartAllBack_Install(int mode) {
-	INFO_(L"[StartAllBack°²×°×é¼ş]Æô¶¯");
-	HWND temp;
-	INFO_(L"[StartAllBack°²×°×é¼ş]ÔËĞĞ°²×°³ÌĞò");
+	INFO_(L"[StartAllBackå®‰è£…å™¨]å¼€å§‹");
+	INFO_(L"[StartAllBackå®‰è£…å™¨]å¼€å§‹å®‰è£…ç¨‹åº");
 	system("start AppData\\StartAllBack\\Install.exe");
 
-    //µÈ´ıÓ¦ÓÃÆô¶¯
-    INFO_(L"[StartAllBack°²×°×é¼ş]µÈ´ı´°¿ÚÆô¶¯");
-    HWND hWnd_Window = FindWindowW(NULL, L"°²×° StartAllBack");
+    //ç­‰å¾…åº”ç”¨ç¨‹åº
+    INFO_(L"[StartAllBackå®‰è£…å™¨]ç­‰å¾…åº”ç”¨ç¨‹åº");
+    HWND hWnd_Window = FindWindowW(NULL, L"å®‰è£… StartAllBack");
     while (hWnd_Window == NULL) {
-        hWnd_Window = FindWindowW(NULL, L"°²×° StartAllBack");
+        hWnd_Window = FindWindowW(NULL, L"å®‰è£… StartAllBack");
     }
-    INFO_(L"[StartAllBack°²×°×é¼ş]²éÕÒµ½´°¿Ú");
-    //Ç°ÖÃ
+    INFO_(L"[StartAllBackå®‰è£…å™¨]å·²æ‰¾åˆ°çª—å£");
+    //å‰ç½®
     SetForegroundWindow(hWnd_Window);
     SetWindowPos(hWnd_Window, NULL, 0, 0, 0, 0, SWP_NOSIZE);
 
 
     if (mode == 1) {
-        ClickButtonMode1(hWnd_Window, L"StartAllBack°²×°×é¼ş", L"ÎªËùÓĞÓÃ»§°²×°");
+        ClickButtonMode1(hWnd_Window, L"StartAllBackå®‰è£…å™¨", L"ä¸ºæ‰€æœ‰ç”¨æˆ·å®‰è£…");
     }
     else if (mode == 2) {//
-        ClickButtonMode1(hWnd_Window, L"StartAllBack°²×°×é¼ş", L"Îªµ±Ç°ÓÃ»§°²×°");
+        ClickButtonMode1(hWnd_Window, L"StartAllBackå®‰è£…å™¨", L"ä¸ºå½“å‰ç”¨æˆ·å®‰è£…");
     }
     else {
-        MessageBox(NULL, (LPCTSTR)L"¼ì²â°²×°Ä£Ê½Ê±³öÏÖ´íÎó Çë½«°²×°ÈÕÖ¾·¢ËÍ¸ø¿ª·¢Õß·´À¡´ËÎÊÌâ StartAllBack°²×°½ø³ÌÍË³ö", (LPCTSTR)L" StartAllBack°²×°×é¼ş", MB_OK | MB_ICONERROR);
+        MessageBox(NULL, (LPCTSTR)L"æ£€æµ‹å®‰è£…æ¨¡å¼æ—¶å‡ºç°é”™è¯¯ï¼Œè¯·å°†å®‰è£…æ—¥å¿—å‘é€ç»™å¼€å‘è€…å¤„ç† StartAllBackå®‰è£…å™¨é€€å‡º", (LPCTSTR)L" StartAllBackå®‰è£…å™¨", MB_OK | MB_ICONERROR);
         return false;
     }
     
 
 
-    INFO_(L"[StartAllBack°²×°×é¼ş]µÈ´ı³ÌĞò½áÊø");
-    //µÈ´ıÓ¦ÓÃÆô¶¯
-    INFO_(L"[StartAllBack°²×°×é¼ş]µÈ´ı³ÌĞò½áÊø");
-    hWnd_Window = FindWindowW(NULL, L"°²×° StartAllBack");
-    HWND hWnd_ERROR = FindWindowW(NULL, L"´íÎó");
+    INFO_(L"[StartAllBackå®‰è£…å™¨]ç­‰å¾…å®‰è£…å®Œæˆ");
+    //ç­‰å¾…åº”ç”¨ç¨‹åº
+    INFO_(L"[StartAllBackå®‰è£…å™¨]ç­‰å¾…å®‰è£…å®Œæˆ");
+    hWnd_Window = FindWindowW(NULL, L"å®‰è£… StartAllBack");
+    HWND hWnd_ERROR = FindWindowW(NULL, L"é”™è¯¯");
     while (hWnd_Window != NULL) {
-        hWnd_Window = FindWindowW(NULL, L"°²×° StartAllBack");
-        hWnd_ERROR = FindWindowW(NULL, L"´íÎó");
+        hWnd_Window = FindWindowW(NULL, L"å®‰è£… StartAllBack");
+        hWnd_ERROR = FindWindowW(NULL, L"é”™è¯¯");
         if (hWnd_ERROR != NULL) {
-            INFO_(L"[StartAllBack°²×°×é¼ş]²éÕÒµ½±¨´í´°¿Ú");
-            HWND errormain=FindChildControlExact(hWnd_ERROR, L"StartAllBack ²»¼æÈİµ±Ç° Windows ÏµÍ³°æ±¾¡£");
+            INFO_(L"[StartAllBackå®‰è£…å™¨]å·²æ‰¾åˆ°é”™è¯¯çª—å£");
+            HWND errormain=FindChildControlExact(hWnd_ERROR, L"StartAllBack ä¸å…¼å®¹å½“å‰ Windows ç³»ç»Ÿç‰ˆæœ¬");
             if (errormain != NULL) {
-                ERROR_(L"[StartAllBack°²×°×é¼ş]StartAllBack²»¼æÈİµ±Ç°ÏµÍ³");
+                ERROR_(L"[StartAllBackå®‰è£…å™¨]StartAllBackä¸å…¼å®¹å½“å‰ç³»ç»Ÿ");
                 SetForegroundWindow(hWnd_ERROR);
                 enter_key();
-                MessageBox(NULL, (LPCTSTR)L"StartAllBack²»¼æÈİµ±Ç°ÏµÍ³ °²×°½ø³ÌÍË³ö", (LPCTSTR)L" StartAllBack°²×°×é¼ş", MB_OK | MB_ICONERROR);
+                MessageBox(NULL, (LPCTSTR)L"StartAllBackä¸å…¼å®¹å½“å‰ç³»ç»Ÿ å®‰è£…ç¨‹åºé€€å‡º", (LPCTSTR)L" StartAllBackå®‰è£…å™¨", MB_OK | MB_ICONERROR);
                 return false;
             }
         }
     }
-    INFO_(L"[StartAllBack°²×°×é¼ş]³ÌĞò½áÊø");
-    INFO_(L"[StartAllBack°²×°×é¼ş]°²×°Íê³É");
+    INFO_(L"[StartAllBackå®‰è£…å™¨]å®‰è£…æ˜¾ç¤ºå®Œæˆ");
+    INFO_(L"[StartAllBackå®‰è£…å™¨]å®‰è£…å®Œæˆ");
     if (!StartAllBack_Config(mode)) {
         return false;
     }
@@ -115,35 +114,35 @@ bool StartAllBack_Install(int mode) {
         return true;
     }
 }
-void StartAllBack_SetupRun(){
-    INFO_(L"[StartAllBackÖ´ĞĞ°²×°×é¼ş]Æô¶¯");
-    //»ñÈ¡ÓÃ»§Ãû
+inline void StartAllBack_SetupRun(){
+    INFO_(L"[StartAllBackæ‰§è¡Œå®‰è£…å™¨]å¼€å§‹");
+    //è·å–ç”¨æˆ·å
     wchar_t username[10000];
     DWORD username_len=10000;
     GetUserName(username, &username_len);
-    wstring user_name = username;
-    MESSAGE_(L"[StartAllBackÖ´ĞĞ°²×°×é¼ş]¼ì²âµ½ÓÃ»§Ãû", user_name);
-    if (filesystem::exists(L"C:/Program Files/StartAllBack/StartAllBackCfg.exe")) {
-        INFO_(L"[StartAllBackÖ´ĞĞ°²×°×é¼ş]¼ì²âµ½ÒÑ°²×°StartAllBackÈ«¾Ö");
+    std::wstring user_name = username;
+    MESSAGE_(L"[StartAllBackæ‰§è¡Œå®‰è£…å™¨]æ£€æµ‹åˆ°ç”¨æˆ·å", user_name);
+    if (std::filesystem::exists(L"C:/Program Files/StartAllBack/StartAllBackCfg.exe")) {
+        INFO_(L"[StartAllBackæ‰§è¡Œå®‰è£…å™¨]æ£€æµ‹åˆ°å·²å®‰è£…StartAllBackå…¨å±€");
         if (!StartAllBack_Install(1)) {
-            ERROR_(L"[StartAllBackÖ´ĞĞ°²×°×é¼ş]°²×°Ê±³öÏÖ´íÎó");
+            ERROR_(L"[StartAllBackæ‰§è¡Œå®‰è£…å™¨]å®‰è£…æ—¶å‡ºç°é”™è¯¯");
             return;
         }
     }
-    else if (filesystem::exists(L"C:/Users/"+ user_name + L"/AppData/Local/StartAllBack/StartAllBackCfg.exe")) {
-        INFO_(L"[StartAllBackÖ´ĞĞ°²×°×é¼ş]¼ì²âµ½ÒÑ°²×°StartAllBackµ±Ç°ÓÃ»§");
+    else if (std::filesystem::exists(L"C:/Users/"+ user_name + L"/AppData/Local/StartAllBack/StartAllBackCfg.exe")) {
+        INFO_(L"[StartAllBackæ‰§è¡Œå®‰è£…å™¨]æ£€æµ‹åˆ°å·²å®‰è£…StartAllBackå½“å‰ç”¨æˆ·");
         if (!StartAllBack_Install(2)) {
-            ERROR_(L"[StartAllBackÖ´ĞĞ°²×°×é¼ş]°²×°Ê±³öÏÖ´íÎó");
+            ERROR_(L"[StartAllBackæ‰§è¡Œå®‰è£…å™¨]å®‰è£…æ—¶å‡ºç°é”™è¯¯");
             return;
         }
     }
     else {
-        INFO_(L"[StartAllBackÖ´ĞĞ°²×°×é¼ş]Î´¼ì²âµ½ÒÑ°²×°µÄStartAllBack");
+        INFO_(L"[StartAllBackæ‰§è¡Œå®‰è£…å™¨]æœªæ£€æµ‹åˆ°å·²å®‰è£…çš„StartAllBack");
         if (!StartAllBack_Install(1)) {
-            ERROR_(L"[StartAllBackÖ´ĞĞ°²×°×é¼ş]°²×°Ê±³öÏÖ´íÎó");
+            ERROR_(L"[StartAllBackæ‰§è¡Œå®‰è£…å™¨]å®‰è£…æ—¶å‡ºç°é”™è¯¯");
             return;
         }
     }
-    INFO_(L"[StartAllBackÖ´ĞĞ°²×°×é¼ş]ÍË³ö");
+    INFO_(L"[StartAllBackæ‰§è¡Œå®‰è£…å™¨]é€€å‡º");
     return;
 }

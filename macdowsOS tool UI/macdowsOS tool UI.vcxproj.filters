@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="源文件">
@@ -9,10 +9,6 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
-    <Filter Include="资源文件">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
     <Filter Include="头文件\Tool">
       <UniqueIdentifier>{11ee6f28-ef30-4285-afcd-74c1f598fb53}</UniqueIdentifier>
     </Filter>
@@ -22,37 +18,81 @@
     <Filter Include="头文件\be">
       <UniqueIdentifier>{31d1f273-ccd4-42c7-8a81-33c85e8b4f1c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="头文件\Window">
-      <UniqueIdentifier>{c733847d-8c69-4749-9085-149478ddc89d}</UniqueIdentifier>
+    <Filter Include="QML 界面">
+      <UniqueIdentifier>{a8e6f3c1-4b2d-4f7c-9d5b-3f2c7b5d8e1a}</UniqueIdentifier>
+      <Extensions>qml</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\UI">
+      <UniqueIdentifier>{ce013974-b6c1-4d97-afb2-6219e0b4c98f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
+  <!-- .cpp 源文件 -->
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Backend.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <!-- 头文件 -->
+  <ItemGroup>
+    <QtMoc Include="Backend.h">
+      <Filter>头文件</Filter>
+    </QtMoc>
+    <!-- 核心基础 -->
+    <!-- 工具 -->
+    <!-- WinToMac 安装 -->
+  </ItemGroup>
+  <!-- QML 文件 -->
+  <ItemGroup>
+    <QtRcc Include="qml.qrc">
+      <Filter>QML 界面</Filter>
+    </QtRcc>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="res\home.png">
-      <Filter>资源文件</Filter>
-    </Image>
-    <Image Include="res\Setting.png">
-      <Filter>资源文件</Filter>
-    </Image>
-    <Image Include="res\WindowsFix.png">
-      <Filter>资源文件</Filter>
-    </Image>
-    <Image Include="res\WindowsToMac.png">
-      <Filter>资源文件</Filter>
-    </Image>
-    <Image Include="res\box.png">
-      <Filter>资源文件</Filter>
-    </Image>
+    <None Include="qml\AboutPage.qml">
+      <Filter>源文件\UI</Filter>
+    </None>
+    <None Include="qml\CeleCraftPage.qml">
+      <Filter>源文件\UI</Filter>
+    </None>
+    <None Include="qml\HomePage.qml">
+      <Filter>源文件\UI</Filter>
+    </None>
+    <None Include="qml\main.qml">
+      <Filter>源文件\UI</Filter>
+    </None>
+    <None Include="qml\NavigationSidebar.qml">
+      <Filter>源文件\UI</Filter>
+    </None>
+    <None Include="qml\SettingsPage.qml">
+      <Filter>源文件\UI</Filter>
+    </None>
+    <None Include="qml\ThemeWizardPage.qml">
+      <Filter>源文件\UI</Filter>
+    </None>
+    <None Include="qml\ThemeWizardWindow.qml">
+      <Filter>源文件\UI</Filter>
+    </None>
+    <None Include="qml\WindowControls.qml">
+      <Filter>源文件\UI</Filter>
+    </None>
+    <!--<None Include="qml\WindowRoundPage.qml">
+      <Filter>源文件\UI</Filter>
+    </None>-->
+    <None Include="qml\WindowsFixPage.qml">
+      <Filter>源文件\UI</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="LogSystem.h">
-      <Filter>头文件\be</Filter>
-    </ClInclude>
     <ClInclude Include="DeleteTheme.h">
+      <Filter>头文件\Tool\WinToMac Tool</Filter>
+    </ClInclude>
+    <ClInclude Include="FinalSetting.h">
       <Filter>头文件\Tool\WinToMac Tool</Filter>
     </ClInclude>
     <ClInclude Include="Icon_install.h">
@@ -61,8 +101,11 @@
     <ClInclude Include="mydockfinder_Install.h">
       <Filter>头文件\Tool\WinToMac Tool</Filter>
     </ClInclude>
-    <ClInclude Include="restart.h">
-      <Filter>头文件\be</Filter>
+    <ClInclude Include="OldNewExplorerInstall.h">
+      <Filter>头文件\Tool\WinToMac Tool</Filter>
+    </ClInclude>
+    <ClInclude Include="StartAllBack_Install.h">
+      <Filter>头文件\Tool\WinToMac Tool</Filter>
     </ClInclude>
     <ClInclude Include="Theme_Install_win10.h">
       <Filter>头文件\Tool\WinToMac Tool</Filter>
@@ -73,75 +116,25 @@
     <ClInclude Include="Theme_patch_install.h">
       <Filter>头文件\Tool\WinToMac Tool</Filter>
     </ClInclude>
-    <ClInclude Include="WindowControl.h">
-      <Filter>头文件\be</Filter>
-    </ClInclude>
-    <ClInclude Include="WinToMacWin10.h">
-      <Filter>头文件\Tool\WinToMac Tool</Filter>
-    </ClInclude>
     <ClInclude Include="CreateSafePoint.h">
-      <Filter>头文件\Tool</Filter>
-    </ClInclude>
-    <ClInclude Include="WindowsFix.h">
-      <Filter>头文件\Tool</Filter>
-    </ClInclude>
-    <ClInclude Include="MainWindow.h">
-      <Filter>头文件\Window</Filter>
-    </ClInclude>
-    <ClInclude Include="SettingWindow.h">
-      <Filter>头文件\Window</Filter>
-    </ClInclude>
-    <ClInclude Include="WindowConfig.h">
-      <Filter>头文件\Window</Filter>
-    </ClInclude>
-    <ClInclude Include="WindowRound.h">
-      <Filter>头文件\Tool</Filter>
-    </ClInclude>
-    <ClInclude Include="WindowRoundWindow.h">
-      <Filter>头文件\Window</Filter>
-    </ClInclude>
-    <ClInclude Include="AboutWindow.h">
-      <Filter>头文件\Window</Filter>
-    </ClInclude>
-    <ClInclude Include="CeleCraft.h">
-      <Filter>头文件\Window</Filter>
-    </ClInclude>
-    <ClInclude Include="WinToMacWin11.h">
-      <Filter>头文件\Tool\WinToMac Tool</Filter>
-    </ClInclude>
-    <ClInclude Include="All.h">
       <Filter>头文件\be</Filter>
-    </ClInclude>
-    <ClInclude Include="FinalSetting.h">
-      <Filter>头文件\Tool\WinToMac Tool</Filter>
-    </ClInclude>
-    <ClInclude Include="StartAllBack_Install.h">
-      <Filter>头文件\Tool\WinToMac Tool</Filter>
-    </ClInclude>
-    <ClInclude Include="OldNewExplorerInstall.h">
-      <Filter>头文件\Tool\WinToMac Tool</Filter>
     </ClInclude>
     <ClInclude Include="FilesSystem.h">
       <Filter>头文件\be</Filter>
     </ClInclude>
-    <ClInclude Include="WindowButtonChange.h">
-      <Filter>头文件\Tool</Filter>
+    <ClInclude Include="restart.h">
+      <Filter>头文件\be</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowControl.h">
+      <Filter>头文件\be</Filter>
+    </ClInclude>
+    <!--<ClInclude Include="WindowRound.h">
+      <Filter>头文件\be</Filter>
+    </ClInclude>-->
+    <ClInclude Include="WindowsFix.h">
+      <Filter>头文件\be</Filter>
     </ClInclude>
   </ItemGroup>
-  <ItemGroup>
-    <Font Include="pingfang0.ttf">
-      <Filter>资源文件</Filter>
-    </Font>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\README.md">
-      <Filter>源文件</Filter>
-    </None>
-    <None Include="..\README-Chinese.md">
-      <Filter>源文件</Filter>
-    </None>
-    <None Include="..\README-English.md">
-      <Filter>源文件</Filter>
-    </None>
-  </ItemGroup>
+  <!-- 字体 -->
+  <!-- 其他文件 -->
 </Project>

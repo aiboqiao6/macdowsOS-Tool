@@ -1,63 +1,64 @@
 #pragma once
-#include<bits/stdc++.h>
+#include <string>
+#include <cwctype>
 #include"FilesSystem.h"
 #include<windows.h>
 #include"LogSystem.h"
 #include"All.h"
-using namespace std;
-bool steam_mydockfinder(wstring path) {
-    MESSAGE_(L"[mydockfinder°²×°×é¼ş]Â·¾¶", path);
-    //¼ì²âÎÄ¼ş
-    wstring exe1 = path + L"/Dock64.exe";
-    wstring exe2 = path + L"/Dock.exe";
-    INFO_(L"[mydockfiner°²×°×é¼ş]¼ì²âÖ÷³ÌĞòÊÇ·ñ´æÔÚ");
+bool steam_mydockfinder(std::wstring path) {
+    MESSAGE_(L"[mydockfinderå®‰è£…å™¨]è·¯å¾„", path);
+    //å¿½ç•¥æ–‡ä»¶
+    std::wstring exe1 = path + L"/Dock64.exe";
+    std::wstring exe2 = path + L"/Dock.exe";
+    INFO_(L"[mydockfinerå®‰è£…å™¨]æ£€æŸ¥dockç¨‹åºæ˜¯å¦å­˜åœ¨");
     if(!(fs::exists(exe1)||fs::exists(exe2))){
         return false;
     }
-    INFO_(L"[mydockfiner°²×°×é¼ş]¼ì²â°²×°Â·¾¶ÊÇ·ñÎªsteamÂ·¾¶");
-    //¼ì²âÂ·¾¶
-    wstring ovc_path1 = L"steamapps";
-    wstring ovc_path2 = L"steam";
-    int str_ = path.size();
-    int str_1 = ovc_path1.size();
-    int str_2 = ovc_path2.size();
-    for (int j = 0; j < str_; j++) {
+    INFO_(L"[mydockfinerå®‰è£…å™¨]æ£€æµ‹å®‰è£…è·¯å¾„æ˜¯å¦ä¸ºsteamè·¯å¾„");
+    //æ¯”è¾ƒè·¯å¾„
+    std::wstring ovc_path1 = L"steamapps";
+    std::wstring ovc_path2 = L"steam";
+    size_t str_ = path.size();
+    size_t str_1 = ovc_path1.size();
+    size_t str_2 = ovc_path2.size();
+    for (size_t j = 0; j < str_; j++) {
         bool temp1 = true, temp2 = true;
-        for (int i = 0; i < str_1; i++) {
+        for (size_t i = 0; i < str_1; i++) {
             if (path[j + i] != ovc_path1[i]) {
                 temp1 = false;
                // break;
             }
         }
-        for (int i = 0; i < str_2; i++) {
+        for (size_t i = 0; i < str_2; i++) {
             if (path[j + i] != ovc_path2[i]) {
                 temp2 = false;
                // break;
             }
         }
         if (temp1 || temp2) {
-            INFO_(L"[mydockfinder°²×°×é¼ş]¼ì²âµ½mydockfinderÎªsteam°æ");
+            INFO_(L"[mydockfinderå®‰è£…å™¨]æ£€æµ‹åˆ°mydockfinderä¸ºsteamç‰ˆ");
             return true;
         }
     }
 
-    INFO_(L"[mydockfinder°²×°×é¼ş]Î´¼ì²âµ½steam");
+    INFO_(L"[mydockfinderå®‰è£…å™¨]æœªæ£€æµ‹åˆ°steam");
     return false;
 }
-//¼ì²éÂ·¾¶Î²²¿ÊÇ·ñÓĞ/mydockfinderºÍ/MyDockFinder ÊÇ·µ»Øtrue ·ñ·µ»Øfalse
-bool pathback(wstring *path_,int str_,wstring *temp1,wstring *temp2) {
-    //Â·¾¶Î²²¿È¥ÖØ
-    for (int j = str_ - 16; j <= str_ - 13; j++) {
+//æ¯”è¾ƒè·¯å¾„å°¾éƒ¨æ˜¯å¦ä¸ºmydockfinder/MyDockFinder æ˜¯è¿”å›true å¦åˆ™è¿”å›false
+bool pathback(std::wstring *path_,size_t str_,std::wstring *temp1,std::wstring *temp2) {
+    //è·¯å¾„å°¾éƒ¨å»é™¤
+    if (str_ < 16) return false;
+    for (size_t j = str_ - 16; j <= str_ - 13; j++) {
         bool temp3=true, temp4=true;
         for (int i = 0; i < 13; i++) {
             if (path_[j] != temp1[i]) {
-                //¼ì²âµ½×Ö·û´®1²»·û
+                //æ£€æµ‹åˆ°å­—ç¬¦ä¸²ä¸åŒ
                 temp3 = false;
             }
         }
         for (int i = 0; i < 13; i++) {
             if (path_[j] != temp1[i]) {
-                //¼ì²âµ½×Ö·û´®2²»·û
+                //æ£€æµ‹åˆ°å­—ç¬¦ä¸²ä¸åŒ
                 temp4 = false;
             }
         }
@@ -67,9 +68,9 @@ bool pathback(wstring *path_,int str_,wstring *temp1,wstring *temp2) {
     }
     return false;
 }
-//¸´ÖÆmydockfinder
-void copy_mydockfinder(wstring Path) {
-    wstring line_copyfiles[40] = {
+//å®‰è£…mydockfinder
+void copy_mydockfinder(std::wstring Path) {
+    std::wstring line_copyfiles[40] = {
         L"dll",
         L"lang",
         L"launchpad",
@@ -112,27 +113,27 @@ void copy_mydockfinder(wstring Path) {
     };
     for (int j = 0; j < 39; j++) {
         copyPath(L"AppData/MyDockFinder/MyDockFinder/" + line_copyfiles[j], Path);
-        MESSAGE_(L"[mydockfinder°²×°×é¼ş]²Ù×÷Íê³É", line_copyfiles[j]);
+        MESSAGE_(L"[mydockfinderå®‰è£…å™¨]å·²å®‰è£…", line_copyfiles[j]);
     }
     return;
     
 }
-bool mydockfinder_install() {
-    INFO_(L"[mydockfinder°²×°×é¼ş]ÔËĞĞ×é¼ş");
-    //ÎÄ¼şÂ·¾¶
-    INFO_(L"[mydockfinder°²×°×é¼ş]¶ÁÈ¡Â·¾¶");
-    MessageBox(NULL, (LPCTSTR)L"ÇëÔÚÑ¡Ôñ°²×°Ä¿Â¼Ê±²»ÒªÑ¡ÔñCÅÌÄ¿Â¼»òÎŞĞ§Ä¿Â¼", (LPCTSTR)L" mydockfinder°²×°×é¼ş", MB_OK);
-    wstring InstallFolder_temp = BrowseFolder(L" ÇëÑ¡Ôñmydockfinder°²×°Ä¿Â¼£¨²»ÒªÑ¡CÅÌ£©");
-    // ¼ì²éÂ·¾¶¿ÉÓÃ
+inline bool mydockfinder_install() {
+    INFO_(L"[mydockfinderå®‰è£…å™¨]å¼€å§‹å®‰è£…");
+    //æ–‡ä»¶è·¯å¾„
+    INFO_(L"[mydockfinderå®‰è£…å™¨]è·å–è·¯å¾„");
+    MessageBox(NULL, (LPCTSTR)L"è¯·é€‰æ‹©å®‰è£…ç›®å½•ï¼Œä¸è¦é€‰æ‹©Cç›˜ç›®å½•ï¼Œæ— æ•ˆç›®å½•", (LPCTSTR)L" mydockfinderå®‰è£…å·¥å…·", MB_OK);
+    std::wstring InstallFolder_temp = BrowseFolder(L" è¯·é€‰æ‹©mydockfinderå®‰è£…ç›®å½•ï¼Œä¸è¦é€‰Cç›˜");
+    // æ£€æŸ¥è·¯å¾„åˆæ³•æ€§
     wchar_t driveLetter = towupper(InstallFolder_temp[0]);
     if (InstallFolder_temp.empty() || driveLetter == L'C') {
-        ERROR_(L"[mydockfinder°²×°×é¼ş]Ä¿Â¼Îª¿Õ»ò²»¿ÉÓÃ ³ÌĞòÍË³ö");
-        MessageBox(NULL, (LPCTSTR)L"²»Òª²»Ñ¡ÔñÄ¿Â¼»òÑ¡Ôñ²»¿ÉÓÃÄ¿Â¼ °²×°½ø³ÌÍË³ö", (LPCTSTR)L" mydockfinder°²×°×é¼ş", MB_OK);
+        ERROR_(L"[mydockfinderå®‰è£…å™¨]ç›®å½•ä¸ºç©ºæˆ–ä¸å¯ç”¨ ç¨‹åºé€€å‡º");
+        MessageBox(NULL, (LPCTSTR)L"è¯·é‡æ–°é€‰æ‹©ç›®å½•ï¼Œé€‰æ‹©ä¸å¯ç”¨ç›®å½• å®‰è£…ç¨‹åºé€€å‡º", (LPCTSTR)L" mydockfinderå®‰è£…å·¥å…·", MB_OK);
         return false;
     }
-    wstring InstallPath;
-    //½áÊømydockfinder½ø³Ì
-    INFO_(L"[mydockfinder°²×°×é¼ş]½áÊømydockfinder×é¼ş");
+    std::wstring InstallPath;
+    //å…³é—­mydockfinderç›¸å…³
+    INFO_(L"[mydockfinderå®‰è£…å™¨]å…³é—­mydockfinderç›¸å…³");
     killapp(L"trayico.exe");
     killapp(L"UiAccess.exe");
     killapp(L"Dockmod64arm.exe");
@@ -146,47 +147,47 @@ bool mydockfinder_install() {
     killapp(L"dock.exe");
     killapp(L"steamclient_loader.exe");
     killapp(L"ApplicationFrameHost.exe");
-    //²¹È«ÎÄ¼şÂ·¾¶±£Ö¤Ò»¶¨ÓĞ/mydockfinder
-    wstring temp_path = L"/mydockfinder";
-    wstring temp_path1 = L"/MyDockFinder";
+    //æ£€æŸ¥æ–‡ä»¶è·¯å¾„æœ€åæ˜¯å¦æœ‰/mydockfinder
+    std::wstring temp_path = L"/mydockfinder";
+    std::wstring temp_path1 = L"/MyDockFinder";
     if (pathback(&InstallFolder_temp, InstallFolder_temp.size(), & temp_path, &temp_path1)) {
         InstallPath = InstallFolder_temp + L"/MyDockFinder";
     }
     else {
         InstallPath = InstallFolder_temp;
     }
-    //¼ì²â°²×°Ä£Ê½
+    //æ£€æµ‹å®‰è£…æ¨¡å¼
     if (steam_mydockfinder(InstallPath)) {
-        INFO_(L"[mydockfinder°²×°×é¼ş]Ä£Ê½1 steam°æ±¾°²×°");
+        INFO_(L"[mydockfinderå®‰è£…å™¨]æ¨¡å¼1 steamç‰ˆæœ¬å®‰è£…");
 
     }
     else {
-        //Á½¸ödockÍ¼±êÅäÖÃÎÄ¼ş
-        wstring configfiles_1 = InstallPath + L"/ico.ini";
-        wstring configfiles_2 = InstallPath + L"/ico_bak.ini";
-        //¼ì²âÊÇ·ñ´æÔÚÅäÖÃÎÄ¼ş(¼ì²âÊÇ·ñ´æÔÚÅäÖÃ)
+        //å¤‡ä»½dockå›¾æ ‡é…ç½®æ–‡ä»¶
+        std::wstring configfiles_1 = InstallPath + L"/ico.ini";
+        std::wstring configfiles_2 = InstallPath + L"/ico_bak.ini";
+        //æ£€æµ‹æ˜¯å¦å­˜åœ¨é…ç½®æ–‡ä»¶ï¼ˆæ£€æµ‹æ˜¯å¦å·²å®‰è£…ï¼‰
         if (fs::exists(configfiles_1) && fs::exists(configfiles_2)) {
-            INFO_(L"[mydockfinder°²×°×é¼ş]¼ì²âµ½Ô­ÓĞÅäÖÃ");
-            wstring backupfiles = L"AppData/MyDockFinder/MyDockFinder_ConfigData";
+            INFO_(L"[mydockfinderå®‰è£…å™¨]æ£€æµ‹åˆ°åŸæœ‰é…ç½®");
+            std::wstring backupfiles = L"AppData/MyDockFinder/MyDockFinder_ConfigData";
             copyPath(configfiles_1, backupfiles);
             copyPath(configfiles_2, backupfiles);
-            INFO_(L"[mydockfinder°²×°×é¼ş]Íê³É±¸·İ");
+            INFO_(L"[mydockfinderå®‰è£…å™¨]å®Œæˆå¤‡ä»½");
             copy_mydockfinder(InstallPath);
-            INFO_(L"[mydockfinder°²×°×é¼ş]¸´ÖÆÎÄ¼şÍê³É ¿ªÊ¼»¹Ô­±¸·İ");
+            INFO_(L"[mydockfinderå®‰è£…å™¨]æ–‡ä»¶å¤åˆ¶å®Œæˆ å¼€å§‹æ¢å¤é…ç½®");
             copyPath(backupfiles + L"/ico.ini", InstallPath);
             copyPath(backupfiles + L"/ico_bak.ini", InstallPath);
         }
         else {
-            INFO_(L"[mydockfinder°²×°×é¼ş]Î´¼ì²âµ½Ô­ÓĞÅäÖÃ");
+            INFO_(L"[mydockfinderå®‰è£…å™¨]æœªæ£€æµ‹åˆ°åŸæœ‰é…ç½®");
             copy_mydockfinder(InstallPath);
         }
         
 
     }
-    INFO_(L"[mydockfinder°²×°×é¼ş]ÉèÖÃ¿ª»ú×ÔÆô¶¯");
+    INFO_(L"[mydockfinderå®‰è£…å™¨]è®¾ç½®å¼€æœºè‡ªå¯åŠ¨");
     const wchar_t* APP_NAME = L"MyDockFinder";
-    wstring appPath = InstallPath + L"/steamclient_loader.exe";
+    std::wstring appPath = InstallPath + L"/steamclient_loader.exe";
     AddAutoStart(appPath, APP_NAME);
-    INFO_(L"[mydockfinder°²×°×é¼ş]ÍË³ö");
+    INFO_(L"[mydockfinderå®‰è£…å™¨]é€€å‡º");
 	return true;
 }

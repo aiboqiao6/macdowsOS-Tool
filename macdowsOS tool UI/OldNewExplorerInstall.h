@@ -1,97 +1,96 @@
 #pragma once
-#include<bits/stdc++.h>
 #include"FilesSystem.h"
 #include"WindowControl.h"
+#include"All.h"
 #include<Windows.h>
 #include <string>
 #include <chrono>
 #include <thread>
-using namespace std;
 namespace {
-    // ÌáÇ°ÉùÃ÷½á¹¹Ìå£¨½â¾öÎ´ÉùÃ÷±êÊ¶·ûÎÊÌâ£©
+    // å†…éƒ¨è¾…åŠ©ç»“æ„ä½“ï¼ˆæ­¤å‘½åç©ºé—´å¤–éƒ¨ä¸å¯è§ï¼‰
     struct ControlHandles {
         HWND hEdit;
         HWND hOkBtn;
     };
-        // ·µ»Ø£ºµÚÒ»¸öÕÒµ½µÄÊäÈë¿ò¿Ø¼şHWND£¬Î´ÕÒµ½·µ»ØNULL
+        // é€’å½’ï¼šæ‰¾åˆ°ç¬¬ä¸€ä¸ªç¬¦åˆè¦æ±‚çš„ç¼–è¾‘æ¡†HWNDï¼Œæœªæ‰¾åˆ°è¿”å›NULL
         HWND FindEditControlRecursive(HWND hParent) {
 
-            // 2. ±éÀúµ±Ç°¸¸´°¿ÚµÄÖ±½Ó×Ó¿Ø¼ş£¨GW_CHILD»ñÈ¡µÚÒ»¸ö×Ó¿Ø¼ş£©
+            // 2. æšä¸¾å½“å‰çˆ¶çª—å£çš„ç›´æ¥å­æ§ä»¶ï¼ˆGW_CHILDè·å–ç¬¬ä¸€ä¸ªå­æ§ä»¶ï¼‰
             HWND hChild = GetWindow(hParent, GW_CHILD);
             while (hChild) {
-                // 3. »ñÈ¡µ±Ç°×Ó¿Ø¼şµÄÀàÃû£¬ÅĞ¶ÏÊÇ·ñÎªÊäÈë¿ò£¨EDITÀà£©
+                // 3. è·å–å½“å‰å­æ§ä»¶çš„ç±»åï¼Œåˆ¤æ–­æ˜¯å¦ä¸ºç¼–è¾‘æ¡†ï¼ˆEDITç±»ï¼‰
                 wchar_t className[256] = { 0 };
                 GetClassNameW(hChild, className, 256);
 
-                // ¾«×¼Æ¥Åä±ê×¼ÊäÈë¿òÀàÃû£¨EDIT£©£¬ÕÒµ½ÔòÖ±½Ó·µ»Ø
+                // æ ‡å‡†åŒ¹é…é€»è¾‘ï¼šå¦‚æœæ˜¯EDITç±»åˆ™æ‰¾åˆ°ï¼Œç›´æ¥è¿”å›
                 if (wcscmp(className, L"Edit") == 0|| wcscmp(className, L"EDIT")==0) {
                     return hChild;
                 }
 
-                // 4. µİ¹é²éÕÒµ±Ç°×Ó¿Ø¼şµÄ×Ó¿Ø¼ş£¨Éî¶ÈÓÅÏÈ£¬ÓÅÏÈ²éÉî²ã¼¶£©
+                // 4. é€’å½’æŸ¥æ‰¾å½“å‰å­æ§ä»¶çš„å­æ§ä»¶ï¼ˆæ·±åº¦ä¼˜å…ˆï¼Œå…ˆæ·±å…¥å±‚çº§ï¼‰
                 HWND hFound = FindEditControlRecursive(hChild);
                 if (hFound) {
                     return hFound;
                 }
 
-                // 5. ²éÕÒÏÂÒ»¸öĞÖµÜ¿Ø¼ş
+                // 5. ç»§ç»­æŸ¥æ‰¾ä¸‹ä¸€ä¸ªå…„å¼Ÿæ§ä»¶
                 hChild = GetWindow(hChild, GW_HWNDNEXT);
             }
 
-            // 6. ËùÓĞ×Ó¿Ø¼ş±éÀúÍê±ÏÎ´ÕÒµ½£¬·µ»ØNULL
+            // 6. æ‰€æœ‰å­æ§ä»¶éå†å®Œä»æœªæ‰¾åˆ°ï¼Œè¿”å›NULL
             return NULL;
         }
-    // ºËĞÄº¯Êı£º¿ØÖÆÔËĞĞ´°¿ÚÖ´ĞĞÖ¸¶¨ÃüÁî
+    // æ ¸å¿ƒå‡½æ•°ï¼šåœ¨è¿è¡Œå¯¹è¯æ¡†ä¸­æ‰§è¡ŒæŒ‡å®šå‘½ä»¤
     bool ExecuteInRunDialog(const std::wstring& command){
-        // 1. Ä£Äâ°´ÏÂWin+R´ò¿ªÔËĞĞ´°¿Ú£¨ÓÅ»¯£ºÈ·±£°´¼üÊÍ·ÅË³ĞòÕıÈ·£©
+        // 1. æ¨¡æ‹ŸæŒ‰ä¸‹Win+Ræ‰“å¼€è¿è¡Œçª—å£ï¼ˆä¼˜åŒ–ç¡®è®¤æŒ‰ä¸‹å’Œé‡Šæ”¾é¡ºåºä»¥ç¡®ä¿ç¨³å®šæ€§ï¼‰
         INPUT inputs[4] = { 0 };
-        // °´ÏÂWin¼ü
+        // æŒ‰ä¸‹Winé”®
         inputs[0].type = INPUT_KEYBOARD;
         inputs[0].ki.wVk = VK_LWIN;
-        // °´ÏÂR¼ü
+        // æŒ‰ä¸‹Ré”®
         inputs[1].type = INPUT_KEYBOARD;
         inputs[1].ki.wVk = 'R';
-        // ËÉ¿ªR¼ü
+        // é‡Šæ”¾Ré”®
         inputs[2].type = INPUT_KEYBOARD;
         inputs[2].ki.wVk = 'R';
         inputs[2].ki.dwFlags = KEYEVENTF_KEYUP;
-        // ËÉ¿ªWin¼ü
+        // é‡Šæ”¾Winé”®
         inputs[3].type = INPUT_KEYBOARD;
         inputs[3].ki.wVk = VK_LWIN;
         inputs[3].ki.dwFlags = KEYEVENTF_KEYUP;
         SendInput(_countof(inputs), inputs, sizeof(INPUT));
-        // 2. µÈ´ıÔËĞĞ´°¿Ú´´½¨£¬²¢»ñÈ¡Æä¾ä±ú£¨¼æÈİ¶àÓïÑÔ£ºÓÅÏÈ°´ÀàÃû²éÕÒ£¬²»ÒÀÀµ±êÌâ£©
-        INFO_(L"[OldNewExplorer°²×°×é¼ş]µÈ´ıÔËĞĞ´°¿ÚÆô¶¯");
-        HWND hRunDialog = FindWindowW(NULL, L"ÔËĞĞ");
+        // 2. ç­‰å¾…è¿è¡Œçª—å£å‡ºç°ï¼ˆæ·»åŠ è·å–çª—å£å»¶æ—¶ä»¥å¢åŠ ç¨³å®šæ€§ï¼Œå…ˆç¼“å†²å†æŸ¥æ‰¾ï¼Œé¿å…å¼‚å¸¸ï¼‰
+        INFO_(L"[OldNewExplorerå®‰è£…å·¥å…·]ç­‰å¾…è¿è¡Œçª—å£å‡ºç°");
+        HWND hRunDialog = FindWindowW(NULL, L"è¿è¡Œ");
         while (hRunDialog == NULL) {
-            hRunDialog = FindWindowW(NULL, L"ÔËĞĞ");
+            hRunDialog = FindWindowW(NULL, L"è¿è¡Œ");
         }
-        INFO_(L"[OldNewExplorer°²×°×é¼ş]ÔËĞĞ´°¿ÚÆô¶¯");
-        // 3. Ã¶¾ÙÔËĞĞ´°¿ÚµÄ×Ó¿Ø¼ş£¬ÕÒµ½ÊäÈë±à¼­¿òºÍÈ·¶¨°´Å¥
-        // ĞŞÕı½á¹¹Ìå³õÊ¼»¯·½Ê½£¨½â¾öÓï·¨´íÎó£©
+        INFO_(L"[OldNewExplorerå®‰è£…å·¥å…·]è¿è¡Œçª—å£å‡ºç°");
+        // 3. æšä¸¾è¿è¡Œçª—å£çš„å­æ§ä»¶ï¼Œæ‰¾åˆ°è¾“å…¥ç¼–è¾‘æ¡†å’Œç¡®å®šæŒ‰é’®
+        // ç»“æ„ä½“åˆå§‹åŒ–é‡‡ç”¨ç°ä»£æ ¼å¼é¿å…è¯­æ³•é—®é¢˜
         ControlHandles handles;
         handles.hEdit = nullptr;
         handles.hOkBtn = nullptr;
 
-        INFO_(L"[OldNewExplorer°²×°×é¼ş]µÈ´ıÊäÈë¿ò¼ÓÔØ³É¹¦");
+        INFO_(L"[OldNewExplorerå®‰è£…å·¥å…·]ç­‰å¾…æŸ¥æ‰¾ç¼–è¾‘æ¡†æˆåŠŸ");
         handles.hEdit = FindEditControlRecursive(hRunDialog);
         while (handles.hEdit == NULL) {
             handles.hEdit = FindEditControlRecursive(hRunDialog);
         }
-        INFO_(L"[OldNewExplorer°²×°×é¼ş]ÔËĞĞ´°¿ÚÆô¶¯");
+        INFO_(L"[OldNewExplorerå®‰è£…å·¥å…·]ç¼–è¾‘æ¡†å·²æ‰¾åˆ°");
         
-        // 4. ¹Ø¼üĞŞ¸´£ºÏÈ¼¤»îÊäÈë¿ò£¬È·±£½¹µãÔÚÊäÈë¿òÉÏ
-        SetForegroundWindow(hRunDialog); // ½«ÔËĞĞ´°¿ÚÖÃ¶¥
-        SetFocus(handles.hEdit);         // ¸øÊäÈë¿òÉèÖÃ½¹µã
-        // 5. Ïò±à¼­¿ò·¢ËÍÎÄ±¾£¨·Ö²½Öè£¬´¥·¢ÄÚÈİ±ä¸ü£©
-        SendMessageW(handles.hEdit, EM_SETSEL, 0, -1); // Ñ¡ÖĞËùÓĞÎÄ±¾
-        SendMessageW(handles.hEdit, WM_CLEAR, 0, 0);    // Çå³ıÑ¡ÖĞÄÚÈİ
-        // ºËĞÄĞŞ¸´1£ºÖğ×Ö·û·¢ËÍÊäÈë£¨Ä£ÄâÕæÊµ¼üÅÌÊäÈë£¬´¥·¢ÄÚÈİ±ä¸ü£©
+        // 4. æ§ä»¶ä¿®æ”¹ä¼˜å…ˆçº§ç¡®ä¿è¾“å…¥æ¡†è·å¾—ç„¦ç‚¹ä»¥æé«˜ç¨³å®šæ€§
+        SetForegroundWindow(hRunDialog); // ç½®é¡¶è¿è¡Œçª—å£
+        SetFocus(handles.hEdit);         // è®¾ç½®è¾“å…¥æ¡†ç„¦ç‚¹
+        // 5. åœ¨ç¼–è¾‘æ¡†ä¸­è¾“å…¥æ–‡æœ¬çš„æ”¹è‰¯æ­¥éª¤ï¼Œç¡®ä¿æ•°æ®ç¨³å®š
+        SendMessageW(handles.hEdit, EM_SETSEL, 0, -1); // é€‰ä¸­æ‰€æœ‰æ–‡æœ¬
+        SendMessageW(handles.hEdit, WM_CLEAR, 0, 0);    // æ¸…é™¤é€‰ä¸­å†…å®¹
+        // ä¿®æ”¹1ï¼šé€å­—ç¬¦è¾“å…¥ï¼ˆæ¨¡æ‹ŸçœŸå®è¾“å…¥ï¼Œä½¿æ•°æ®æ›´ç¨³å®šï¼‰
         for (wchar_t c : command){
-            // ·¢ËÍ×Ö·ûÏûÏ¢£¨Ìæ´úÖ±½ÓSetText£¬¸üÌù½üÕæÊµÊäÈë£©
+            // å‘é€å­—ç¬¦æ¶ˆæ¯ï¼ˆç›´æ¥SetTextå¯èƒ½æœ‰ç¨³å®šæ€§é—®é¢˜ï¼Œä½¿ç”¨æ¨¡æ‹Ÿè¾“å…¥ï¼‰
             SendMessageW(handles.hEdit, WM_CHAR, static_cast<WPARAM>(c), 0);
         }
-        // ºËĞÄĞŞ¸´2£ºÖ÷¶¯·¢ËÍEN_CHANGEÍ¨Öª£¬¸æËß¸¸´°¿ÚÊäÈë¿òÄÚÈİ±äÁË
+        // ä¿®æ”¹2ï¼šå‘é€EN_CHANGEé€šçŸ¥ä¿ƒä½¿ç•Œé¢æ›´æ–°ï¼Œç¡®ä¿æ•°æ®ç¨³å®š
         SendMessageW(hRunDialog, WM_COMMAND,MAKEWPARAM(GetDlgCtrlID(handles.hEdit), EN_CHANGE),reinterpret_cast<LPARAM>(handles.hEdit));
        
         enter_key();
@@ -101,40 +100,40 @@ namespace {
     }
 
 }
-void OldNewExplorer_Install() {
-    INFO_(L"[OldNewExplorer°²×°×é¼ş]×é¼şÔËĞĞ");
-    INFO_(L"[OldNewExplorer°²×°×é¼ş]¿½±´³ÌĞòÎÄ¼ş");
+inline void OldNewExplorer_install() {
+    INFO_(L"[OldNewExplorerå®‰è£…å·¥å…·]å¼€å§‹å®‰è£…");
+    INFO_(L"[OldNewExplorerå®‰è£…å·¥å…·]å¤åˆ¶åº”ç”¨æ–‡ä»¶");
     copyPath(L"./AppData/OldNewExplorer", L"C:/");
 
-    INFO_(L"[OldNewExplorer°²×°×é¼ş]ÔËĞĞÅäÖÃ³ÌĞò");
-    ExecuteInRunDialog(L"C:\OldNewExplorer\OldNewExplorerCfg.exe");
-    INFO_(L"[OldNewExplorer°²×°×é¼ş]µÈ´ıÅäÖÃ³ÌĞòÆô¶¯");
-    HWND hWnd_Window= FindWindowW(NULL, L"ÖÂÃÀ»¯ OldNewExplorer ÅäÖÃ");
+    INFO_(L"[OldNewExplorerå®‰è£…å·¥å…·]æ‰“å¼€é…ç½®ç¨‹åº");
+    ExecuteInRunDialog(L"C:\\OldNewExplorer\\OldNewExplorerCfg.exe");
+    INFO_(L"[OldNewExplorerå®‰è£…å·¥å…·]ç­‰å¾…é…ç½®çª—å£å‡ºç°");
+    HWND hWnd_Window= FindWindowW(NULL, L"é…ç½® OldNewExplorer");
     while (hWnd_Window == NULL) {
-        hWnd_Window = FindWindowW(NULL, L"ÖÂÃÀ»¯ OldNewExplorer ÅäÖÃ");
+        hWnd_Window = FindWindowW(NULL, L"é…ç½® OldNewExplorer");
     }
-    INFO_(L"[OldNewExplorer°²×°×é¼ş]ÅäÖÃ³ÌĞòÆô¶¯");
+    INFO_(L"[OldNewExplorerå®‰è£…å·¥å…·]é…ç½®çª—å£å‡ºç°");
     SetForegroundWindow(hWnd_Window);
     SetWindowPos(hWnd_Window, NULL, 0, 0, 0, 0, SWP_NOSIZE);
 
-    INFO_(L"[OldNewExplorer°²×°×é¼ş]¿ªÊ¼²Ù¿ØÅäÖÃ³ÌĞò");
-    TurnOffOn(true , hWnd_Window, L"OldNewExplorer°²×°×é¼ş", L"Ê¹ÓÃ¾­µäÇı¶¯Æ÷·Ö×é");
-    TurnOffOn(false, hWnd_Window, L"OldNewExplorer°²×°×é¼ş", L"Ê¹ÓÃ¿â¡¢²¢Òş²Ø¶¥²¿ÎÄ¼ş¼Ğ");
+    INFO_(L"[OldNewExplorerå®‰è£…å·¥å…·]å¼€å§‹é…ç½®è®¾ç½®");
+    TurnOffOn(true , hWnd_Window, L"OldNewExplorerå®‰è£…å·¥å…·", L"ä½¿ç”¨ç»å…¸å¯¼èˆªæ ");
+    TurnOffOn(false, hWnd_Window, L"OldNewExplorerå®‰è£…å·¥å…·", L"ä½¿ç”¨åº“ã€å®¶åº­ç»„å’Œæ”¶è—å¤¹");
 
-    TurnOffOn(true , hWnd_Window, L"OldNewExplorer°²×°×é¼ş", L"Ê¹ÓÃ¹¤¾ßÀ¸´úÌæ¹¦ÄÜÇø£¨±ØÑ¡£©");
-    TurnOffOn(false, hWnd_Window, L"OldNewExplorer°²×°×é¼ş", L"²»Òª¹´Ñ¡ÎÒ");
-    TurnOffOn(false, hWnd_Window, L"OldNewExplorer°²×°×é¼ş", L"Òş²Ø·µ»ØÉÏ¼¶Ä¿Â¼°´Å¥£¨±ØÑ¡£©");
-    TurnOffOn(false, hWnd_Window, L"OldNewExplorer°²×°×é¼ş", L"¿ªÆôµ¼º½À¸ÌØĞ§£¨²¿·ÖÖ÷ÌâĞèÒª¹´Ñ¡£©");
-    TurnOffOn(true , hWnd_Window, L"OldNewExplorer°²×°×é¼ş", L"Òş²Ø±êÌâÀ¸Ğ¡Í¼±ê£¨¿ÉÑ¡£©");
-    TurnOffOn(true , hWnd_Window, L"OldNewExplorer°²×°×é¼ş", L"Òş²Ø±êÌâÀ¸ÎÄ×Ö£¨¿ÉÑ¡£©");
+    TurnOffOn(true , hWnd_Window, L"OldNewExplorerå®‰è£…å·¥å…·", L"ä½¿ç”¨å‘½ä»¤æ ä»£æ›¿è¯¦ç»†ä¿¡æ¯é¢æ¿ï¼ˆå¯é€‰ï¼‰");
+    TurnOffOn(false, hWnd_Window, L"OldNewExplorerå®‰è£…å·¥å…·", L"ä¸æ˜¾ç¤ºè¯¦ç»†ä¿¡æ¯ï¼ˆå¯é€‰ï¼‰");
+    TurnOffOn(false, hWnd_Window, L"OldNewExplorerå®‰è£…å·¥å…·", L"åœ¨æ–‡ä»¶å¤¹å·¦è¾¹æ˜¾ç¤ºç›®å½•æ ‘æŒ‰é’®ï¼ˆå¯é€‰ï¼‰");
+    TurnOffOn(false, hWnd_Window, L"OldNewExplorerå®‰è£…å·¥å…·", L"ä¸ºæ–‡ä»¶å¤¹èƒŒæ™¯å¯ç”¨é€æ˜æ•ˆæœï¼ˆéœ€è¦DWMï¼Œå¯é€‰ï¼‰");
+    TurnOffOn(true , hWnd_Window, L"OldNewExplorerå®‰è£…å·¥å…·", L"éšè—èµ„æºç®¡ç†å™¨æ ‡é¢˜ï¼ˆå¯é€‰ï¼‰");
+    TurnOffOn(true , hWnd_Window, L"OldNewExplorerå®‰è£…å·¥å…·", L"éšè—èµ„æºç®¡ç†å™¨æ–‡å­—ï¼ˆå¯é€‰ï¼‰");
     
-    TurnOffOn(false, hWnd_Window, L"OldNewExplorer°²×°×é¼ş", L"ÏÔÊ¾µ×²¿ÏêÏ¸ĞÅÏ¢´°¸ñ£¨´ó²¿·ÖÇé¿öÏÂ¶¼²»ÓÃ¹´Ñ¡£©");
-    TurnOffOn(false, hWnd_Window, L"OldNewExplorer°²×°×é¼ş", L"ÏÔÊ¾µ×²¿×´Ì¬À¸£¨²»ÓÃ¹´Ñ¡£©");
+    TurnOffOn(false, hWnd_Window, L"OldNewExplorerå®‰è£…å·¥å…·", L"æ˜¾ç¤ºåº•éƒ¨è¯¦ç»†ä¿¡æ¯æ ï¼ˆå¤§éƒ¨åˆ†ç”¨æˆ·é»˜è®¤å…³é—­ï¼Œå¯é€‰ï¼‰");
+    TurnOffOn(false, hWnd_Window, L"OldNewExplorerå®‰è£…å·¥å…·", L"æ˜¾ç¤ºåº•éƒ¨çŠ¶æ€æ ï¼ˆé»˜è®¤å…³é—­ï¼Œå¯é€‰ï¼‰");
 
-    ClickButtonMode1(hWnd_Window, L"OldNewExplorer°²×°×é¼ş", L"°²×°");
+    ClickButtonMode1(hWnd_Window, L"OldNewExplorerå®‰è£…å·¥å…·", L"å®‰è£…");
     
-    INFO_(L"[OldNewExplorer°²×°×é¼ş]½áÊøÅäÖÃ³ÌĞò½ø³Ì");
+    INFO_(L"[OldNewExplorerå®‰è£…å·¥å…·]é…ç½®å®Œæˆå…³é—­ç¨‹åº");
     killapp(L"OldNewExplorerCfg.exe");
-    INFO_(L"[OldNewExplorer°²×°×é¼ş]ÅäÖÃ½áÊø ÍË³ö");
+    INFO_(L"[OldNewExplorerå®‰è£…å·¥å…·]é…ç½®ç»“æŸ é€€å‡º");
     return;
 }

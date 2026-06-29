@@ -1,0 +1,22 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/main.qml</file>
+        <file>qml/WindowControls.qml</file>
+        <file>qml/NavigationSidebar.qml</file>
+        <file>qml/HomePage.qml</file>
+        <file>qml/ThemeWizardPage.qml</file>
+        <file>qml/ThemeWizardWindow.qml</file>
+        <file>qml/CeleCraftPage.qml</file>
+        <file>qml/SettingsPage.qml</file>
+        <!-- <file>qml/WindowRoundPage.qml</file> -->
+        <file>qml/WindowsFixPage.qml</file>
+        <file>qml/BeautificationHub.qml</file>
+        <file>res/home.png</file>
+        <file>res/WindowsToMac.png</file>
+        <file>res/WindowsFix.png</file>
+        <file>res/box.png</file>
+        <file>res/Setting.png</file>
+        <!-- <file>res/tool/WindowRound.png</file> -->
+        <file>pingfang0.ttf</file>
+    </qresource>
+</RCC>

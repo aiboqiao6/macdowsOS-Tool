@@ -1,21 +1,24 @@
 #pragma once
+// ============================================================
+// restart.h
+// æè¿°ï¼šç³»ç»Ÿé‡å¯å·¥å…·ï¼Œæä¾›é‡å¯è®¡ç®—æœºçš„ç›¸å…³å‡½æ•°
+//      åŒ…å«å¸¦ç¡®è®¤æç¤ºå’Œæ— æç¤ºä¸¤ç§é‡å¯æ–¹å¼
+// ============================================================
 #include<windows.h>
-#include<bits/stdc++.h>
 #include"LogSystem.h"
-using namespace std;
-void restart_() {
-    INFO_(L"[ÖØÆô×é¼ş]Æô¶¯");
-    if (MessageBoxW(NULL, L"µã»÷È·¶¨ÒÔÖØĞÂÆô¶¯ÏµÍ³", L"macdowsOS tool ÖØÆô", MB_OK) == 1) {
-        INFO_(L"[ÖØÆô×é¼ş]ÖØÆô");
-        system("shutdown -r -t 2");  // 2ÃëºóÖØÆô
+inline void restart_() {
+    INFO_(L"[é‡å¯å™¨]å¼€å§‹");
+    if (MessageBoxW(NULL, L"è¯·ç¡®è®¤é‡å¯è®¡ç®—æœºç³»ç»Ÿï¼Ÿ", L"macdowsOS tool é‡å¯", MB_OK) == 1) {
+        INFO_(L"[é‡å¯å™¨]é‡å¯");
+        system("shutdown -r -t 2");  // 2ç§’åé‡å¯
     }
-    INFO_(L"[ÖØÆô×é¼ş]ÍË³ö");
+    INFO_(L"[é‡å¯å™¨]é€€å‡º");
     return;
 }
-void restart_nonotice() {
-    INFO_(L"[ÖØÆô×é¼ş]Æô¶¯");
-    INFO_(L"[ÖØÆô×é¼ş]ÖØÆô");
-    system("shutdown -r -t 0");  // 2ÃëºóÖØÆô
-    INFO_(L"[ÖØÆô×é¼ş]ÍË³ö");
+inline void restart_nonotice() {
+    INFO_(L"[é‡å¯å™¨]å¼€å§‹");
+    INFO_(L"[é‡å¯å™¨]é‡å¯");
+    system("shutdown -r -t 0");  // ç«‹å³é‡å¯
+    INFO_(L"[é‡å¯å™¨]é€€å‡º");
     return;
 }

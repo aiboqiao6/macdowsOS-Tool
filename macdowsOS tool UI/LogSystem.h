@@ -1,83 +1,78 @@
 #pragma once
+// ============================================================
+// LogSystem.h
+// æè¿°ï¼šæ—¥å¿—ç³»ç»Ÿå·¥å…·ï¼Œæä¾›ç¨‹åºè¿è¡Œæ—¶çš„æ—¥å¿—è®°å½•åŠŸèƒ½
+//      åŒ…å« INFO_ã€ERROR_ã€MESSAGE_ ç­‰æ—¥å¿—è¾“å‡ºå‡½æ•°
+// ============================================================
+
 #include <iostream>
 #include <sstream>
+#include <string>
 #include <windows.h>
-#include <exception>
-#include <type_traits>
-using namespace std;
 
-int open_debug_window;
+// è°ƒè¯•çª—å£å¼€å…³
+inline bool g_debugWindow = false;
 
-// ÄÚ²¿¸¨Öúº¯Êı - ²»±©Â¶¸øÍâ²¿
-namespace internal {
-    // »ñÈ¡¸ñÊ½»¯µÄÊ±¼ä×Ö·û´®
-    inline wstring getFormattedTime() {
-        SYSTEMTIME now;
-        GetLocalTime(&now);
-        wstringstream ws;
-        ws << L"[" << now.wYear << L"/" << now.wMonth << L"/" << now.wDay
-            << L"|" << now.wHour << L":" << now.wMinute << L":" << now.wSecond
-            << L":" << now.wMilliseconds << L"]";
-        return ws.str();
+namespace detail {
+
+// è·å–æ ¼å¼åŒ–æ—¶é—´å­—ç¬¦ä¸²
+inline std::wstring GetFormattedTime() {
+    SYSTEMTIME now;
+    GetLocalTime(&now);
+    std::wstringstream ws;
+    ws << L"[" << now.wYear << L"/" << now.wMonth << L"/" << now.wDay
+       << L"|" << now.wHour << L":" << now.wMinute << L":" << now.wSecond
+       << L":" << now.wMilliseconds << L"]";
+    return ws.str();
+}
+
+} // namespace detail
+
+// æ—¥å¿—å‡½æ•° - å‚æ•°æ”¹ä¸º const& é¿å…æ‹·è´
+inline void ERROR_(const std::wstring& data) {
+    std::wcout << detail::GetFormattedTime()
+               << L"[ERROR]" << data << std::endl;
+}
+
+inline void INFO_(const std::wstring& data) {
+    std::wcout << detail::GetFormattedTime()
+               << L"[INFO]" << data << std::endl;
+}
+
+// å°†çª„å­—ç¬¦ä¸²è½¬ä¸ºå®½å­—ç¬¦ä¸²
+inline std::wstring ToWide(const std::string& str) {
+    if (str.empty()) return {};
+    int len = MultiByteToWideChar(CP_ACP, 0, str.c_str(), -1, nullptr, 0);
+    std::wstring wide(static_cast<size_t>(len) - 1, L'\0');
+    MultiByteToWideChar(CP_ACP, 0, str.c_str(), -1, &wide[0], len);
+    return wide;
+}
+
+// MESSAGE_ æ¨¡æ¿ - ä¸­æ–‡ä¿¡æ¯ + å€¼
+template<typename T>
+void MESSAGE_(const std::wstring& chinese, const T& value) {
+    std::wcout << detail::GetFormattedTime()
+               << L"[MESSAGE]" << chinese << value << std::endl;
+}
+
+inline void MESSAGE_(const std::wstring& chinese, const std::exception& value) {
+    std::wcout << detail::GetFormattedTime()
+               << L"[MESSAGE]" << chinese << ToWide(value.what()) << std::endl;
+}
+
+inline void MESSAGE_(const std::wstring& chinese, const std::string& value) {
+    std::wcout << detail::GetFormattedTime()
+               << L"[MESSAGE]" << chinese << ToWide(value) << std::endl;
+}
+
+inline void MESSAGE_(const std::wstring& chinese, const char* value) {
+    if (value) {
+        std::wcout << detail::GetFormattedTime()
+                   << L"[MESSAGE]" << chinese << ToWide(value) << std::endl;
     }
 }
 
-// Ô­ÓĞµÄÈı¸öº¯Êı±£³ÖÏàÍ¬µÄÍâ¹ÛºÍµ÷ÓÃ·½Ê½
-void ERROR_(wstring data_) {
-    wcout << internal::getFormattedTime();
-    wcout << L"[ERROR]";
-    wcout << data_ << endl;
-}
-
-void INFO_(wstring data_ ) {
-    wcout << internal::getFormattedTime();
-    wcout << L"[INFO]";
-    wcout << data_ << endl;
-}
-
-// ¹¤¾ßº¯Êı£º½«×Ö·û´®×ª»»Îª¿í×Ö·û´®
-inline wstring to_wstring(const string& str) {
-    return wstring(str.begin(), str.end());
-}
-
-// ¹¤¾ßº¯Êı£º½«×Ö·ûÖ¸Õë×ª»»Îª¿í×Ö·û´®
-inline wstring to_wstring(const char* str) {
-    if (str == nullptr) return L"(null)";
-    return wstring(str, str + strlen(str));
-}
-
-// MESSAGE_º¯ÊıÄ£°å
-template<typename T>
-void MESSAGE_(wstring chinese, const T& value) {
-    wcout << internal::getFormattedTime();
-    wcout << L"[MESSAGE]";
-    wcout << chinese << value << endl;
-}
-
-// MESSAGE_º¯ÊıÖØÔØ - ÓÃÓÚstd::exception
-void MESSAGE_(wstring chinese, const std::exception& value) {
-    wcout << internal::getFormattedTime();
-    wcout << L"[MESSAGE]";
-    wcout << chinese << to_wstring(value.what()) << endl;
-}
-
-// MESSAGE_º¯ÊıÖØÔØ - ÓÃÓÚstd::string
-void MESSAGE_(wstring chinese, const string& value) {
-    wcout << internal::getFormattedTime();
-    wcout << L"[MESSAGE]";
-    wcout << chinese << to_wstring(value) << endl;
-}
-
-// MESSAGE_º¯ÊıÖØÔØ - ÓÃÓÚchar* (C×Ö·û´®)
-void MESSAGE_(wstring chinese, const char* value) {
-    wcout << internal::getFormattedTime();
-    wcout << L"[MESSAGE]";
-    wcout << chinese << to_wstring(value) << endl;
-}
-
-// MESSAGE_º¯ÊıÖØÔØ - ÓÃÓÚwstring (ÒÑ´æÔÚ£¬µ«¼ò»¯ÁË)
-void MESSAGE_(wstring chinese, const wstring& value) {
-    wcout << internal::getFormattedTime();
-    wcout << L"[MESSAGE]";
-    wcout << chinese << value << endl;
+inline void MESSAGE_(const std::wstring& chinese, const std::wstring& value) {
+    std::wcout << detail::GetFormattedTime()
+               << L"[MESSAGE]" << chinese << value << std::endl;
 }
