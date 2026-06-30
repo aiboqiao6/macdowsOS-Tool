@@ -3,16 +3,35 @@
 #include <filesystem>
 #include <cstdlib>
 #include<Windows.h>
+#include <objbase.h>
 #include"LogSystem.h"
 #include"WindowControl.h"
 #include"All.h"
 bool StartAllBack_Config(int mode) {
     INFO_(L"[StartAllBack配置器]开始");
     INFO_(L"[StartAllBack配置器]启动配置程序");
+    MESSAGE_(L"[StartAllBack配置器]安装模式 ", mode);
+    // 初始化 COM（ShellExecuteW 依赖 COM）
+    HRESULT comInit = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
+    
     if (mode == 1) {
-        ShellExecuteW(NULL, L"open", L"C:\\Program Files\\StartAllBack\\StartAllBackCfg.exe", NULL, NULL, SW_SHOWNORMAL);
-    }
-    else if (mode == 2) {
+        // 检查并启动配置程序
+        LPCWSTR exePath1 = L"C:\\Program Files\\StartAllBack\\StartAllBackCfg.exe";
+        if (GetFileAttributesW(exePath1) == INVALID_FILE_ATTRIBUTES) {
+            ERROR_(L"[StartAllBack配置器]未找到全局安装的StartAllBackCfg.exe");
+            MESSAGE_(L"[StartAllBack配置器]尝试查找当前用户安装路径", L"");
+            mode = 2; // 降级到当前用户路径
+        }
+        else {
+            HINSTANCE r = ShellExecuteW(NULL, L"open", exePath1, NULL, NULL, SW_SHOWNORMAL);
+            if ((INT_PTR)r <= 32) {
+                ERROR_(L"[StartAllBack配置器]启动配置程序失败");
+                MessageBox(NULL, (LPCTSTR)L"无法启动 StartAllBack 配置程序，请检查是否被安全软件拦截", (LPCTSTR)L" StartAllBack配置器", MB_OK | MB_ICONERROR);
+                if (comInit == S_OK) CoUninitialize();
+                return false;
+            }
+        }
+    }else if (mode == 2) {
         //获取用户名
         wchar_t username[10000];
         DWORD username_len = 10000;
@@ -21,38 +40,51 @@ bool StartAllBack_Config(int mode) {
         MESSAGE_(L"[StartAllBack配置器]检测到用户名", user_name);
 
         std::wstring configprogrampath = L"C:\\Users\\" + user_name + L"\\AppData\\Local\\StartAllBack\\StartAllBackCfg.exe";
-        const wchar_t* path_temp = configprogrampath.data();
-        //
-        ShellExecuteW(NULL, L"open", path_temp, NULL, NULL, SW_SHOWNORMAL);
+        const wchar_t* path_temp = configprogrampath.c_str();
+        // 检查当前用户路径的配置程序是否存在
+        if (GetFileAttributesW(path_temp) == INVALID_FILE_ATTRIBUTES) {
+            ERROR_(L"[StartAllBack配置器]未找到任何安装路径的StartAllBackCfg.exe");
+            MessageBox(NULL, (LPCTSTR)L"未找到 StartAllBack 配置程序，请确认已安装 StartAllBack", (LPCTSTR)L" StartAllBack配置器", MB_OK | MB_ICONERROR);
+            if (comInit == S_OK) CoUninitialize();
+            return false;
+        }
+        HINSTANCE r2 = ShellExecuteW(NULL, L"open", path_temp, NULL, NULL, SW_SHOWNORMAL);
+        if ((INT_PTR)r2 <= 32) {
+            ERROR_(L"[StartAllBack配置器]启动配置程序失败");
+            MessageBox(NULL, (LPCTSTR)L"无法启动 StartAllBack 配置程序，请检查是否被安全软件拦截", (LPCTSTR)L" StartAllBack配置器", MB_OK | MB_ICONERROR);
+            if (comInit == S_OK) CoUninitialize();
+            return false;
+        }
     }
     else {
         MessageBox(NULL, (LPCTSTR)L"检测安装模式时出现错误，请将安装日志发送给开发者处理 StartAllBack配置程序退出", (LPCTSTR)L" StartAllBack配置器", MB_OK | MB_ICONERROR);
         return false;
     }
-
-    HWND hWnd_Window = FindWindowW(NULL, L"配置 StartAllBack");
+    INFO_(L"[StartAllBack配置器]查找窗口");
+    HWND hWnd_Window = FindWindowW(NULL, L"设置 StartAllBack");
     while (hWnd_Window == NULL) {
-        hWnd_Window = FindWindowW(NULL, L"配置 StartAllBack");
+        hWnd_Window = FindWindowW(NULL, L"设置 StartAllBack");
     }
     INFO_(L"[StartAllBack配置器]已找到窗口");
     SetForegroundWindow(hWnd_Window);
     SetWindowPos(hWnd_Window, NULL, 0, 0, 0, 0, SWP_NOSIZE);
 
-    ClickButtonMode1(hWnd_Window, L"StartAllBack配置器", L"Windows 7 资源管理器样式");
-    TurnOffOn(false, hWnd_Window, L"StartAllBack配置器", L"显示开始按钮");
-    TurnOffOn(false, hWnd_Window, L"StartAllBack配置器", L"增强型任务管理器");
-    TurnOffOn(true , hWnd_Window, L"StartAllBack配置器", L"恢复传统右键菜单");
-    TurnOffOn(false, hWnd_Window, L"StartAllBack配置器", L"选中时显示强调色");
-    TurnOffOn(true , hWnd_Window, L"StartAllBack配置器", L"资源管理器式右键菜单");
-    TurnOffOn(false, hWnd_Window, L"StartAllBack配置器", L"禁用大图标资源管理器");
-    TurnOffOn(true , hWnd_Window, L"StartAllBack配置器", L"全新关机图标");
-    TurnOffOn(false, hWnd_Window, L"StartAllBack配置器", L"底部详细信息栏");
-    TurnOffOn(false, hWnd_Window, L"StartAllBack配置器", L"右侧详细信息栏");
-    TurnOffOn(true , hWnd_Window, L"StartAllBack配置器", L"启用搜索字母效果");
+    ClickButtonMode1(hWnd_Window, L"StartAllBack配置器", L"Windows 7 主题样式");
+    TurnOffOn(false, hWnd_Window, L"StartAllBack配置器", L"经典开始菜单风格");
+    TurnOffOn(false, hWnd_Window, L"StartAllBack配置器", L"增强型经典任务栏");
 
+    TurnOffOn(true, hWnd_Window, L"StartAllBack配置器", L"标题栏云母效果");
+    TurnOffOn(true, hWnd_Window, L"StartAllBack配置器", L"全新工具栏图标");
+    TurnOffOn(false, hWnd_Window, L"StartAllBack配置器", L"经典驱动器分组");
+    TurnOffOn(false, hWnd_Window, L"StartAllBack配置器", L"底部详细信息栏");
+
+    TurnOffOn(true, hWnd_Window, L"StartAllBack配置器", L"经典样式的右键菜单");
+    TurnOffOn(true, hWnd_Window, L"StartAllBack配置器", L"恢复控制面板小程序");
+    TurnOffOn(true, hWnd_Window, L"StartAllBack配置器", L"选中背景显示强调色");
     INFO_(L"[StartAllBack配置器]配置完成 重启文件资源管理器");
     system("taskkill /f /im explorer.exe");
     system("start explorer");
+    if (comInit == S_OK) CoUninitialize();
     return true;
 }
 bool StartAllBack_Install(int mode) {

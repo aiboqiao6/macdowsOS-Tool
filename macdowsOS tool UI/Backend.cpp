@@ -35,66 +35,79 @@ void Backend::setBgColor(const QColor &color) {
 void Backend::installThemeWin10() {
     INFO_(L"[Backend] 安装 Win10 主题");
     theme_install_win10();
+    return;
 }
 
 void Backend::installThemeWin11() {
     INFO_(L"[Backend] 安装 Win11 主题");
     theme_install_win11();
+    return;
 }
 
 void Backend::patchThemePath() {
-    INFO_(L"[Backend] 安装主题路径补丁");
+    INFO_(L"[Backend] 安装主题补丁");
     theme_path_install();
+    return;
 }
 
 void Backend::installIcons() {
     INFO_(L"[Backend] 安装图标");
     Icon_Install();
+    return;
 }
 
-bool Backend::installMyDockFinder() {
+void Backend::installMyDockFinder() {
     INFO_(L"[Backend] 安装 myDockFinder");
-    return mydockfinder_install();
+    mydockfinder_install();
+    return;
 }
 
 void Backend::deleteTheme() {
     INFO_(L"[Backend] 删除主题");
     Delete_theme();
+    return;
 }
 
 void Backend::installStartAllBack() {
     INFO_(L"[Backend] 安装 StartAllBack");
     StartAllBack_SetupRun();
+    return;
 }
 
 void Backend::installOldNewExplorer() {
     INFO_(L"[Backend] 安装 OldNewExplorer");
     OldNewExplorer_install();
+    return;
 }
 
 void Backend::finalSetting() {
     INFO_(L"[Backend] 执行最终设置");
     FinalSetting();
+    return;
 }
 
 void Backend::runWindowsFix() {
     INFO_(L"[Backend] 运行系统修复");
     WindowsFix();
+    return;
 }
 
 void Backend::runWindowsFixNoWindow() {
     INFO_(L"[Backend] 运行无弹窗系统修复");
     WindowsFix_nowindow();
+    return;
 }
 
-void Backend::restartExplorer() {
-    INFO_(L"[Backend] 重启资源管理器");
+void Backend::restart() {
+    INFO_(L"[Backend] 重启");
     restart_();
+    return;
 }
 
-void Backend::restartExplorerNoNotice() {
-    INFO_(L"[Backend] 无提示重启资源管理器");
+void Backend::restartNoNotice() {
+    INFO_(L"[Backend] 无提示重启");
     restart_nonotice();
+    return;
 }
 
 bool Backend::createRestorePoint(const QString& description) {
@@ -107,18 +120,22 @@ bool Backend::createRestorePoint(const QString& description) {
 
 void Backend::killProcess(const QString& appName) {
     killapp(reinterpret_cast<const wchar_t*>(appName.utf16()));
+    return;
 }
 
 void Backend::addAutoStart(const QString& targetPath, const QString& shortcutName) {
     AddAutoStart(
         reinterpret_cast<const wchar_t*>(targetPath.utf16()),
         reinterpret_cast<const wchar_t*>(shortcutName.utf16()));
+    return;
 }
 
 void Backend::setDesktopIcons(bool show) {
     SetDesktopIconsPermanent(show);
+    return;
 }
 
 void Backend::log(const QString& message) {
     INFO_(reinterpret_cast<const wchar_t*>(message.utf16()));
+    return;
 }

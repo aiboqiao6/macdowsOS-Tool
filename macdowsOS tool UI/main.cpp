@@ -1,3 +1,5 @@
+#define _CRT_SECURE_NO_WARNINGS
+
 // ============================================================
 // main.cpp — macdowsOS Tool UI 主入口
 //
@@ -18,6 +20,7 @@
 #include <QtCore/QTimer>
 #include <QtQuick/QQuickWindow>
 #include <QtQuick/QSGRendererInterface>
+#include <QtQuickControls2/QQuickStyle>
 
 #include <Windows.h>
 
@@ -25,7 +28,13 @@
 
 // ============================================================
 int main(int argc, char *argv[]) {
+    freopen("log.txt", "w", stdout);
+    (void)argc; (void)argv;
     QGuiApplication app(argc, nullptr);
+
+    // 设置 Quick Controls 样式为非原生样式，以支持 background/contentItem 自定义
+    QQuickStyle::setStyle(QStringLiteral("Basic"));
+
     app.setApplicationName(QStringLiteral("macdowsOS Tool"));
     app.setApplicationDisplayName(QStringLiteral("macdowsOS Tool"));
     app.setWindowIcon(QIcon());

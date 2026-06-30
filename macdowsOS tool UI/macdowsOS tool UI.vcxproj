@@ -37,12 +37,12 @@
   </ImportGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="QtSettings">
     <QtInstall>6.11.1_msvc2022_64</QtInstall>
-    <QtModules>quick</QtModules>
+    <QtModules>quick;quickcontrols2</QtModules>
     <QtBuildConfig>debug</QtBuildConfig>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="QtSettings">
     <QtInstall>6.11.1_msvc2022_64</QtInstall>
-    <QtModules>quick</QtModules>
+    <QtModules>quick;quickcontrols2</QtModules>
     <QtBuildConfig>release</QtBuildConfig>
   </PropertyGroup>
   <Target Name="QtMsBuildNotFound" BeforeTargets="CustomBuild;ClCompile" Condition="!Exists('$(QtMsBuild)\qt.targets') or !Exists('$(QtMsBuild)\qt.props')">
@@ -73,6 +73,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>dwmapi.lib;NtDll.lib;winhttp.lib;Shell32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <GenerateManifest>false</GenerateManifest>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
@@ -93,6 +94,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>dwmapi.lib;NtDll.lib;winhttp.lib;Shell32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <GenerateManifest>false</GenerateManifest>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -106,24 +108,23 @@
     <QtRcc Include="qml.qrc" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="qml\AboutPage.qml" />
     <None Include="qml\CeleCraftPage.qml" />
     <None Include="qml\HomePage.qml" />
     <None Include="qml\main.qml" />
     <None Include="qml\NavigationSidebar.qml" />
     <None Include="qml\SettingsPage.qml" />
-    <None Include="qml\ThemeWizardPage.qml" />
     <None Include="qml\ThemeWizardWindow.qml" />
     <None Include="qml\WindowControls.qml" />
-    <!--<None Include="qml\WindowRoundPage.qml" />-->
     <None Include="qml\WindowsFixPage.qml" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="All.h" />
     <ClInclude Include="CreateSafePoint.h" />
     <ClInclude Include="DeleteTheme.h" />
     <ClInclude Include="FilesSystem.h" />
     <ClInclude Include="FinalSetting.h" />
     <ClInclude Include="Icon_install.h" />
+    <ClInclude Include="LogSystem.h" />
     <ClInclude Include="mydockfinder_Install.h" />
     <ClInclude Include="OldNewExplorerInstall.h" />
     <ClInclude Include="restart.h" />
@@ -132,13 +133,18 @@
     <ClInclude Include="Theme_Install_win11.h" />
     <ClInclude Include="Theme_patch_install.h" />
     <ClInclude Include="WindowControl.h" />
-    <!--<ClInclude Include="WindowRound.h" />-->
     <ClInclude Include="WindowsFix.h" />
   </ItemGroup>
+  <PropertyGroup>
+    <GenerateManifest>false</GenerateManifest>
+  </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
     <Import Project="$(QtMsBuild)\qt.targets" />
   </ImportGroup>
+  <ItemGroup>
+    <ResourceCompile Include="app.rc" />
+  </ItemGroup>
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
 </Project>

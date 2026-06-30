@@ -54,9 +54,6 @@
     </QtRcc>
   </ItemGroup>
   <ItemGroup>
-    <None Include="qml\AboutPage.qml">
-      <Filter>源文件\UI</Filter>
-    </None>
     <None Include="qml\CeleCraftPage.qml">
       <Filter>源文件\UI</Filter>
     </None>
@@ -72,18 +69,12 @@
     <None Include="qml\SettingsPage.qml">
       <Filter>源文件\UI</Filter>
     </None>
-    <None Include="qml\ThemeWizardPage.qml">
-      <Filter>源文件\UI</Filter>
-    </None>
     <None Include="qml\ThemeWizardWindow.qml">
       <Filter>源文件\UI</Filter>
     </None>
     <None Include="qml\WindowControls.qml">
       <Filter>源文件\UI</Filter>
     </None>
-    <!--<None Include="qml\WindowRoundPage.qml">
-      <Filter>源文件\UI</Filter>
-    </None>-->
     <None Include="qml\WindowsFixPage.qml">
       <Filter>源文件\UI</Filter>
     </None>
@@ -128,13 +119,13 @@
     <ClInclude Include="WindowControl.h">
       <Filter>头文件\be</Filter>
     </ClInclude>
-    <!--<ClInclude Include="WindowRound.h">
-      <Filter>头文件\be</Filter>
-    </ClInclude>-->
     <ClInclude Include="WindowsFix.h">
       <Filter>头文件\be</Filter>
     </ClInclude>
   </ItemGroup>
   <!-- 字体 -->
   <!-- 其他文件 -->
+  <ItemGroup>
+    <Manifest Include="app.manifest" />
+  </ItemGroup>
 </Project>

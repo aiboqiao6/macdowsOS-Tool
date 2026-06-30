@@ -4,6 +4,7 @@
 #include <tlhelp32.h> 
 #include <tchar.h>  
 #include <shellapi.h> 
+#include <objbase.h>
 #include"LogSystem.h"
 #include"FilesSystem.h"
 // 将主题设置为开机后自动应用
@@ -61,16 +62,31 @@ inline void theme_install_win11() {
     copyPath(res2, topath);
     //应用主题
     INFO_(L"[主题安装工具]应用主题");
-    HINSTANCE result = ShellExecuteW(NULL,L"open",L"C:\\Windows\\Resources\\Themes\\Tahoe - Light.theme",NULL,NULL,SW_SHOWNORMAL);
-    // 检查执行结果
-    if ((INT_PTR)result <= 32) {
-        ERROR_(L"[主题安装工具]无法应用主题");
-        MessageBox(NULL, (LPCTSTR)L"无法应用主题 请检查应用是否被安全软件拦截或重启当前系统后再试", (LPCTSTR)L" macdowsOS tool 主题安装工具", MB_OK | MB_ICONERROR);
-        HINSTANCE result1 = ShellExecuteW(NULL,L"open",L"ms-settings:themes",NULL,NULL,SW_SHOWNORMAL);
+    // 初始化 COM（ShellExecuteW 依赖 COM）
+    HRESULT comInit = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
+    // 检查主题文件是否存在
+    LPCWSTR themeFile = L"C:\\Windows\\Resources\\Themes\\Tahoe - Light.theme";
+    if (GetFileAttributesW(themeFile) == INVALID_FILE_ATTRIBUTES) {
+        ERROR_(L"[主题安装工具]主题文件不存在，文件复制可能失败");
+        MessageBox(NULL, (LPCTSTR)L"无法安装主题：主题文件复制失败，请以管理员权限运行本程序后重试", (LPCTSTR)L" macdowsOS tool 主题安装工具", MB_OK | MB_ICONERROR);
+        HINSTANCE result1 = ShellExecuteW(NULL, L"open", L"ms-settings:themes", NULL, NULL, SW_SHOWNORMAL);
         if ((INT_PTR)result1 <= 32) {
             ERROR_(L"[主题安装工具]无法打开系统设置");
-            MessageBox(NULL, (LPCTSTR)L"无法打开系统设置 请检查是否被安全软件拦截或重启系统重试", (LPCTSTR)L" macdowsOS tool 主题安装工具", MB_OK | MB_ICONERROR);
-            MessageBox(NULL, (LPCTSTR)L"请手动打开主题应用", (LPCTSTR)L" macdowsOS tool 主题安装工具", MB_OK);
+            MessageBox(NULL, (LPCTSTR)L"请尝试手动打开系统设置 → 个性化 → 主题", (LPCTSTR)L" macdowsOS tool 主题安装工具", MB_OK);
+        }
+        if (comInit == S_OK) CoUninitialize();
+        return;
+    }
+    HINSTANCE result = ShellExecuteW(NULL, L"open", themeFile, NULL, NULL, SW_SHOWNORMAL);
+    // 检查执行结果
+    if ((INT_PTR)result <= 32) {
+        DWORD err = GetLastError();
+        MESSAGE_(L"[主题安装工具]无法应用主题 错误码:", err);
+        MessageBox(NULL, (LPCTSTR)L"无法应用主题 请检查应用是否被安全软件拦截或重启当前系统后再试", (LPCTSTR)L" macdowsOS tool 主题安装工具", MB_OK | MB_ICONERROR);
+        HINSTANCE result1 = ShellExecuteW(NULL, L"open", L"ms-settings:themes", NULL, NULL, SW_SHOWNORMAL);
+        if ((INT_PTR)result1 <= 32) {
+            ERROR_(L"[主题安装工具]无法打开系统设置");
+            MessageBox(NULL, (LPCTSTR)L"请尝试手动打开系统设置 → 个性化 → 主题", (LPCTSTR)L" macdowsOS tool 主题安装工具", MB_OK);
         }
         else {
             Sleep(500);
@@ -78,6 +94,7 @@ inline void theme_install_win11() {
             MessageBox(NULL, (LPCTSTR)L"请尝试搜索主题并手动应用主题", (LPCTSTR)L" macdowsOS tool 主题安装工具", MB_OK);
         }
     }
+    if (comInit == S_OK) CoUninitialize();
     INFO_(L"[主题安装工具]设置开机自动应用主题");
     SetThemeToOpenAfterReboot_win11(L"C:\\Windows\\Resources\\Themes\\Tahoe - Light.theme");
     INFO_(L"[主题安装工具]退出");

@@ -1,28 +1,34 @@
 // ============================================================
-// NavigationSidebar.qml — macOS 15 Sequoia 风格侧边栏
-// 统一选中态 + 悬浮高亮 + 分组分隔，设置固定底部
+// NavigationSidebar.qml — 仿 macOS 15 Sequoia 风格侧边栏导航组件
+// 支持分组显示（通用/工具）、选中态高亮、悬浮高亮
+// "设置"项固定在底部，不随内容分组滚动
 // ============================================================
+
+// QtQuick — 基础 QML 模块，提供核心类型
 import QtQuick
+// QtQuick.Controls — 提供 ItemDelegate、Label 等标准控件
 import QtQuick.Controls
+// QtQuick.Layouts — 提供 ColumnLayout、Row 等布局管理器
 import QtQuick.Layouts
 
+// === 侧边栏根容器 ===
 Rectangle {
     id: root
-    color: "transparent"
+    color: "transparent"   // 透明背景，由外层叠加玻璃效果
 
-    property int currentIndex: 0
-    signal navigationRequested(int index)
+    // ——— 属性定义 ———
+    property int currentIndex: 0            // 当前选中项的索引，供外部使用
+    signal navigationRequested(int index)   // 导航请求信号，父容器需处理以切换页面
 
-    // 导航数据（设置不在此处，单独固定在底部）
+    // === 导航数据模型 ===
     ListModel {
         id: navModel
         ListElement { name: "首页"; iconSource: "qrc:/res/home.png"; section: "general" }
         ListElement { name: "系统美化"; iconSource: "qrc:/res/WindowsToMac.png"; section: "general" }
-        //ListElement { name: "窗口圆角"; iconSource: "qrc:/res/tool/WindowRound.png"; section: "tools" }
         ListElement { name: "系统修复"; iconSource: "qrc:/res/WindowsFix.png"; section: "tools" }
     }
 
-    // 获取指定分组的原始索引列表
+    // ——— 辅助函数 ———
     function sectionIndices(sectionName) {
         var items = []
         for (var i = 0; i < navModel.count; i++) {
@@ -31,9 +37,10 @@ Rectangle {
         return items
     }
 
-    // 选中项的原始索引（设置固定为最后一个）
-    property int selectedIndex: 0
+    // ——— 属性 ———
+    property int selectedIndex: 0   // 当前选中的导航项索引（设置项固定为 navModel.count）
 
+    // === 主布局：垂直排列 ===
     ColumnLayout {
         anchors.fill: parent
         spacing: 0
@@ -54,12 +61,10 @@ Rectangle {
 
             delegate: ItemDelegate {
                 id: genDelegate
+                required property int modelData
+
                 Layout.fillWidth: true
                 Layout.preferredHeight: 38
-                leftPadding: 0
-                rightPadding: 0
-                topPadding: 0
-                bottomPadding: 0
                 implicitHeight: 38
 
                 readonly property bool isSelected: root.selectedIndex === modelData
@@ -123,12 +128,10 @@ Rectangle {
 
             delegate: ItemDelegate {
                 id: toolDelegate
+                required property int modelData
+
                 Layout.fillWidth: true
                 Layout.preferredHeight: 38
-                leftPadding: 0
-                rightPadding: 0
-                topPadding: 0
-                bottomPadding: 0
                 implicitHeight: 38
 
                 readonly property bool isSelected: root.selectedIndex === modelData
@@ -176,18 +179,14 @@ Rectangle {
             }
         }
 
-        // ---- 弹性空间：将设置推到最底 ----
+        // ---- 弹性空间 ----
         Item { Layout.fillHeight: true }
 
-        // ---- 设置（固定底部） ----
+        // ---- 设置 ----
         ItemDelegate {
             id: settingsDelegate
             Layout.fillWidth: true
             Layout.preferredHeight: 38
-            leftPadding: 0
-            rightPadding: 0
-            topPadding: 0
-            bottomPadding: 0
             implicitHeight: 38
 
             readonly property bool isSelected: root.selectedIndex === navModel.count

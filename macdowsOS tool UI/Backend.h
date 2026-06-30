@@ -22,15 +22,15 @@ public:
     Q_INVOKABLE void installThemeWin11();
     Q_INVOKABLE void patchThemePath();
     Q_INVOKABLE void installIcons();
-    Q_INVOKABLE bool installMyDockFinder();
+    Q_INVOKABLE void installMyDockFinder();
     Q_INVOKABLE void deleteTheme();
     Q_INVOKABLE void installStartAllBack();
     Q_INVOKABLE void installOldNewExplorer();
     Q_INVOKABLE void finalSetting();
     Q_INVOKABLE void runWindowsFix();
     Q_INVOKABLE void runWindowsFixNoWindow();
-    Q_INVOKABLE void restartExplorer();
-    Q_INVOKABLE void restartExplorerNoNotice();
+    Q_INVOKABLE void restart();
+    Q_INVOKABLE void restartNoNotice();
     Q_INVOKABLE bool createRestorePoint(const QString& description);
     Q_INVOKABLE void killProcess(const QString& appName);
     Q_INVOKABLE void addAutoStart(const QString& targetPath, const QString& shortcutName);

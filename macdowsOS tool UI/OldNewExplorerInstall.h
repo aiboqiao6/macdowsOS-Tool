@@ -108,27 +108,28 @@ inline void OldNewExplorer_install() {
     INFO_(L"[OldNewExplorer安装工具]打开配置程序");
     ExecuteInRunDialog(L"C:\\OldNewExplorer\\OldNewExplorerCfg.exe");
     INFO_(L"[OldNewExplorer安装工具]等待配置窗口出现");
-    HWND hWnd_Window= FindWindowW(NULL, L"配置 OldNewExplorer");
+    HWND hWnd_Window= FindWindowW(NULL, L"致美化 OldNewExplorer 配置");
     while (hWnd_Window == NULL) {
-        hWnd_Window = FindWindowW(NULL, L"配置 OldNewExplorer");
+        hWnd_Window = FindWindowW(NULL, L"致美化 OldNewExplorer 配置");
     }
     INFO_(L"[OldNewExplorer安装工具]配置窗口出现");
     SetForegroundWindow(hWnd_Window);
     SetWindowPos(hWnd_Window, NULL, 0, 0, 0, 0, SWP_NOSIZE);
 
     INFO_(L"[OldNewExplorer安装工具]开始配置设置");
-    TurnOffOn(true , hWnd_Window, L"OldNewExplorer安装工具", L"使用经典导航栏");
-    TurnOffOn(false, hWnd_Window, L"OldNewExplorer安装工具", L"使用库、家庭组和收藏夹");
+    TurnOffOn(true , hWnd_Window, L"OldNewExplorer安装工具", L"使用经典驱动器分组");
+    TurnOffOn(false, hWnd_Window, L"OldNewExplorer安装工具", L"使用库、并隐藏顶部文件夹");
 
-    TurnOffOn(true , hWnd_Window, L"OldNewExplorer安装工具", L"使用命令栏代替详细信息面板（可选）");
-    TurnOffOn(false, hWnd_Window, L"OldNewExplorer安装工具", L"不显示详细信息（可选）");
-    TurnOffOn(false, hWnd_Window, L"OldNewExplorer安装工具", L"在文件夹左边显示目录树按钮（可选）");
-    TurnOffOn(false, hWnd_Window, L"OldNewExplorer安装工具", L"为文件夹背景启用透明效果（需要DWM，可选）");
-    TurnOffOn(true , hWnd_Window, L"OldNewExplorer安装工具", L"隐藏资源管理器标题（可选）");
-    TurnOffOn(true , hWnd_Window, L"OldNewExplorer安装工具", L"隐藏资源管理器文字（可选）");
+    TurnOffOn(true , hWnd_Window, L"OldNewExplorer安装工具", L"使用工具栏代替功能区（必选）");
     
-    TurnOffOn(false, hWnd_Window, L"OldNewExplorer安装工具", L"显示底部详细信息栏（大部分用户默认关闭，可选）");
-    TurnOffOn(false, hWnd_Window, L"OldNewExplorer安装工具", L"显示底部状态栏（默认关闭，可选）");
+    TurnOffOn(true, hWnd_Window, L"OldNewExplorer安装工具", L"隐藏标题栏小图标（可选）");
+    TurnOffOn(true, hWnd_Window, L"OldNewExplorer安装工具", L"隐藏标题栏文字（可选）");
+    TurnOffOn(true, hWnd_Window, L"OldNewExplorer安装工具", L"隐藏返回上级目录按钮（必选）");
+    TurnOffOn(false, hWnd_Window, L"OldNewExplorer安装工具", L"开启导航栏特效（部分主题需要勾选）");
+    TurnOffOn(false, hWnd_Window, L"OldNewExplorer安装工具", L"不要勾选我");
+
+    TurnOffOn(false, hWnd_Window, L"OldNewExplorer安装工具", L"显示底部状态栏（不用勾选）");
+    TurnOffOn(false, hWnd_Window, L"OldNewExplorer安装工具", L"显示底部详细信息窗格（大部分情况下都不用勾选）");
 
     ClickButtonMode1(hWnd_Window, L"OldNewExplorer安装工具", L"安装");
     

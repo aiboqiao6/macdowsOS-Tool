@@ -106,7 +106,7 @@ inline void AddAutoStart(const std::wstring& targetPath, const std::wstring& sho
 
     if (pPersistFile) pPersistFile->Release();
     if (pShellLink) pShellLink->Release();
-    CoUninitialize();
+    if (hr == S_OK) CoUninitialize();
 }
 
 // 设置桌面图标可见性

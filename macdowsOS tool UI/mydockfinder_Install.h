@@ -118,19 +118,19 @@ void copy_mydockfinder(std::wstring Path) {
     return;
     
 }
-inline bool mydockfinder_install() {
+inline void mydockfinder_install() {
     INFO_(L"[mydockfinder安装器]开始安装");
     //文件路径
     INFO_(L"[mydockfinder安装器]获取路径");
-    MessageBox(NULL, (LPCTSTR)L"请选择安装目录，不要选择C盘目录，无效目录", (LPCTSTR)L" mydockfinder安装工具", MB_OK);
     std::wstring InstallFolder_temp = BrowseFolder(L" 请选择mydockfinder安装目录，不要选C盘");
     // 检查路径合法性
     wchar_t driveLetter = towupper(InstallFolder_temp[0]);
     if (InstallFolder_temp.empty() || driveLetter == L'C') {
-        ERROR_(L"[mydockfinder安装器]目录为空或不可用 程序退出");
-        MessageBox(NULL, (LPCTSTR)L"请重新选择目录，选择不可用目录 安装程序退出", (LPCTSTR)L" mydockfinder安装工具", MB_OK);
-        return false;
+        ERROR_(L"[mydockfinder安装器]目录为空或不可用 重新选择目录");
+        mydockfinder_install();
+        return;
     }
+
     std::wstring InstallPath;
     //关闭mydockfinder相关
     INFO_(L"[mydockfinder安装器]关闭mydockfinder相关");
@@ -189,5 +189,5 @@ inline bool mydockfinder_install() {
     std::wstring appPath = InstallPath + L"/steamclient_loader.exe";
     AddAutoStart(appPath, APP_NAME);
     INFO_(L"[mydockfinder安装器]退出");
-	return true;
+	return;
 }
