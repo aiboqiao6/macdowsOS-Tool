@@ -8,16 +8,15 @@
 #include"LogSystem.h"
 #include"FilesSystem.h"
 // 将主题设置为开机后自动应用
+// 通过 RunOnce + CurrentTheme 双重机制确保主题在重启后正确加载
 bool SetThemeToOpenAfterReboot_win10(const std::wstring& themeFilePath) {
+    bool success = true;
     HKEY hKey = nullptr;
-    bool success = false;
 
-    // 1. 构建打开主题文件的命令
-    // 使用"start"来确保通过默认关联程序打开
-    std::wstring command = L"cmd /c start \"\" \"" + themeFilePath + L"\"";
-
-    // 2. 打开当前用户的RunOnce注册表项
-    // 使用 KEY_WOW64_64KEY 确保64位系统上访问正确的注册表位置
+    // ====== 1. 设置 RunOnce：开机后直接打开 .theme 文件触发主题引擎加载 ======
+    // 注意：直接使用文件路径（加引号），不使用 cmd /c start
+    // RunOnce 会通过文件关联自动调用 Personalization 控制面板应用主题
+    std::wstring runOnceCmd = L"\"" + themeFilePath + L"\"";
     LONG result = RegOpenKeyExW(
         HKEY_CURRENT_USER,
         L"Software\\Microsoft\\Windows\\CurrentVersion\\RunOnce",
@@ -27,35 +26,67 @@ bool SetThemeToOpenAfterReboot_win10(const std::wstring& themeFilePath) {
     );
 
     if (result == ERROR_SUCCESS && hKey != nullptr) {
-        // 3. 创建一个唯一的值的名称，使用固定名称
-        const wchar_t* valueName = L"ApplyThemeOnStartup";
-
-        // 4. 将命令写入注册表
         result = RegSetValueExW(
             hKey,
-            valueName,
+            L"ApplyThemeOnStartup",
             0,
             REG_SZ,
-            reinterpret_cast<const BYTE*>(command.c_str()),
-            static_cast<DWORD>((command.length() + 1) * sizeof(wchar_t))
+            reinterpret_cast<const BYTE*>(runOnceCmd.c_str()),
+            static_cast<DWORD>((runOnceCmd.length() + 1) * sizeof(wchar_t))
         );
 
-        if (result == ERROR_SUCCESS) {
-            success = true;
+        if (result != ERROR_SUCCESS) {
+            success = false;
+            MESSAGE_(L"[主题安装工具]RunOnce注册失败，错误码:", result);
         }
-
         RegCloseKey(hKey);
     }
+    else {
+        success = false;
+        MESSAGE_(L"[主题安装工具]无法打开 RunOnce 注册表，错误码:", result);
+    }
 
+    // ====== 2. 设置 CurrentTheme：让 Windows 登录时自动识别当前主题 ======
+    HKEY hKeyTheme = nullptr;
+    result = RegOpenKeyExW(
+        HKEY_CURRENT_USER,
+        L"Software\\Microsoft\\Windows\\CurrentVersion\\Themes",
+        0,
+        KEY_WRITE | KEY_WOW64_64KEY,
+        &hKeyTheme
+    );
+
+    if (result == ERROR_SUCCESS && hKeyTheme != nullptr) {
+        result = RegSetValueExW(
+            hKeyTheme,
+            L"CurrentTheme",
+            0,
+            REG_SZ,
+            reinterpret_cast<const BYTE*>(themeFilePath.c_str()),
+            static_cast<DWORD>((themeFilePath.length() + 1) * sizeof(wchar_t))
+        );
+
+        if (result != ERROR_SUCCESS) {
+            MESSAGE_(L"[主题安装工具]CurrentTheme注册失败，错误码:", result);
+        }
+        RegCloseKey(hKeyTheme);
+    }
+    else {
+        MESSAGE_(L"[主题安装工具]无法打开 Themes 注册表，错误码:", result);
+    }
+
+    if (success) {
+        INFO_(L"[主题安装工具]开机自动应用主题设置成功");
+    }
     return success;
 }
 inline void theme_install_win10() {
     INFO_(L"[主题安装工具]开始安装");
     INFO_(L"[主题安装工具]复制文件");
     //资源
-    std::wstring res = L"AppData/Theme/Windows 10 Themes/Big Sur";
-    std::wstring res1 = L"AppData/Theme/Windows 10 Themes/Big Sur Day.theme";
-    std::wstring res2 = L"AppData/Theme/Windows 10 Themes/Big Sur Night.theme";
+    std::wstring res = L"AppData/Theme/WIndows 10 Themes/Big Sur";
+    std::wstring res1 = L"AppData/Theme/WIndows 10 Themes/Big Sur Day.theme";
+    std::wstring res2 = L"AppData/Theme/WIndows 10 Themes/Big Sur Night.theme";
     std::wstring topath = L"C:\\Windows\\Resources\\Themes";
     copyPath(res, topath);
     copyPath(res1, topath);
@@ -68,7 +99,6 @@ inline void theme_install_win10() {
     LPCWSTR themeFile = L"C:\\Windows\\Resources\\Themes\\Big Sur Day.theme";
     if (GetFileAttributesW(themeFile) == INVALID_FILE_ATTRIBUTES) {
         ERROR_(L"[主题安装工具]主题文件不存在，文件复制可能失败");
-        DWORD err = GetLastError();
         MessageBox(NULL, (LPCTSTR)L"无法安装主题：主题文件复制失败，请以管理员权限运行本程序后重试", (LPCTSTR)L" macdowsOS tool 主题安装工具", MB_OK | MB_ICONERROR);
         HINSTANCE result1 = ShellExecuteW(NULL, L"open", L"ms-settings:themes", NULL, NULL, SW_SHOWNORMAL);
         if ((INT_PTR)result1 <= 32) {

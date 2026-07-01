@@ -53,6 +53,7 @@ Window {
     property int installProgress: 0   // 当前安装进度（已完成的步骤数）
     property int installTotal: 0      // 安装总步骤数
     property string targetDisk: "C:"  // 用户选择的目标磁盘名称
+    property int selectedDiskIndex: 0 // 用户选择的磁盘索引
 
     // ====== 重置向导 ======
     // 将所有状态恢复至初始值，用于重新开始安装
@@ -64,10 +65,10 @@ Window {
     }
 
     // ====== 关闭向导 ======
-    // 重置状态后关闭窗口
+    // 重置状态后关闭窗口（无边框窗口下 close() 可能失效，改用 visible 控制）
     function closeWizard() {
         resetWizard()
-        wizardWindow.close()
+        wizardWindow.visible = false
     }
     // ============================================================
     // 圆角蒙版
@@ -124,21 +125,51 @@ Window {
                 Layout.preferredHeight: 48
                 color: "transparent"
 
-                // macOS 风格窗口控制按钮（仅保留关闭按钮，最小化/最大化隐藏）
-                // 步骤 2（安装中）时关闭按钮也隐藏
-                WindowControls {
-                    anchors.left: parent.left
-                    anchors.leftMargin: 16
+                // 独立关闭按钮（不使用公共 WindowControls 组件）
+                // 红色圆形 macOS 风格，仅步骤0显示
+                Item {
+                    visible: wizardWindow.step === 0
+                    x: 16
                     anchors.verticalCenter: parent.verticalCenter
-                    showMinimize: false
-                    showMaximize: false
-                    visible: wizardWindow.step !== 2
-                    onCloseClicked: closeWizard()
-                    onMinimizeClicked: wizardWindow.showMinimized()
-                    onMaximizeClicked: {
-                        wizardWindow.visibility === Window.Maximized
-                            ? wizardWindow.showNormal()
-                            : wizardWindow.showMaximized()
+                    width: 24
+                    height: 24
+
+                    // 红色圆形背景
+                    Rectangle {
+                        anchors.centerIn: parent
+                        width: 14
+                        height: 14
+                        radius: width / 2
+                        color: "#EC6765"
+
+                        // 悬停时显示的 "×" 图标
+                        Rectangle {
+                            anchors.centerIn: parent
+                            width: 9; height: 1.5
+                            color: "#773432"
+                            radius: 0.5
+                            rotation: 45
+                            opacity: closeMouse.containsMouse ? 0.8 : 0
+                            Behavior on opacity { NumberAnimation { duration: 100 } }
+                        }
+                        Rectangle {
+                            anchors.centerIn: parent
+                            width: 9; height: 1.5
+                            color: "#773432"
+                            radius: 0.5
+                            rotation: -45
+                            opacity: closeMouse.containsMouse ? 0.8 : 0
+                            Behavior on opacity { NumberAnimation { duration: 100 } }
+                        }
+                    }
+
+                    // 鼠标交互（24x24 可点击区域）
+                    MouseArea {
+                        id: closeMouse
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        cursorShape: Qt.PointingHandCursor
+                        onClicked: closeWizard()
                     }
                 }
 
@@ -634,14 +665,14 @@ Window {
         if (selectedVersion === 10) {
             // Windows 10 安装步骤（6 步）
             steps = [
-               // { name: "安装MyDockFinder", action: function() { Backend.installMyDockFinder(); } },
-              //  { name: "安装补丁", action: function() { Backend.patchThemePath(); } },
-               // { name: "删除主题", action: function() { Backend.deleteTheme(); } },
-              //  { name: "安装主题", action: function() { Backend.installThemeWin10(); } },
-              //  { name: "安装图标", action: function() { Backend.installIcons(); } },
-              //  { name: "安装OldNewExplorer", action: function() { Backend.installOldNewExplorer(); } },
-              //  { name: "执行最终设置", action: function() { Backend.finalSetting(); } },
-                { name: "重启", action: function() { Backend.restartNoNotice(); } }
+              { name: "安装MyDockFinder", action: function() { Backend.installMyDockFinder(); } },
+              { name: "安装补丁", action: function() { Backend.patchThemePath(); } },
+              { name: "删除主题", action: function() { Backend.deleteTheme(); } },
+              { name: "安装主题", action: function() { Backend.installThemeWin10(); } },
+              { name: "安装图标", action: function() { Backend.installIcons(); } },
+              { name: "安装OldNewExplorer", action: function() { Backend.installOldNewExplorer(); } },
+              { name: "执行最终设置", action: function() { Backend.finalSetting(); } },
+              { name: "重启", action: function() { Backend.restartNoNotice(); } }
             ]
         } else { 
             // Windows 11 安装步骤（7 步，多一个 StartAllBack）

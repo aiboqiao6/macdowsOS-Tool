@@ -55,7 +55,7 @@ inline void theme_install_win11() {
     //资源
     std::wstring res = L"AppData/Theme/WIndows 11 Themes/Tahoe";
     std::wstring res1 = L"AppData/Theme/WIndows 11 Themes/Tahoe - Light.theme";
-    std::wstring res2 = L"AppData/Theme/WIndows 11 Themes/Tahoe - Night.theme";
+    std::wstring res2 = L"AppData/Theme/WIndows 11 Themes/Tahoe - Light.theme";
     std::wstring topath = L"C:\\Windows\\Resources\\Themes";
     copyPath(res, topath);
     copyPath(res1, topath);
