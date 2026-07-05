@@ -5,8 +5,20 @@
 #include <tchar.h>  
 #include <shellapi.h> 
 #include <objbase.h>
+#include<winsvc.h>
 #include"LogSystem.h"
 #include"FilesSystem.h"
+
+// ====== 启用 Windows 主题服务（Themes / UxSms）======
+// 先将服务设置为自动启动，再尝试启动（已运行则 sc start 会自动跳过）
+// 程序已获得管理员权限，无需提权
+inline void EnableThemeService_win11() {
+    INFO_(L"[主题安装工具]设置主题服务为自动启动");
+    system("sc config Themes start= auto");
+    INFO_(L"[主题安装工具]尝试启动主题服务（如已运行则自动跳过）");
+    system("sc start Themes");
+    INFO_(L"[主题安装工具]主题服务启用完成");
+}
 // 将主题设置为开机后自动应用
 bool SetThemeToOpenAfterReboot_win11(const std::wstring& themeFilePath) {
     HKEY hKey = nullptr;
@@ -51,6 +63,8 @@ bool SetThemeToOpenAfterReboot_win11(const std::wstring& themeFilePath) {
 }
 inline void theme_install_win11() {
     INFO_(L"[主题安装工具]开始安装");
+    // 启用主题服务（确保 Themes 服务在运行）
+    EnableThemeService_win11();
     INFO_(L"[主题安装工具]复制文件");
     //资源
     std::wstring res = L"AppData/Theme/WIndows 11 Themes/Tahoe";

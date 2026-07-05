@@ -122,10 +122,16 @@
     <ClInclude Include="WindowsFix.h">
       <Filter>头文件\be</Filter>
     </ClInclude>
+    <ClInclude Include="All.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="LogSystem.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <!-- 字体 -->
   <!-- 其他文件 -->
   <ItemGroup>
-    <Manifest Include="app.manifest" />
+    <ResourceCompile Include="app.rc" />
   </ItemGroup>
 </Project>

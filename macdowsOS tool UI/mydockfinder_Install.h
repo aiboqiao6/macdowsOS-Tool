@@ -5,44 +5,53 @@
 #include<windows.h>
 #include"LogSystem.h"
 #include"All.h"
-bool steam_mydockfinder(std::wstring path) {
-    MESSAGE_(L"[mydockfinder安装器]路径", path);
-    //忽略文件
-    std::wstring exe1 = path + L"/Dock64.exe";
-    std::wstring exe2 = path + L"/Dock.exe";
-    INFO_(L"[mydockfiner安装器]检查dock程序是否存在");
-    if(!(fs::exists(exe1)||fs::exists(exe2))){
-        return false;
-    }
-    INFO_(L"[mydockfiner安装器]检测安装路径是否为steam路径");
-    //比较路径
-    std::wstring ovc_path1 = L"steamapps";
-    std::wstring ovc_path2 = L"steam";
-    size_t str_ = path.size();
-    size_t str_1 = ovc_path1.size();
-    size_t str_2 = ovc_path2.size();
-    for (size_t j = 0; j < str_; j++) {
-        bool temp1 = true, temp2 = true;
-        for (size_t i = 0; i < str_1; i++) {
-            if (path[j + i] != ovc_path1[i]) {
-                temp1 = false;
-               // break;
-            }
-        }
-        for (size_t i = 0; i < str_2; i++) {
-            if (path[j + i] != ovc_path2[i]) {
-                temp2 = false;
-               // break;
-            }
-        }
-        if (temp1 || temp2) {
-            INFO_(L"[mydockfinder安装器]检测到mydockfinder为steam版");
-            return true;
-        }
+void setwallpaper(std::wstring path) {
+    const wchar_t* regPath = L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\PersonalizationCSP";
+    const wchar_t* valueName = L"LockScreenImagePath";
+    const wchar_t* imagePath = path.c_str();
+    HKEY hKey;
+    LONG result;
+
+    // 使用 KEY_WOW64_64_KEY 确保访问 64 位注册表视图
+    result = RegCreateKeyExW(
+        HKEY_LOCAL_MACHINE,
+        regPath,
+        0,
+        NULL,
+        REG_OPTION_NON_VOLATILE,
+        KEY_WRITE,   // 添加此标志
+        NULL,
+        &hKey,
+        NULL
+    );
+
+    if (result != ERROR_SUCCESS) {
+        MESSAGE_(L"[mydockfinder安装器]打开注册表失败，错误码:", result);
+        return;
     }
 
-    INFO_(L"[mydockfinder安装器]未检测到steam");
-    return false;
+    // 写入路径
+    DWORD dataSize = (wcslen(imagePath) + 1) * sizeof(wchar_t);
+    result = RegSetValueExW(hKey, valueName, 0, REG_SZ,
+        (const BYTE*)imagePath, dataSize);
+    if (result != ERROR_SUCCESS) {
+        MESSAGE_(L"[mydockfinder安装器]打开注册表失败，错误码:", result);
+        RegCloseKey(hKey);
+        return;
+    }
+
+    // 可选：设置状态值（1 表示启用自定义锁屏图片）
+    const wchar_t* statusName = L"LockScreenImageStatus";
+    DWORD statusValue = 1;
+    result = RegSetValueExW(hKey, statusName, 0, REG_DWORD,
+        (const BYTE*)&statusValue, sizeof(DWORD));
+    if (result != ERROR_SUCCESS) {
+        MESSAGE_(L"[mydockfinder安装器]打开注册表失败，错误码:", result);
+        // 不影响主要功能，可忽略
+    }
+
+    RegCloseKey(hKey);
+    std::wcout << L"注册表写入成功。请重启或注销后查看效果。" << std::endl;
 }
 //比较路径尾部是否为mydockfinder/MyDockFinder 是返回true 否则返回false
 bool pathback(std::wstring *path_,size_t str_,std::wstring *temp1,std::wstring *temp2) {
@@ -157,12 +166,8 @@ inline void mydockfinder_install() {
         InstallPath = InstallFolder_temp;
     }
     //检测安装模式
-    if (steam_mydockfinder(InstallPath)) {
-        INFO_(L"[mydockfinder安装器]模式1 steam版本安装");
-
-    }
-    else {
-        //备份dock图标配置文件
+  
+    //备份dock图标配置文件
         std::wstring configfiles_1 = InstallPath + L"/ico.ini";
         std::wstring configfiles_2 = InstallPath + L"/ico_bak.ini";
         //检测是否存在配置文件（检测是否已安装）
@@ -181,13 +186,14 @@ inline void mydockfinder_install() {
             INFO_(L"[mydockfinder安装器]未检测到原有配置");
             copy_mydockfinder(InstallPath);
         }
-        
-
-    }
     INFO_(L"[mydockfinder安装器]设置开机自启动");
     const wchar_t* APP_NAME = L"MyDockFinder";
     std::wstring appPath = InstallPath + L"/steamclient_loader.exe";
     AddAutoStart(appPath, APP_NAME);
+    // 设置亮色壁纸为锁屏壁纸（直接使用安装目录中的壁纸）
+    INFO_(L"[mydockfinder安装器]设置亮色壁纸为锁屏壁纸");
+    //
+    setwallpaper(InstallPath + L"wallpaper\\Golden_Gate_Abstract\\Golden_Gate_Abstract_1.jpg");
     INFO_(L"[mydockfinder安装器]退出");
 	return;
 }
