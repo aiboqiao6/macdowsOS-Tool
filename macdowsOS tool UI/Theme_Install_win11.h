@@ -5,7 +5,6 @@
 #include <tchar.h>  
 #include <shellapi.h> 
 #include <objbase.h>
-#include<winsvc.h>
 #include"LogSystem.h"
 #include"FilesSystem.h"
 
@@ -30,12 +29,12 @@ bool SetThemeToOpenAfterReboot_win11(const std::wstring& themeFilePath) {
 
     // 2. 打开当前用户的RunOnce注册表项
     // 使用 KEY_WOW64_64KEY 确保64位系统上访问正确的注册表位置
-    LONG result = RegOpenKeyExW(
+    LONG result = RegCreateKeyExW(
         HKEY_CURRENT_USER,
         L"Software\\Microsoft\\Windows\\CurrentVersion\\RunOnce",
-        0,
+        0, NULL, REG_OPTION_NON_VOLATILE,
         KEY_WRITE | KEY_WOW64_64KEY,
-        &hKey
+        NULL, &hKey, NULL
     );
 
     if (result == ERROR_SUCCESS && hKey != nullptr) {
@@ -69,7 +68,7 @@ inline void theme_install_win11() {
     //资源
     std::wstring res = L"AppData/Theme/WIndows 11 Themes/Tahoe";
     std::wstring res1 = L"AppData/Theme/WIndows 11 Themes/Tahoe - Light.theme";
-    std::wstring res2 = L"AppData/Theme/WIndows 11 Themes/Tahoe - Light.theme";
+    std::wstring res2 = L"AppData/Theme/WIndows 11 Themes/Tahoe - Night.theme";
     std::wstring topath = L"C:\\Windows\\Resources\\Themes";
     copyPath(res, topath);
     copyPath(res1, topath);

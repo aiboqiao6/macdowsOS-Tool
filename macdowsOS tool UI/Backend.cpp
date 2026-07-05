@@ -9,7 +9,6 @@
 #include "All.h"
 #include "LogSystem.h"
 #include "WindowsFix.h"
-//#include "WindowRound.h"
 #include "CreateSafePoint.h"
 #include "Icon_install.h"
 #include "Theme_Install_win10.h"
@@ -116,6 +115,12 @@ bool Backend::createRestorePoint(const QString& description) {
         reinterpret_cast<const wchar_t*>(description.utf16()));
     if (seq < 0) return false;
     return Finish_CreateSafePoint(seq);
+}
+
+void Backend::restartExplorer() {
+    INFO_(L"[Backend] 重启资源管理器");
+    killapp(L"explorer.exe");
+    return;
 }
 
 void Backend::killProcess(const QString& appName) {

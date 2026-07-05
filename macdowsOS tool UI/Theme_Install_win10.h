@@ -5,7 +5,6 @@
 #include <tchar.h>  
 #include <shellapi.h> 
 #include <objbase.h>
-#include<winsvc.h>
 #include"LogSystem.h"
 #include"FilesSystem.h"
 
@@ -29,12 +28,12 @@ bool SetThemeToOpenAfterReboot_win10(const std::wstring& themeFilePath) {
     // 注意：直接使用文件路径（加引号），不使用 cmd /c start
     // RunOnce 会通过文件关联自动调用 Personalization 控制面板应用主题
     std::wstring runOnceCmd = L"\"" + themeFilePath + L"\"";
-    LONG result = RegOpenKeyExW(
+    LONG result = RegCreateKeyExW(
         HKEY_CURRENT_USER,
         L"Software\\Microsoft\\Windows\\CurrentVersion\\RunOnce",
-        0,
+        0, NULL, REG_OPTION_NON_VOLATILE,
         KEY_WRITE | KEY_WOW64_64KEY,
-        &hKey
+        NULL, &hKey, NULL
     );
 
     if (result == ERROR_SUCCESS && hKey != nullptr) {

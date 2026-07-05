@@ -10,9 +10,6 @@
 #include <string>
 #include <windows.h>
 
-// 调试窗口开关
-inline bool g_debugWindow = false;
-
 namespace detail {
 
 // 获取格式化时间字符串

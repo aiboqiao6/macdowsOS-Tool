@@ -298,7 +298,6 @@ Window {
                     BeautificationHub {}
                     CeleCraftPage {}
                     SettingsPage {}
-                    //WindowRoundPage {}     // 窗口圆角页（暂时注释禁用）
                     WindowsFixPage {}
                 }
             }

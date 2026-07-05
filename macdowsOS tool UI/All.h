@@ -1,15 +1,12 @@
 #pragma once
 
 #include <Windows.h>
-#include <shellapi.h>
 #include <tlhelp32.h>
-#include <tchar.h>
 #include <shlobj_core.h>
 #include <string>
 #include <algorithm>
 
 #include "LogSystem.h"
-#include "WindowControl.h"
 
 // 静默运行批处理文件
 inline bool RunBatchSilentlyNative(const std::wstring& batchFilePath) {

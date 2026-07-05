@@ -1,5 +1,7 @@
 > This document is translated by AI. For the original Chinese version, please refer to the official Chinese documentation.
 
+[简体中文](README-Chinese.md) | [主 README](README.md)
+
 # macdowsOS Tool UI User Guide
 
 -----------------------------------------------------------------------------------------

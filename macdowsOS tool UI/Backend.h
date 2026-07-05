@@ -32,6 +32,7 @@ public:
     Q_INVOKABLE void restart();
     Q_INVOKABLE void restartNoNotice();
     Q_INVOKABLE bool createRestorePoint(const QString& description);
+    Q_INVOKABLE void restartExplorer();
     Q_INVOKABLE void killProcess(const QString& appName);
     Q_INVOKABLE void addAutoStart(const QString& targetPath, const QString& shortcutName);
     Q_INVOKABLE void setDesktopIcons(bool show);

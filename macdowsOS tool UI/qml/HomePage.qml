@@ -50,7 +50,7 @@ Rectangle {
         // ——— 版本号 ———
         Label {
             anchors.horizontalCenter: parent.horizontalCenter
-            text: "版本 1.30 Beta 2"
+            text: "版本 1.30 RC"
             font.pixelSize: 14
             color: "#86868B"                             // macOS 浅灰色
         }

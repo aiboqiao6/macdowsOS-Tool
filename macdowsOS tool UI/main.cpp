@@ -16,7 +16,6 @@
 #include <QtQml/QQmlError>
 #include <QtQml/QJSEngine>
 #include <QtCore/QUrl>
-#include <QtCore/QDebug>
 #include <QtCore/QTimer>
 #include <QtQuick/QQuickWindow>
 #include <QtQuick/QSGRendererInterface>

@@ -108,6 +108,7 @@
     <QtRcc Include="qml.qrc" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="qml\BeautificationHub.qml" />
     <None Include="qml\CeleCraftPage.qml" />
     <None Include="qml\HomePage.qml" />
     <None Include="qml\main.qml" />
