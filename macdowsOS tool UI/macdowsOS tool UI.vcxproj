@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|x64">
@@ -108,6 +108,9 @@
     <QtRcc Include="qml.qrc" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\README-Chinese.md" />
+    <None Include="..\README-English.md" />
+    <None Include="..\README.md" />
     <None Include="qml\BeautificationHub.qml" />
     <None Include="qml\CeleCraftPage.qml" />
     <None Include="qml\HomePage.qml" />
