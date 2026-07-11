@@ -153,6 +153,25 @@ namespace {
         return temp;
     }
 }
+HWND FindWindow_(std::wstring title, std::wstring pack_name) {
+    //计数器
+    SYSTEMTIME now;
+    GetLocalTime(&now);
+    //
+    LPCTSTR temp = title.c_str();
+    //
+    HWND hWnd_Window = FindWindowW(NULL, temp);
+    while (hWnd_Window == NULL) {
+        SYSTEMTIME now_temp;
+        GetLocalTime(&now_temp);
+        if (now_temp.wSecond - now.wSecond >= 20) {
+            ERROR_(L"[" + pack_name + L"]" + L"超时未找到" + title);
+            MessageBox(NULL, (LPCTSTR)L" 无法查找到窗口 请检查组件完整性或将log.txt发送给开发者获取帮助", (LPCTSTR)L" macdowsOS tool 窗口控制工具", MB_OK);
+        }
+        hWnd_Window = FindWindowW(NULL, temp);
+    }
+    return hWnd_Window;
+}
 // ==================== 按钮点击操作 ====================
 void ClickButtonMode1(HWND hwnd_window, std::wstring pack_name, std::wstring button_name) {
     HWND temp = findwindow(hwnd_window, pack_name, button_name);

@@ -38,68 +38,23 @@ Rectangle {
                 color: "#1D1D1F"         // 深灰色文字
                 bottomPadding: 10
             }
-
-            // === 桌面图标设置项 ===
-            // 提供"隐藏"和"显示"两个按钮，控制 Windows 桌面图标的可见性
-            Rectangle {
-                width: parent.width
-                height: 56       // 设置项行高 56px
-
-                // === 水平行布局：左侧文字描述 + 右侧操作按钮 ===
-                Row {
-                    anchors {
-                        left: parent.left; leftMargin: 18
-                        right: parent.right; rightMargin: 18
-                        verticalCenter: parent.verticalCenter
-                    }
-                    spacing: 10
-
-                    // === 左侧：设置项名称和说明 ===
-                    Column {
-                        anchors.verticalCenter: parent.verticalCenter
-                        spacing: 2
-                        // 设置项名称
-                        Label {
-                            text: "桌面图标"
-                            font { pixelSize: 14; weight: Font.Medium }
-                            color: "#1D1D1F"
-                        }
-                        // 设置项说明
-                        Label {
-                            text: "显示或隐藏桌面图标"
-                            font.pixelSize: 12
-                            color: "#86868B"     // 浅灰色辅助文字
-                        }
-                    }
-
-                    // 弹性填充项：将左右两侧推到两端
-                    Item { height: 1; width: 1 }
-
-                    // === "隐藏" 按钮：点击后隐藏桌面图标 ===
-                    Button {
-                        id: hideBtn
-                        text: "隐藏"
-                        implicitWidth: 64; implicitHeight: 30
-                        anchors.verticalCenter: parent.verticalCenter
-                        // 浅灰色圆角按钮，支持按下和悬停状态变色
-                        background: Rectangle { radius: 10; color: hideBtn.down ? "#D0D0D5" : hideBtn.hovered ? "#DCDCE0" : "#E8E8ED" }
-                        contentItem: Label { text: "隐藏"; color: "#1D1D1F"; font.pixelSize: 12; horizontalAlignment: Text.AlignHCenter; verticalAlignment: Text.AlignVCenter }
-                        // 调用后端接口，传入 false 表示隐藏桌面图标
-                        onClicked: Backend.setDesktopIcons(false)
-                    }
-
-                    // === "显示" 按钮：点击后显示桌面图标 ===
-                    Button {
-                        id: showBtn
-                        text: "显示"
-                        implicitWidth: 64; implicitHeight: 30
-                        anchors.verticalCenter: parent.verticalCenter
-                        background: Rectangle { radius: 10; color: showBtn.down ? "#D0D0D5" : showBtn.hovered ? "#DCDCE0" : "#E8E8ED" }
-                        contentItem: Label { text: "显示"; color: "#1D1D1F"; font.pixelSize: 12; horizontalAlignment: Text.AlignHCenter; verticalAlignment: Text.AlignVCenter }
-                        // 调用后端接口，传入 true 表示显示桌面图标
-                        onClicked: Backend.setDesktopIcons(true)
-                    }
-                }
+            Label {
+                text: "macdowsOS Tool UI"
+                font { pixelSize: 15; weight: Font.Bold }  // 20px 加粗字体
+                color: "#6E6E73"         // 深灰色文字
+                bottomPadding: 5
+            }
+            Label {
+                text: "雾蓝回针MistBlueSt"
+                font { pixelSize: 15; weight: Font.Bold }  // 20px 加粗字体
+                color: "#6E6E73"         // 深灰色文字
+                bottomPadding: 5
+            }
+            Label {
+                text: "版本 1.30 RC2 版本号 20260711130C2"
+                font { pixelSize: 15; weight: Font.Bold }  // 20px 加粗字体
+                color: "#6E6E73"         // 深灰色文字
+                bottomPadding: 5
             }
 
             // 此处可扩展更多设置项（如开机启动、主题设置等）

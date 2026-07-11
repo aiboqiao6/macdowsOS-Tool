@@ -11,10 +11,8 @@ inline void theme_path_install() {
     system("start AppData\\Theme\\Theme_Patcher.exe");
     //等待应用程序&&查找-安装
     INFO_(L"[主题补丁安装工具]等待应用程序");
-    HWND hWnd_Window = FindWindowW(NULL, L"UltraUXThemePatcher 4.5.0 from https://mhoefs.eu");
-    while (hWnd_Window==NULL) {
-        hWnd_Window = FindWindowW(NULL, L"UltraUXThemePatcher 4.5.0 from https://mhoefs.eu");
-    }
+    HWND hWnd_Window = FindWindow_(L"UltraUXThemePatcher 4.5.0 from https://mhoefs.eu", L"主题补丁安装工具");
+    
     INFO_(L"[主题补丁安装工具]已找到窗口");
     //前置
     SetForegroundWindow(hWnd_Window);

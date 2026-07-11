@@ -61,10 +61,8 @@ bool StartAllBack_Config(int mode) {
         return false;
     }
     INFO_(L"[StartAllBack配置器]查找窗口");
-    HWND hWnd_Window = FindWindowW(NULL, L"设置 StartAllBack");
-    while (hWnd_Window == NULL) {
-        hWnd_Window = FindWindowW(NULL, L"设置 StartAllBack");
-    }
+    HWND hWnd_Window = FindWindow_(L"设置 StartAllBack", L"StartAllBack配置器");
+    
     INFO_(L"[StartAllBack配置器]已找到窗口");
     SetForegroundWindow(hWnd_Window);
     SetWindowPos(hWnd_Window, NULL, 0, 0, 0, 0, SWP_NOSIZE);
@@ -94,10 +92,10 @@ bool StartAllBack_Install(int mode) {
 
     //等待应用程序
     INFO_(L"[StartAllBack安装器]等待应用程序");
-    HWND hWnd_Window = FindWindowW(NULL, L"安装 StartAllBack");
-    while (hWnd_Window == NULL) {
-        hWnd_Window = FindWindowW(NULL, L"安装 StartAllBack");
-    }
+    
+
+    HWND hWnd_Window = FindWindow_(L"安装 StartAllBack",L"StartAllBack安装器");
+  
     INFO_(L"[StartAllBack安装器]已找到窗口");
     //前置
     SetForegroundWindow(hWnd_Window);
@@ -120,9 +118,21 @@ bool StartAllBack_Install(int mode) {
     INFO_(L"[StartAllBack安装器]等待安装完成");
     //等待应用程序
     INFO_(L"[StartAllBack安装器]等待安装完成");
+    //
+    //计数器
+    SYSTEMTIME now;
+    GetLocalTime(&now);
+
     hWnd_Window = FindWindowW(NULL, L"安装 StartAllBack");
     HWND hWnd_ERROR = FindWindowW(NULL, L"错误");
     while (hWnd_Window != NULL) {
+        SYSTEMTIME now_temp;
+        GetLocalTime(&now_temp);
+        if (now_temp.wSecond - now.wSecond >= 20) {
+            ERROR_(L"[StartAllBack安装器]无法找到窗口");
+            MessageBox(NULL, (LPCTSTR)L" 无法查找到窗口 请检查组件完整性或将log.txt发送给开发者获取帮助", (LPCTSTR)L" StartAllBack安装器", MB_OK);
+        }
+        //
         hWnd_Window = FindWindowW(NULL, L"安装 StartAllBack");
         hWnd_ERROR = FindWindowW(NULL, L"错误");
         if (hWnd_ERROR != NULL) {

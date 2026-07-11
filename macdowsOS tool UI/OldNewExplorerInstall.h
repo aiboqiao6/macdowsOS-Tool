@@ -38,10 +38,8 @@ inline void OldNewExplorer_install() {
     INFO_(L"[OldNewExplorer安装工具]打开配置程序");
     ExecuteInRunDialog(L"C:\\OldNewExplorer\\OldNewExplorerCfg.exe");
     INFO_(L"[OldNewExplorer安装工具]等待配置窗口出现");
-    HWND hWnd_Window= FindWindowW(NULL, L"致美化 OldNewExplorer 配置");
-    while (hWnd_Window == NULL) {
-        hWnd_Window = FindWindowW(NULL, L"致美化 OldNewExplorer 配置");
-    }
+    HWND hWnd_Window= FindWindow_(L"致美化 OldNewExplorer 配置",L"OldNewExplorer安装工具");
+   
     INFO_(L"[OldNewExplorer安装工具]配置窗口出现");
     SetForegroundWindow(hWnd_Window);
     SetWindowPos(hWnd_Window, NULL, 0, 0, 0, 0, SWP_NOSIZE);

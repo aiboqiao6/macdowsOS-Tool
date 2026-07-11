@@ -62,7 +62,6 @@ Rectangle {
                     { name: "删除已安装主题", desc: "恢复 Windows 默认主题", action: function() { Backend.deleteTheme(); } },
                     { name: "安装 StartAllBack", desc: "Win11 开始菜单增强", action: function() { Backend.installStartAllBack(); } },
                     { name: "安装 OldNewExplorer", desc: "资源管理器增强", action: function() { Backend.installOldNewExplorer(); } },
-                    { name: "执行最终设置", desc: "完成安装后的收尾配置", action: function() { Backend.finalSetting(); } },
                     { name: "重启资源管理器", desc: "使更改生效", action: function() { Backend.restartExplorer(); } }
                 ]
 
