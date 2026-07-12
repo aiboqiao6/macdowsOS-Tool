@@ -25,9 +25,100 @@
 
 #include "Backend.h"
 
+#ifdef Q_OS_WIN
+// Windows 10/11 Acrylic blur behind.  Qt Quick 的 MultiEffect 只能模糊 Qt 场景内的
+// Item，不能模糊窗口背后的桌面内容；真实毛玻璃需要交给 DWM 处理。
+enum AccentState {
+    ACCENT_DISABLED = 0,
+    ACCENT_ENABLE_GRADIENT = 1,
+    ACCENT_ENABLE_TRANSPARENTGRADIENT = 2,
+    ACCENT_ENABLE_BLURBEHIND = 3,
+    ACCENT_ENABLE_ACRYLICBLURBEHIND = 4,
+    ACCENT_ENABLE_HOSTBACKDROP = 5
+};
+
+struct AccentPolicy {
+    int AccentState;
+    int AccentFlags;
+    int GradientColor;
+    int AnimationId;
+};
+
+struct WindowCompositionAttributeData {
+    int Attribute;
+    void *Data;
+    size_t SizeOfData;
+};
+
+static void enableAcrylicBlur(HWND hwnd) {
+    using SetWindowCompositionAttributeFunc = BOOL(WINAPI *)(HWND, WindowCompositionAttributeData *);
+    HMODULE user32 = GetModuleHandleW(L"user32.dll");
+    auto setWindowCompositionAttribute = reinterpret_cast<SetWindowCompositionAttributeFunc>(
+        GetProcAddress(user32, "SetWindowCompositionAttribute"));
+
+    if (!setWindowCompositionAttribute)
+        return;
+
+    // AABBGGRR。较低 alpha 可以让背景纹理更明显；QML 再叠一层浅色材质。
+    AccentPolicy accent = {};
+    accent.AccentState = ACCENT_ENABLE_ACRYLICBLURBEHIND;
+    accent.AccentFlags = 2;
+    accent.GradientColor = 0x66F7F7F7;
+
+    WindowCompositionAttributeData data = {};
+    data.Attribute = 19; // WCA_ACCENT_POLICY
+    data.Data = &accent;
+    data.SizeOfData = sizeof(accent);
+    setWindowCompositionAttribute(hwnd, &data);
+}
+
+static void applyNativeRoundedCorners(HWND hwnd) {
+    HMODULE dwmapi = LoadLibraryW(L"dwmapi.dll");
+    if (dwmapi) {
+        using DwmSetWindowAttributeFunc = HRESULT(WINAPI *)(HWND, DWORD, LPCVOID, DWORD);
+        auto dwmSetWindowAttribute = reinterpret_cast<DwmSetWindowAttributeFunc>(
+            GetProcAddress(dwmapi, "DwmSetWindowAttribute"));
+        if (dwmSetWindowAttribute) {
+            constexpr DWORD DWMWA_WINDOW_CORNER_PREFERENCE = 33;
+            constexpr DWORD DWMWCP_ROUND = 2;
+            DWORD preference = DWMWCP_ROUND;
+            dwmSetWindowAttribute(hwnd, DWMWA_WINDOW_CORNER_PREFERENCE,
+                                  &preference, sizeof(preference));
+        }
+        FreeLibrary(dwmapi);
+    }
+
+    RECT clientRect{};
+    if (!GetClientRect(hwnd, &clientRect))
+        return;
+
+    const int width = clientRect.right - clientRect.left;
+    const int height = clientRect.bottom - clientRect.top;
+    if (width <= 0 || height <= 0)
+        return;
+
+    UINT dpi = 96;
+    HMODULE user32 = GetModuleHandleW(L"user32.dll");
+    if (user32) {
+        using GetDpiForWindowFunc = UINT(WINAPI *)(HWND);
+        auto getDpiForWindow = reinterpret_cast<GetDpiForWindowFunc>(
+            GetProcAddress(user32, "GetDpiForWindow"));
+        if (getDpiForWindow)
+            dpi = getDpiForWindow(hwnd);
+    }
+
+    const int radius = MulDiv(16, static_cast<int>(dpi), 96);
+    HRGN roundedRegion = CreateRoundRectRgn(0, 0, width + 1, height + 1,
+                                           radius * 2, radius * 2);
+    SetWindowRgn(hwnd, roundedRegion, TRUE);
+}
+#endif
+
 // ============================================================
 int main(int argc, char *argv[]) {
     freopen("log.txt", "w", stdout);
+    MessageBox(NULL, (LPCTSTR)L" 目涉及的部分主题、图标和桌面组件来自第三方，其著作权与许可归原作者所有。用户应自行确认相关资源的授权范围并遵守对应许可协议。本项目仅用于技术研究、学习和合法授权的软件交互，不支持盗版或商业侵权用途。开发者不对第三方文件的合法性、兼容性以及因使用本程序造成的数据丢失、系统异常或版权纠纷承担责任。使用本程序即表示你理解并接受相关风险。", (LPCTSTR)L" 雾蓝回针MistBlueSt", MB_OK);
+    MessageBox(NULL, (LPCTSTR)L" macdowsOS Tool UI 完全免费 如果你是付费获取 说明你被骗了", (LPCTSTR)L" 雾蓝回针MistBlueSt", MB_OK);
     (void)argc; (void)argv;
     QGuiApplication app(argc, nullptr);
 
@@ -91,6 +182,11 @@ int main(int argc, char *argv[]) {
 
             HWND hwnd = (HWND)window->winId();
 
+#ifdef Q_OS_WIN
+            enableAcrylicBlur(hwnd);
+            applyNativeRoundedCorners(hwnd);
+#endif
+
             // ——— 取色函数：BitBlt 窗口区域缩到 1 像素 = 硬件加速平均色 ———
             auto doCapture = [window, backend, hwnd]() {
                 SetWindowDisplayAffinity(hwnd, WDA_EXCLUDEFROMCAPTURE);
@@ -133,7 +229,10 @@ int main(int argc, char *argv[]) {
             dragStop->setInterval(300);
             QObject::connect(dragStop, &QTimer::timeout, dragThrottle, &QTimer::stop);
 
-            auto onWindowChanged = [dragThrottle, dragStop]() {
+            auto onWindowChanged = [dragThrottle, dragStop, hwnd]() {
+#ifdef Q_OS_WIN
+                applyNativeRoundedCorners(hwnd);
+#endif
                 if (!dragThrottle->isActive())
                     dragThrottle->start();
                 dragStop->start();

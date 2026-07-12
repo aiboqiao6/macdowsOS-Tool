@@ -80,7 +80,7 @@ Window {
         id: cornerMask
         anchors.fill: parent
         color: "white"
-        radius: 16                                     // 圆角半径 16px
+        radius: 14                                     // 圆角半径 14px
     }
 
     // 着色器效果源：将 cornerMask 的渲染结果作为纹理提供给 MultiEffect
@@ -111,7 +111,7 @@ Window {
         Rectangle {
             id: bgWhite
             anchors.fill: parent
-            color: "#FFFFFF"
+            color: "#F2F2F7"
         }
 
         // ====== 整体垂直布局 ======
@@ -122,25 +122,26 @@ Window {
             // ====== 自定义标题栏 ======
             Rectangle {
                 Layout.fillWidth: true
-                Layout.preferredHeight: 48
-                color: "transparent"
+                Layout.preferredHeight: 52
+                color: "#F2F2F7"
 
                 // 独立关闭按钮（不使用公共 WindowControls 组件）
                 // 红色圆形 macOS 风格，仅步骤0显示
                 Item {
                     visible: wizardWindow.step === 0
-                    x: 16
+                    x: 18
                     anchors.verticalCenter: parent.verticalCenter
                     width: 24
                     height: 24
 
-                    // 红色圆形背景
                     Rectangle {
                         anchors.centerIn: parent
-                        width: 14
-                        height: 14
+                        width: 13
+                        height: 13
                         radius: width / 2
-                        color: "#EC6765"
+                        color: "#FF5F57"
+                        border.color: "#D14E48"
+                        border.width: 0.5
 
                         // 悬停时显示的 "×" 图标
                         Rectangle {
@@ -176,7 +177,7 @@ Window {
                 // 鼠标拖拽区域：从左侧 80px 开始（避开红绿灯按钮）
                 MouseArea {
                     anchors.left: parent.left
-                    anchors.leftMargin: 80
+                    anchors.leftMargin: 92
                     anchors.right: parent.right
                     anchors.top: parent.top
                     anchors.bottom: parent.bottom
@@ -274,7 +275,7 @@ Window {
                     Label {
                         text: "macOS Golden Gate"
                         color: "#1D1D1F"
-                        font { pixelSize: 26; weight: Font.Bold }
+                        font { pixelSize: 26; weight: Font.DemiBold }
                         Layout.alignment: Qt.AlignHCenter
                         Layout.bottomMargin: -14  // 大幅缩小与副标题间距
                     }
@@ -299,8 +300,8 @@ Window {
 
                         // 背景：蓝色圆角矩形，悬停/按下时颜色加深
                         background: Rectangle {
-                            radius: 10
-                            color: continueBtn.down ? "#1A5ADB" : continueBtn.hovered ? "#3771F0" : "#2F6EED"
+                            radius: 8
+                            color: continueBtn.down ? "#0066CC" : continueBtn.hovered ? "#3478F6" : "#0A84FF"
                         }
                         // 文字：白色粗体居中
                         contentItem: Label {
@@ -399,7 +400,8 @@ Window {
                         width: 200
                         height: 160
                         radius: 12
-                        border.color: clickedDisk ? "#2F6EED" : "#E8E8ED"
+                        color: "#FFFFFF"
+                        border.color: clickedDisk ? "#0A84FF" : "#D1D1D6"
                         border.width: 2
 
                         // 竖向布局：图标在上 → 文字居中
@@ -470,8 +472,8 @@ Window {
                             implicitWidth: 100
                             implicitHeight: 36
                             background: Rectangle {
-                                radius: 10
-                                color: backBtn.down ? "#D0D0D5" : backBtn.hovered ? "#DCDCE0" : "#E8E8ED"
+                            radius: 8
+                                color: backBtn.down ? "#D1D1D6" : backBtn.hovered ? "#E5E5EA" : "#EDEDF2"
                             }
                             contentItem: Label {
                                 text: "后退"
@@ -490,8 +492,8 @@ Window {
                             implicitWidth: 100
                             implicitHeight: 36
                             background: Rectangle {
-                                radius: 10
-                                color: installBtn.down ? "#1A5ADB" : installBtn.hovered ? "#3771F0" : "#2F6EED"
+                                radius: 8
+                                color: installBtn.down ? "#0066CC" : installBtn.hovered ? "#3478F6" : "#0A84FF"
                             }
                             contentItem: Label {
                                 text: "安装"
@@ -607,7 +609,7 @@ Window {
                 implicitWidth: 320
                 implicitHeight: 6
                 radius: 3
-                color: "#E8E8ED"
+                color: "#D1D1D6"
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.top: parent.top
                 anchors.topMargin: parent.height * 0.80
@@ -616,7 +618,7 @@ Window {
                     width: parent.width * (wizardWindow.installTotal > 0 ? wizardWindow.installProgress / wizardWindow.installTotal : 0)
                     height: parent.height
                     radius: 3
-                    color: "#2F6EED"
+                    color: "#0A84FF"
                     Behavior on width {
                         NumberAnimation { duration: 300; easing.type: Easing.OutCubic }
                     }
@@ -642,8 +644,8 @@ Window {
         Rectangle {
             anchors.fill: parent
             color: "transparent"
-            radius: 16
-            border.color: "#D0D0D0"
+            radius: 14
+            border.color: "#30000000"
             border.width: 1
             z: 80
         }
