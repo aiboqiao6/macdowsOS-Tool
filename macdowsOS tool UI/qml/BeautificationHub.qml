@@ -18,39 +18,7 @@ Item {
             Label { text: "系统美化"; color: "#1D1D1F"; font { pixelSize: 28; weight: Font.DemiBold } }
             Label { text: "选择完整美化方案，或单独安装某个组件。"; color: "#6E6E73"; font.pixelSize: 13 }
         }
-        Rectangle {
-            Layout.fillWidth: true
-            Layout.maximumWidth: 620
-            Layout.preferredHeight: 84
-            radius: 10
-            color: "#FFF6F6"
-            border.color: "#FFE0E0"
-            border.width: 1
 
-            RowLayout {
-                anchors.fill: parent
-                anchors.margins: 18
-                spacing: 12
-                ColumnLayout {
-                    Layout.fillWidth: true
-                    spacing: 4
-
-                    Label {
-                        text: "重要提示"
-                        color: "#D70015"
-                        font { pixelSize: 14; weight: Font.DemiBold }
-                    }
-
-                    Label {
-                        text: "Windows美化需要重启计算机，建议操作前保存好当前正在编辑的文档。"
-                        color: "#D70015"
-                        font.pixelSize: 12
-                        wrapMode: Text.WordWrap
-                        Layout.fillWidth: true
-                    }
-                }
-            }
-        }
         Rectangle {
             Layout.fillWidth: true
             Layout.maximumWidth: 620

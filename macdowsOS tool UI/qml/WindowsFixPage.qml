@@ -41,7 +41,7 @@ Item {
                     }
 
                     Label {
-                        text: "系统修复可能需要重启计算机，建议操作前保存好当前正在编辑的文档。"
+                        text: "系统修复可能需要重启计算机，建议操作前创建系统还原点。"
                         color: "#D70015"
                         font.pixelSize: 12
                         wrapMode: Text.WordWrap

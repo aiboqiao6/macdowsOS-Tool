@@ -81,7 +81,7 @@ Item {
                     spacing: 4
 
                     Label { text: "版本"; color: "#1D1D1F"; font { pixelSize: 14; weight: Font.DemiBold } }
-                    Label { text: "1.30"; color: "#86868B"; font.pixelSize: 12 }
+                    Label { text: "1.30 RC2"; color: "#86868B"; font.pixelSize: 12 }
                 }
 
                 Label {

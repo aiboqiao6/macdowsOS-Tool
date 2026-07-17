@@ -2,7 +2,7 @@
 
 <div align="center">
 
-# macdowsOS Tool
+# macdowsOS Tool UI
 
 用于 Windows 10/11 的自动化桌面美化、组件安装与系统修复工具
 
@@ -22,12 +22,11 @@ macdowsOS Tool UI主要基于自动操作技术实现的全自动Windows仿macOS
 
 ## 系统要求
 
-| 状态 | 操作系统 | 架构与版本 |
+| 状态 | 操作系统 | 架构 | 版本 |
 |:---:|---|---|
-| ✅ | Windows 11 | x64，不支持 ARM64 |
-| ✅ | Windows 10 | x64，21H2 及以上版本 |
-| ❌ | 精简版 Windows | 不支持过度精简或缺失系统组件的版本 |
-| ❌ | Windows x86 / ARM64 | 当前版本不支持 |
+| ✅ | Windows 11 | x64，不支持 ARM64 | 建议使用24H2及以上版本 |
+| ✅ | Windows 10 | x64，不支持ARM64  | 建议使用21H2及以上版本 |
+| ❗ | 精简版 Windows | 不支持过度精简或缺失系统组件的版本 | - |
 
 自动操作技术目前依赖于组件标题名匹配 ，当前仅支持 **简体中文**。
 

@@ -66,7 +66,6 @@ macdowsOS Tool 需要使用以下资源用于实现此功能。
 | StartAllBack | startallback.cn | StartAllBack | 否 |
 | Theme | www.deviantart.com | niivu | 是 |
 
-此功能可能会出现的问题
 
 ---
 
@@ -77,6 +76,9 @@ macdowsOS Tool 使用命令行执行系统修复，命令来自于 [华为](http
 ---
 
 ### 4) 窗口圆角功能
+
+> **此功能现已从macdowsOS Tool中删除** 
+
 
 现在的窗口圆角功能使用 Windows API 创建圆角区域切割窗口，因此兼容性不怎么好，之后会对此进行优化
 

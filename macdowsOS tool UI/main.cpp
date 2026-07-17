@@ -117,8 +117,6 @@ static void applyNativeRoundedCorners(HWND hwnd) {
 // ============================================================
 int main(int argc, char *argv[]) {
     freopen("log.txt", "w", stdout);
-    MessageBox(NULL, (LPCTSTR)L" 目涉及的部分主题、图标和桌面组件来自第三方，其著作权与许可归原作者所有。用户应自行确认相关资源的授权范围并遵守对应许可协议。本项目仅用于技术研究、学习和合法授权的软件交互，不支持盗版或商业侵权用途。开发者不对第三方文件的合法性、兼容性以及因使用本程序造成的数据丢失、系统异常或版权纠纷承担责任。使用本程序即表示你理解并接受相关风险。", (LPCTSTR)L" 雾蓝回针MistBlueSt", MB_OK);
-    MessageBox(NULL, (LPCTSTR)L" macdowsOS Tool UI 完全免费 如果你是付费获取 说明你被骗了", (LPCTSTR)L" 雾蓝回针MistBlueSt", MB_OK);
     (void)argc; (void)argv;
     QGuiApplication app(argc, nullptr);
 
