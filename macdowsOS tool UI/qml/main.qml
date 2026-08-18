@@ -57,17 +57,17 @@ Window {
                 id: sidebarMaterial
                 Layout.preferredWidth: appWindow.sidebarWidth
                 Layout.fillHeight: true
-                color: "transparent"
+                color: "#E2E3E7"
 
                 Rectangle {
                     anchors.fill: parent
-                    color: "#8AF2F2F7"
+                    color: "#38FFFFFF"
                 }
 
                 Rectangle {
                     anchors.fill: parent
                     color: "#40FFFFFF"
-                    opacity: 0.35
+                    opacity: 0.24
                     gradient: Gradient {
                         orientation: Gradient.Vertical
                         GradientStop { position: 0.0; color: "#55FFFFFF" }

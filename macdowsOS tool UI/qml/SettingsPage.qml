@@ -36,7 +36,7 @@ Item {
                     spacing: 4
                     Label { text: "macdowsOS Tool UI"; color: "#1D1D1F"; font { pixelSize: 15; weight: Font.DemiBold } }
                     Label { text: "雾蓝回针 MistBlueSt"; color: "#6E6E73"; font.pixelSize: 13 }
-                    Label { text: "版本 1.30 · 20260712130"; color: "#86868B"; font.pixelSize: 12 }
+                    Label { text: "版本 1.30 · 20260812130"; color: "#86868B"; font.pixelSize: 12 }
                 }
             }
         }

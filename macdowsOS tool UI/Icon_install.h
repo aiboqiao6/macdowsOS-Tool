@@ -84,15 +84,13 @@ inline void Icon_Install() {
     // 替换用文件 (第三方自定义图标)
     std::wstring res1 = L"AppData/Icon/Icon_res/imageres.dll";
     std::wstring res2 = L"AppData/Icon/Icon_res/imagesp1.dll";
-    std::wstring res3 = L"AppData/Icon/Icon_res/zipfldr.dll";
 
     // 系统源文件 (用于备份)
     std::wstring res5 = L"C:\\Windows\\System32\\imageres.dll";
     std::wstring res6 = L"C:\\Windows\\System32\\imagesp1.dll";
-    std::wstring res7 = L"C:\\Windows\\System32\\zipfldr.dll";
+
     std::wstring res8 = L"C:\\Windows\\SysWOW64\\imageres.dll";
     std::wstring res9 = L"C:\\Windows\\SysWOW64\\imagesp1.dll";
-    std::wstring res10 = L"C:\\Windows\\SysWOW64\\zipfldr.dll";
 
     // 目标目录
     std::wstring to1 = L"C:\\Windows\\System32";
@@ -106,10 +104,9 @@ inline void Icon_Install() {
     INFO_(L"[图标安装工具]备份系统原始文件");
     copyPath(res5, backup1);
     copyPath(res6, backup1);
-    copyPath(res7, backup1);
+
     copyPath(res8, backup2);
     copyPath(res9, backup2);
-    copyPath(res10, backup2);
 
     // ========== 2. 关闭资源管理器 ==========
     INFO_(L"[图标安装工具]关闭文件资源管理器");
@@ -126,20 +123,16 @@ inline void Icon_Install() {
     // System32
     TakeOwnershipAndGrantFullControl(res5);
     TakeOwnershipAndGrantFullControl(res6);
-    TakeOwnershipAndGrantFullControl(res7);
     // SysWOW64
     TakeOwnershipAndGrantFullControl(res8);
     TakeOwnershipAndGrantFullControl(res9);
-    TakeOwnershipAndGrantFullControl(res10);
 
     // 替换 System32
     copyPath(res1, to1);
     copyPath(res2, to1);
-    copyPath(res3, to1);
     // 替换 SysWOW64
     copyPath(res1, to2);
     copyPath(res2, to2);
-    copyPath(res3, to2);
 
     // ========== 5. 启动资源管理器 ==========
     INFO_(L"[图标安装工具]启动文件资源管理器");

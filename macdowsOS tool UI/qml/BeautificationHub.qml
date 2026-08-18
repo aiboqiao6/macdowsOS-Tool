@@ -68,7 +68,7 @@ Item {
                     Layout.fillWidth: true
                     Layout.preferredHeight: 74
                     hoverEnabled: true
-                    background: Rectangle { color: win11Item.hovered ? "#F5F5F7" : "transparent"; radius: 0 }
+                    background: Rectangle { color: win11Item.hovered ? "#F5F5F7" : "transparent"; radius: 10 }
                     contentItem: RowLayout {
                         spacing: 14
                         ColumnLayout {
