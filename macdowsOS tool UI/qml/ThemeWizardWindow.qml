@@ -52,6 +52,7 @@ Window {
     property int selectedVersion: 10  // 用户选择的 Windows 版本（10 或 11，由调用方传入）
     property int installProgress: 0   // 当前安装进度（已完成的步骤数）
     property int installTotal: 0      // 安装总步骤数
+    property string installStatus: "正在准备安装"
     property string targetDisk: "C:"  // 用户选择的目标磁盘名称
     property int selectedDiskIndex: 0 // 用户选择的磁盘索引
 
@@ -61,7 +62,35 @@ Window {
         wizardWindow.step = 0
         wizardWindow.installProgress = 0
         wizardWindow.installTotal = 0
+        wizardWindow.installStatus = "正在准备安装"
         wizardWindow.selectedDiskIndex = 0
+    }
+
+    Connections {
+        target: Backend
+
+        function onInstallationStarted(totalSteps) {
+            wizardWindow.installTotal = totalSteps
+            wizardWindow.installProgress = 0
+        }
+
+        function onInstallationStepChanged(stepName) {
+            wizardWindow.installStatus = "正在" + stepName
+        }
+
+        function onInstallationProgressChanged(completedSteps, totalSteps) {
+            wizardWindow.installProgress = completedSteps
+            wizardWindow.installTotal = totalSteps
+        }
+
+        function onInstallationFinished(success, errorMessage) {
+            if (success) {
+                wizardWindow.installStatus = "安装完成，正在准备重启"
+            } else {
+                wizardWindow.installStatus = "创建还原点失败，安装已停止"
+                console.error("安装失败:", errorMessage)
+            }
+        }
     }
 
     // ====== 关闭向导 ======
@@ -596,9 +625,12 @@ Window {
              
             // ——— 安装状态文字 ———
             Label {
-                text: "正在安装 macOS Golden Gate 在 Macintoch HD上"
+                text: wizardWindow.installStatus
                 color: "#1D1D1F"
                 font { pixelSize: 18; weight: Font.Bold }
+                width: Math.min(520, parent.width - 48)
+                horizontalAlignment: Text.AlignHCenter
+                wrapMode: Text.Wrap
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.top: parent.top
                 anchors.topMargin: parent.height * 0.55
@@ -652,65 +684,11 @@ Window {
     }
 }
 
-    // ============================================================
-    // 安装流程
-    // 根据 selectedVersion 选择对应的安装步骤序列，
-    // 逐个调用后端 C++ 函数执行安装操作。
-    // 安装期间 step 保持为 2（安装中），进度由 installProgress 反映。
-    // 所有步骤完成后进度条显示 100%，无完成界面。
-    // ============================================================
-
-    // ====== 启动安装 ======
-    // 根据所选版本构建安装步骤数组，然后依次执行
     function runInstallation() {
-        let steps
-        if (selectedVersion === 10) {
-            // Windows 10 安装步骤（6 步）
-            steps = [
-              { name: "安装MyDockFinder", action: function() { Backend.installMyDockFinder(); } },
-              { name: "安装补丁", action: function() { Backend.patchThemePath(); } },
-              { name: "删除主题", action: function() { Backend.deleteTheme(); } },
-              { name: "安装主题", action: function() { Backend.installThemeWin10(); } },
-              { name: "安装图标", action: function() { Backend.installIcons(); } },
-              { name: "安装OldNewExplorer", action: function() { Backend.installOldNewExplorer(); } },
-              { name: "执行最终设置", action: function() { Backend.finalSetting(); } },
-              { name: "重启", action: function() { Backend.restartNoNotice(); } }
-            ]
-        } else { 
-            // Windows 11 安装步骤（7 步，多一个 StartAllBack）
-            steps = [
-                { name: "安装MyDockFinder", action: function() { Backend.installMyDockFinder(); } },
-                { name: "安装补丁", action: function() { Backend.patchThemePath(); } },
-                { name: "删除主题", action: function() { Backend.deleteTheme(); } },
-                { name: "安装主题", action: function() { Backend.installThemeWin11(); } },
-                { name: "安装图标", action: function() { Backend.installIcons(); } },
-                { name: "安装StartAllBack", action: function() { Backend.installStartAllBack(); } },
-                { name: "执行最终设置", action: function() { Backend.finalSetting(); } },
-                { name: "重启", action: function() { Backend.restartNoNotice(); } }
-            ]
-        }
-        wizardWindow.installTotal = steps.length     // 记录总步骤数
-        wizardWindow.installProgress = 0             // 重置进度
-        runNextStep(steps, 0)           // 从第 0 步开始执行
-    }
-
-    // ====== 执行下一步安装 ======
-    // 递归调用，依次执行安装步骤数组中的每个动作
-    // 所有步骤在 step === 2 的页面中完成，进度条实时更新
-    // 参数：
-    //   steps — 安装步骤数组
-    //   index — 当前要执行的步骤索引
-    function runNextStep(steps, index) {
-        if (index >= steps.length) {
-            // 所有步骤已完成，停留在当前页面（进度条显示 100%）
-            return
-        }
-        // 更新进度（installProgress / installTotal → 进度条百分比）
-        wizardWindow.installProgress = index + 1
-        // 使用 Qt.callLater 延迟执行，避免阻塞 UI 线程
-        Qt.callLater(function() {
-            steps[index].action()               // 调用后端执行当前步骤
-            runNextStep(steps, index + 1)       // 递归执行下一步
-        })
+        wizardWindow.installProgress = 0
+        wizardWindow.installTotal = 0
+        wizardWindow.installStatus = "正在准备安装"
+        if (!Backend.startInstallation(wizardWindow.selectedVersion))
+            wizardWindow.installStatus = "安装任务无法启动"
     }
 }

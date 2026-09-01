@@ -29,8 +29,8 @@ namespace {
         INFO_(L"[OldNewExplorer安装工具]程序已启动");
         return true;
     }
-}
-inline void OldNewExplorer_install() {
+
+void OldNewExplorer_install() {
     INFO_(L"[OldNewExplorer安装工具]开始安装");
     INFO_(L"[OldNewExplorer安装工具]复制应用文件");
     copyPath(L"./AppData/OldNewExplorer", L"C:/");
@@ -65,4 +65,6 @@ inline void OldNewExplorer_install() {
     killapp(L"OldNewExplorerCfg.exe");
     INFO_(L"[OldNewExplorer安装工具]配置结束 退出");
     return;
+}
+
 }

@@ -3,7 +3,9 @@
 #include<windows.h>
 #include"WindowControl.h"
 #include"LogSystem.h"
-inline void theme_path_install() {
+
+namespace {
+void theme_path_install() {
     INFO_(L"[主题补丁安装工具]开始");
     HWND temp,temp1;
     //安装
@@ -53,4 +55,6 @@ inline void theme_path_install() {
     ClickButtonMode3(hWnd_Window, L"主题补丁安装工具", L"&Finish");
     INFO_(L"[主题补丁安装工具]退出");
     return;
+}
+
 }

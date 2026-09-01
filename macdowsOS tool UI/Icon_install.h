@@ -12,6 +12,8 @@
 #include "All.h"
 #pragma comment(lib, "Advapi32.lib")
 
+namespace {
+
 /*
 imageres.dll
 imagesp1.dll
@@ -21,7 +23,7 @@ C:\Windows\SysWOW64
 */
 
 // 取得指定文件/目录的所有权并授予 Administrators 完全控制权限
-inline bool TakeOwnershipAndGrantFullControl(const std::wstring& filePath) {
+bool TakeOwnershipAndGrantFullControl(const std::wstring& filePath) {
     std::wstring takeownCmd = L"takeown /f \"" + filePath + L"\"";
     std::wstring icaclsCmd = L"icacls \"" + filePath + L"\" /grant Administrators:F";
     int r1 = _wsystem(takeownCmd.c_str());
@@ -30,7 +32,7 @@ inline bool TakeOwnershipAndGrantFullControl(const std::wstring& filePath) {
 }
 
 // 清理 Windows 图标缓存文件
-inline void ClearIconCache() {
+void ClearIconCache() {
     // 获取 LOCALAPPDATA 路径
     wchar_t localAppData[MAX_PATH] = { 0 };
     if (!SUCCEEDED(SHGetFolderPathW(NULL, CSIDL_LOCAL_APPDATA, NULL, 0, localAppData))) {
@@ -78,7 +80,7 @@ inline void ClearIconCache() {
     INFO_(L"[图标安装工具]图标缓存已清除");
 }
 
-inline void Icon_Install() {
+void Icon_Install() {
     INFO_(L"[图标安装工具]开始");
 
     // 替换用文件 (第三方自定义图标)
@@ -140,4 +142,6 @@ inline void Icon_Install() {
 
     INFO_(L"[图标安装工具]安装完成");
     return;
+}
+
 }

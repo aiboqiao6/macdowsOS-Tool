@@ -34,9 +34,6 @@
     <ClCompile Include="main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Backend.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
   </ItemGroup>
   <!-- 头文件 -->
   <ItemGroup>

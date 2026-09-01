@@ -8,8 +8,10 @@
 
 #include "LogSystem.h"
 
+namespace {
+
 // 静默运行批处理文件
-inline bool RunBatchSilentlyNative(const std::wstring& batchFilePath) {
+bool RunBatchSilentlyNative(const std::wstring& batchFilePath) {
     STARTUPINFOW si = { sizeof(si) };
     PROCESS_INFORMATION pi;
     std::wstring cmdLine = L"cmd /c \"" + batchFilePath + L"\"";
@@ -24,7 +26,7 @@ inline bool RunBatchSilentlyNative(const std::wstring& batchFilePath) {
 }
 
 // 终止进程
-inline void killapp(const std::wstring& appname) {
+void killapp(const std::wstring& appname) {
     MESSAGE_(L"[macdowsOS Tool] 正在终止进程:", appname);
     HANDLE hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
     if (hSnapshot == INVALID_HANDLE_VALUE) {
@@ -54,7 +56,7 @@ inline void killapp(const std::wstring& appname) {
 }
 
 // 添加开机自启动
-inline void AddAutoStart(const std::wstring& targetPath, const std::wstring& shortcutName) {
+void AddAutoStart(const std::wstring& targetPath, const std::wstring& shortcutName) {
     std::wstring normalizedTarget = targetPath;
     std::replace(normalizedTarget.begin(), normalizedTarget.end(), L'/', L'\\');
 
@@ -107,7 +109,7 @@ inline void AddAutoStart(const std::wstring& targetPath, const std::wstring& sho
 }
 
 // 设置桌面图标可见性
-inline void SetDesktopIconsPermanent(bool show) {
+void SetDesktopIconsPermanent(bool show) {
     HKEY hKey = NULL;
     DWORD dwValue = show ? 0 : 1;
     DWORD dwSize = sizeof(DWORD);
@@ -124,4 +126,6 @@ inline void SetDesktopIconsPermanent(bool show) {
     if (result != ERROR_SUCCESS) {
         ERROR_(L"[macdowsOS Tool] 修改注册表时出现错误 无法修改注册表值");
     }
+}
+
 }

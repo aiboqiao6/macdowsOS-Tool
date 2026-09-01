@@ -7,7 +7,9 @@
 #include<Windows.h>
 #include <filesystem>
 #include"LogSystem.h"
-inline void Delete_theme(){
+
+namespace {
+void Delete_theme(){
     INFO_(L"[主题删除工具]开始删除");
     std::filesystem::remove_all("C:\\Windows\\Resources\\Themes\\Big Sur"); INFO_(L"[主题删除工具]删除Big Sur");
     std::filesystem::remove_all("C:\\Windows\\Resources\\Themes\\Tahoe"); INFO_(L"[主题删除工具]删除Tahoe");
@@ -17,4 +19,6 @@ inline void Delete_theme(){
     std::filesystem::remove_all("C:\\Windows\\Resources\\Themes\\Tahoe - Light.theme"); INFO_(L"[主题删除工具]删除Tahoe - Light.theme");
     std::filesystem::remove_all("C:\\Windows\\Resources\\Themes\\Tahoe - Night.theme"); INFO_(L"[主题删除工具]删除Tahoe - Night.theme");
     return;
+}
+
 }

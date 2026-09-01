@@ -1,5 +1,3 @@
-#define _CRT_SECURE_NO_WARNINGS
-
 // ============================================================
 // main.cpp — macdowsOS Tool UI 主入口
 //
@@ -7,37 +5,25 @@
 // ============================================================
 
 #include <QtGui/QGuiApplication>
-#include <QtGui/QIcon>
 #include <QtGui/QFontDatabase>
 #include <QtGui/QSurfaceFormat>
 #include <QtQml/QQmlApplicationEngine>
 #include <QtQml/QQmlError>
-#include <QtQml/QJSEngine>
 #include <QtCore/QUrl>
 #include <QtQuick/QQuickWindow>
 #include <QtQuick/QSGRendererInterface>
 #include <QtQuickControls2/QQuickStyle>
 
 #include <Windows.h>
+#include <dwmapi.h>
 
 #include "Backend.h"
 
-#ifdef Q_OS_WIN
 static void applyNativeRoundedCorners(HWND hwnd) {
-    HMODULE dwmapi = LoadLibraryW(L"dwmapi.dll");
-    if (dwmapi) {
-        using DwmSetWindowAttributeFunc = HRESULT(WINAPI *)(HWND, DWORD, LPCVOID, DWORD);
-        auto dwmSetWindowAttribute = reinterpret_cast<DwmSetWindowAttributeFunc>(
-            GetProcAddress(dwmapi, "DwmSetWindowAttribute"));
-        if (dwmSetWindowAttribute) {
-            constexpr DWORD DWMWA_WINDOW_CORNER_PREFERENCE = 33;
-            constexpr DWORD DWMWCP_ROUND = 2;
-            DWORD preference = DWMWCP_ROUND;
-            dwmSetWindowAttribute(hwnd, DWMWA_WINDOW_CORNER_PREFERENCE,
-                                  &preference, sizeof(preference));
-        }
-        FreeLibrary(dwmapi);
-    }
+    constexpr DWORD windowCornerPreference = 33;
+    constexpr DWORD roundCorners = 2;
+    DwmSetWindowAttribute(hwnd, windowCornerPreference,
+                          &roundCorners, sizeof(roundCorners));
 
     RECT clientRect{};
     if (!GetClientRect(hwnd, &clientRect))
@@ -48,28 +34,18 @@ static void applyNativeRoundedCorners(HWND hwnd) {
     if (width <= 0 || height <= 0)
         return;
 
-    UINT dpi = 96;
-    HMODULE user32 = GetModuleHandleW(L"user32.dll");
-    if (user32) {
-        using GetDpiForWindowFunc = UINT(WINAPI *)(HWND);
-        auto getDpiForWindow = reinterpret_cast<GetDpiForWindowFunc>(
-            GetProcAddress(user32, "GetDpiForWindow"));
-        if (getDpiForWindow)
-            dpi = getDpiForWindow(hwnd);
-    }
-
-    const int radius = MulDiv(16, static_cast<int>(dpi), 96);
+    const int radius = MulDiv(16, GetDpiForWindow(hwnd), 96);
     HRGN roundedRegion = CreateRoundRectRgn(0, 0, width + 1, height + 1,
                                            radius * 2, radius * 2);
-    SetWindowRgn(hwnd, roundedRegion, TRUE);
+    if (!SetWindowRgn(hwnd, roundedRegion, TRUE))
+        DeleteObject(roundedRegion);
 }
-#endif
 
 // ============================================================
 int main(int argc, char *argv[]) {
-    freopen("log.txt", "w", stdout);
-    (void)argc; (void)argv;
-    QGuiApplication app(argc, nullptr);
+    ResetLog();
+    INFO_(L"[macdowsOS Tool]程序启动");
+    QGuiApplication app(argc, argv);
     MessageBoxW(NULL, L"项目涉及的部分主题、图标和桌面组件来自第三方，其著作权与许可归原作者所有。用户应自行确认相关资源的授权范围并遵守对应许可协议。本项目仅用于技术研究、学习和合法授权的软件交互，不支持盗版或商业侵权用途。开发者不对第三方文件的合法性、兼容性以及因使用本程序造成的数据丢失、系统异常或版权纠纷承担责任。使用本程序即表示你理解并接受相关风险。如果本项目侵犯到了您的权益 请通过邮箱联系 有关内容将会在核实后删除",
         L"提示", MB_OK);
     // 设置 Quick Controls 样式为非原生样式，以支持 background/contentItem 自定义
@@ -77,7 +53,6 @@ int main(int argc, char *argv[]) {
 
     app.setApplicationName(QStringLiteral("macdowsOS Tool"));
     app.setApplicationDisplayName(QStringLiteral("macdowsOS Tool"));
-    app.setWindowIcon(QIcon());
     setlocale(LC_ALL, "chs");
 
     // 加载 PingFang 字体
@@ -107,9 +82,8 @@ int main(int argc, char *argv[]) {
         });
 
     // 创建 Backend 单例并注册到 QML
-    Backend *backend = new Backend();
-    qmlRegisterSingletonType<Backend>("Backend", 1, 0, "Backend",
-        [backend](QQmlEngine *, QJSEngine *) -> QObject * { return backend; });
+    Backend backend;
+    qmlRegisterSingletonInstance("Backend", 1, 0, "Backend", &backend);
 
     QUrl qmlUrl(QStringLiteral("qrc:/qml/main.qml"));
     engine.load(qmlUrl);
@@ -121,23 +95,18 @@ int main(int argc, char *argv[]) {
     }
 
     // 获取窗口
-    auto rootObjs = engine.rootObjects();
-    if (!rootObjs.isEmpty()) {
-        auto window = qobject_cast<QQuickWindow *>(rootObjs.first());
-        if (window) {
-            HWND hwnd = (HWND)window->winId();
+    auto window = qobject_cast<QQuickWindow *>(engine.rootObjects().first());
+    if (window) {
+        HWND hwnd = reinterpret_cast<HWND>(window->winId());
 
-#ifdef Q_OS_WIN
+        applyNativeRoundedCorners(hwnd);
+        auto updateRoundedCorners = [hwnd]() {
             applyNativeRoundedCorners(hwnd);
-            auto updateRoundedCorners = [hwnd]() {
-                applyNativeRoundedCorners(hwnd);
-            };
-            QObject::connect(window, &QQuickWindow::widthChanged,
-                             window, updateRoundedCorners);
-            QObject::connect(window, &QQuickWindow::heightChanged,
-                             window, updateRoundedCorners);
-#endif
-        }
+        };
+        QObject::connect(window, &QQuickWindow::widthChanged,
+                         window, updateRoundedCorners);
+        QObject::connect(window, &QQuickWindow::heightChanged,
+                         window, updateRoundedCorners);
     }
 
     return app.exec();

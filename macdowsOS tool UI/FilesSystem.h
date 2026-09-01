@@ -11,16 +11,18 @@
 #include <shobjidl.h>
 #include <fileapi.h>
 
+namespace {
+
 // 文件系统命名空间
 namespace fs {
-    inline bool exists(const std::wstring& path) {
+    bool exists(const std::wstring& path) {
         DWORD attr = GetFileAttributesW(path.c_str());
         return attr != INVALID_FILE_ATTRIBUTES;
     }
 }
 
 // 递归创建目录路径中所有不存在的目录
-inline bool createDirectories(const std::wstring& path) {
+bool createDirectories(const std::wstring& path) {
     if (path.empty()) return false;
     // 检查是否已存在
     DWORD attr = GetFileAttributesW(path.c_str());
@@ -41,7 +43,7 @@ inline bool createDirectories(const std::wstring& path) {
 }
 
 // 内部递归复制 — 直接将 src 内容复制到 dst 下，不额外添加文件夹名
-static inline void copyPathImpl(const std::wstring& src, const std::wstring& dst) {
+static void copyPathImpl(const std::wstring& src, const std::wstring& dst) {
     DWORD srcAttr = GetFileAttributesW(src.c_str());
     if (srcAttr == INVALID_FILE_ATTRIBUTES) return;
 
@@ -73,7 +75,7 @@ static inline void copyPathImpl(const std::wstring& src, const std::wstring& dst
 // - 若 src 是文件，将文件复制到 dst 下（保留文件名）
 //   例如 copyPath(L"C:\\windows", L"D:\\")   → D:\\windows\\...
 //   例如 copyPath(L"C:\\file.txt", L"D:\\") → D:\\file.txt
-inline void copyPath(const std::wstring& src, const std::wstring& dst) {
+void copyPath(const std::wstring& src, const std::wstring& dst) {
     MESSAGE_(L"[文件操作组件]复制文件从", src);
     MESSAGE_(L"[文件操作组件]到", dst);
 
@@ -96,7 +98,7 @@ inline void copyPath(const std::wstring& src, const std::wstring& dst) {
 }
 
 // 现代文件夹选择对话框 (IFileOpenDialog)
-inline std::wstring BrowseFolder(const std::wstring& title) {
+std::wstring BrowseFolder(const std::wstring& title) {
     std::wstring result;
 
     HRESULT hrCom = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
@@ -130,4 +132,6 @@ inline std::wstring BrowseFolder(const std::wstring& title) {
 
     if (hrCom == S_OK) CoUninitialize();
     return result;
+}
+
 }

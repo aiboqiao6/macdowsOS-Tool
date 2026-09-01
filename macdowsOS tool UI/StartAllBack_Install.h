@@ -7,6 +7,8 @@
 #include"LogSystem.h"
 #include"WindowControl.h"
 #include"All.h"
+
+namespace {
 bool StartAllBack_Config(int mode) {
     INFO_(L"[StartAllBack配置器]开始");
     INFO_(L"[StartAllBack配置器]启动配置程序");
@@ -156,7 +158,7 @@ bool StartAllBack_Install(int mode) {
         return true;
     }
 }
-inline void StartAllBack_SetupRun(){
+void StartAllBack_SetupRun(){
     INFO_(L"[StartAllBack执行安装器]开始");
     //获取用户名
     wchar_t username[10000];
@@ -187,4 +189,6 @@ inline void StartAllBack_SetupRun(){
     }
     INFO_(L"[StartAllBack执行安装器]退出");
     return;
+}
+
 }

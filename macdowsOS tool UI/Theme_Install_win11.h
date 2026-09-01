@@ -8,10 +8,12 @@
 #include"LogSystem.h"
 #include"FilesSystem.h"
 
+namespace {
+
 // ====== 启用 Windows 主题服务（Themes / UxSms）======
 // 先将服务设置为自动启动，再尝试启动（已运行则 sc start 会自动跳过）
 // 程序已获得管理员权限，无需提权
-inline void EnableThemeService_win11() {
+void EnableThemeService_win11() {
     INFO_(L"[主题安装工具]设置主题服务为自动启动");
     system("sc config Themes start= auto");
     INFO_(L"[主题安装工具]尝试启动主题服务（如已运行则自动跳过）");
@@ -60,7 +62,7 @@ bool SetThemeToOpenAfterReboot_win11(const std::wstring& themeFilePath) {
 
     return success;
 }
-inline void theme_install_win11() {
+void theme_install_win11() {
     INFO_(L"[主题安装工具]开始安装");
     // 启用主题服务（确保 Themes 服务在运行）
     EnableThemeService_win11();
@@ -112,4 +114,6 @@ inline void theme_install_win11() {
     SetThemeToOpenAfterReboot_win11(L"C:\\Windows\\Resources\\Themes\\Tahoe - Light.theme");
     INFO_(L"[主题安装工具]退出");
     return;
+}
+
 }

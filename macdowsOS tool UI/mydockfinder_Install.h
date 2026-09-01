@@ -5,6 +5,8 @@
 #include<windows.h>
 #include"LogSystem.h"
 #include"All.h"
+
+namespace {
 void setwallpaper(std::wstring path) {
     const wchar_t* regPath = L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\PersonalizationCSP";
     const wchar_t* valueName = L"LockScreenImagePath";
@@ -31,9 +33,10 @@ void setwallpaper(std::wstring path) {
     }
 
     // 写入路径
-    DWORD dataSize = (wcslen(imagePath) + 1) * sizeof(wchar_t);
+    const DWORD dataSize = static_cast<DWORD>(
+        (path.size() + 1) * sizeof(wchar_t));
     result = RegSetValueExW(hKey, valueName, 0, REG_SZ,
-        (const BYTE*)imagePath, dataSize);
+        reinterpret_cast<const BYTE*>(imagePath), dataSize);
     if (result != ERROR_SUCCESS) {
         MESSAGE_(L"[mydockfinder安装器]打开注册表失败，错误码:", result);
         RegCloseKey(hKey);
@@ -51,7 +54,7 @@ void setwallpaper(std::wstring path) {
     }
 
     RegCloseKey(hKey);
-    std::wcout << L"注册表写入成功。请重启或注销后查看效果。" << std::endl;
+    INFO_(L"[mydockfinder安装器]锁屏壁纸注册表写入成功");
 }
 //比较路径尾部是否为mydockfinder/MyDockFinder 是返回true 否则返回false
 bool pathback(std::wstring *path_,size_t str_,std::wstring *temp1,std::wstring *temp2) {
@@ -78,7 +81,7 @@ bool pathback(std::wstring *path_,size_t str_,std::wstring *temp1,std::wstring *
     return false;
 }
 
-inline void mydockfinder_install() {
+void mydockfinder_install() {
     INFO_(L"[mydockfinder安装器]开始安装");
     //文件路径
     INFO_(L"[mydockfinder安装器]获取路径");
@@ -113,32 +116,34 @@ inline void mydockfinder_install() {
     //检测安装模式
   
     //备份dock图标配置文件
-        std::wstring configfiles_1 = InstallFolder + L"/MyDockFinder/ico.ini";
-        std::wstring configfiles_2 = InstallFolder + L"/MyDockFinder/ico_bak.ini";
+        std::wstring configfiles_1 = InstallFolder + L"\\MyDockFinder\\ico.ini";
+        std::wstring configfiles_2 = InstallFolder + L"\\MyDockFinder\\ico_bak.ini";
         //检测是否存在配置文件（检测是否已安装）
         if (fs::exists(configfiles_1) && fs::exists(configfiles_2)) {
             INFO_(L"[mydockfinder安装器]检测到原有配置");
-            std::wstring backupfiles = L"AppData/MyDockFinder/MyDockFinder_ConfigData";
+            std::wstring backupfiles = L"AppData\\MyDockFinder\\MyDockFinder_ConfigData";
             copyPath(configfiles_1, backupfiles);
             copyPath(configfiles_2, backupfiles);
             INFO_(L"[mydockfinder安装器]完成备份");
-            copyPath(L"AppData/MyDockFinder/MyDockFinder", InstallFolder);
+            copyPath(L"AppData\\MyDockFinder\\MyDockFinder", InstallFolder);
             INFO_(L"[mydockfinder安装器]文件复制完成 开始恢复配置");
-            copyPath(backupfiles + L"/ico.ini", InstallFolder);
-            copyPath(backupfiles + L"/ico_bak.ini", InstallFolder);
+            copyPath(backupfiles + L"\\ico.ini", InstallFolder);
+            copyPath(backupfiles + L"\\ico_bak.ini", InstallFolder);
         }
         else {
             INFO_(L"[mydockfinder安装器]未检测到原有配置");
-            copyPath(L"AppData/MyDockFinder/MyDockFinder", InstallFolder);
+            copyPath(L"AppData\\MyDockFinder\\MyDockFinder", InstallFolder);
         }
     INFO_(L"[mydockfinder安装器]设置开机自启动");
     const wchar_t* APP_NAME = L"MyDockFinder";
-    std::wstring appPath = InstallFolder + L"MyDockFinder\\Dock_64.exe";
+    std::wstring appPath = InstallFolder + L"\\MyDockFinder\\Dock_64.exe";
     AddAutoStart(appPath, APP_NAME);
     // 设置亮色壁纸为锁屏壁纸（直接使用安装目录中的壁纸）
     INFO_(L"[mydockfinder安装器]设置亮色壁纸为锁屏壁纸");
     //
-    setwallpaper(InstallFolder + L"MyDockFinder\\wallpaper\\Golden_Gate_Abstract\\Golden_Gate_Abstract_1.jpg");
+    setwallpaper(InstallFolder + L"\\MyDockFinder\\wallpaper\\Golden_Gate_Abstract\\Golden_Gate_Abstract_1.jpg");
     INFO_(L"[mydockfinder安装器]退出");
 	return;
+}
+
 }

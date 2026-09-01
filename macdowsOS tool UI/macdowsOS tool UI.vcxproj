@@ -99,7 +99,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Backend.cpp" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="Backend.h" />

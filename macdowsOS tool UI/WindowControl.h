@@ -4,6 +4,8 @@
 #include<cstdlib>
 #include<cwchar>
 #include"LogSystem.h"
+
+namespace {
 //回车
 void enter_key() {
     INFO_(L"[窗口控制工具]发送回车按键");
@@ -133,8 +135,7 @@ HWND GetLastChildWindow(HWND hParent) {
 }
 
 // ==================== 内部窗口查找工具 ====================
-namespace {
-    HWND findwindow(HWND hwnd_window, std::wstring pack_name, std::wstring button_name) {
+HWND findwindow(HWND hwnd_window, std::wstring pack_name, std::wstring button_name) {
         SYSTEMTIME now;
         GetLocalTime(&now);
         INFO_(L"[" + pack_name + L"]" + L"开始查找" + button_name);
@@ -150,8 +151,7 @@ namespace {
             temp = FindChildControlExact(hwnd_window, button_);
         }
         INFO_(L"[" + pack_name + L"]" + L"成功找到" + button_name);
-        return temp;
-    }
+    return temp;
 }
 HWND FindWindow_(std::wstring title, std::wstring pack_name) {
     //计数器
@@ -201,4 +201,6 @@ void TurnOffOn(bool OffOn, HWND hwnd_window, std::wstring pack_name, std::wstrin
         SendMessageW(GetParent(temp), WM_COMMAND, MAKEWPARAM(GetDlgCtrlID(temp), BN_CLICKED), (LPARAM)temp);
     }
     return;
+}
+
 }
