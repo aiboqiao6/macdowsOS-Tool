@@ -55,6 +55,7 @@ macdowsOS Tool UI主要基于自动操作技术实现的全自动Windows仿macOS
 - [English User Guide](README-English.md)
 - [GitHub Issues](https://github.com/aiboqiao6/macdowsOS-Tool/issues)
 - QQ 交流群：`942644281`
+- [Discord频道](https://discord.gg/EcaQuYr7H)
 - 开发者联系邮箱：`aiboqiao250@outlook.com`
 
 提交问题时，请附上 Windows 版本、程序版本、错误截图以及程序目录中的 `log.txt`（如有）。请勿在公开 Issue 中上传账号、令牌或其他敏感信息。
