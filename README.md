@@ -15,6 +15,7 @@
 
 </div>
 
+> 目前 macdowsOS Tool 图标安装组件存在 bug  建议等待更新 1.35 版本后再使用
 ## 项目简介
 
 macdowsOS Tool UI主要基于自动操作技术实现的全自动Windows仿macOS
