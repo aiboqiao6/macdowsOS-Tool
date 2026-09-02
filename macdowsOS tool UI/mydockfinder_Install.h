@@ -93,6 +93,12 @@ void mydockfinder_install() {
         mydockfinder_install();
         return;
     }
+    //写入安装配置
+
+    std::wofstream file(L"C:\\Windows\\macdowsOStool\\MyDockFinderPath.txt");
+    file << InstallFolder;
+    file.close();
+
     //关闭mydockfinder相关
     INFO_(L"[mydockfinder安装器]关闭mydockfinder相关");
     killapp(L"trayico.exe");
@@ -107,14 +113,7 @@ void mydockfinder_install() {
     killapp(L"Dockmod_update.exe");
     killapp(L"Dockmod64_update.exe");
     killapp(L"dock.exe");
-
     killapp(L"ApplicationFrameHost.exe");
-    //检查文件路径最后是否有/mydockfinder
-    
-    
-    
-    //检测安装模式
-  
     //备份dock图标配置文件
         std::wstring configfiles_1 = InstallFolder + L"\\MyDockFinder\\ico.ini";
         std::wstring configfiles_2 = InstallFolder + L"\\MyDockFinder\\ico_bak.ini";

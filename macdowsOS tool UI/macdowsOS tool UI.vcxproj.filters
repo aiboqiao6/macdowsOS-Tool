@@ -86,6 +86,9 @@
     <ClInclude Include="Icon_install.h">
       <Filter>头文件\Tool\WinToMac Tool</Filter>
     </ClInclude>
+    <ClInclude Include="iconback.h">
+      <Filter>头文件\Tool\WinToMac Tool</Filter>
+    </ClInclude>
     <ClInclude Include="mydockfinder_Install.h">
       <Filter>头文件\Tool\WinToMac Tool</Filter>
     </ClInclude>

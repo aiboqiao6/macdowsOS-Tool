@@ -11,6 +11,7 @@
 #include "DeleteTheme.h"
 #include "FinalSetting.h"
 #include "Icon_install.h"
+#include "iconback.h"
 #include "LogSystem.h"
 #include "OldNewExplorerInstall.h"
 #include "StartAllBack_Install.h"
@@ -61,6 +62,11 @@ public:
     Q_INVOKABLE void installIcons() {
         INFO_(L"[Backend] 安装图标");
         Icon_Install();
+    }
+
+    Q_INVOKABLE bool restoreIcons() {
+        INFO_(L"[Backend] 恢复系统图标");
+        Icon_Back();
     }
 
     Q_INVOKABLE void installMyDockFinder() {

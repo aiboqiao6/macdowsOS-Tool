@@ -83,11 +83,11 @@ void ClearIconCache() {
 void Icon_Install() {
     INFO_(L"[图标安装工具]开始");
 
-    // 替换用文件 (第三方自定义图标)
-    std::wstring res1 = L"AppData/Icon/Icon_res/imageres.dll";
-    std::wstring res2 = L"AppData/Icon/Icon_res/imagesp1.dll";
+    // 替换用文件
+    std::wstring res1 = L"AppData\\Icon\\Icon_res\\imageres.dll";
+    std::wstring res2 = L"AppData\\Icon\\Icon_res\\imagesp1.dll";
 
-    // 系统源文件 (用于备份)
+    // 系统源文件
     std::wstring res5 = L"C:\\Windows\\System32\\imageres.dll";
     std::wstring res6 = L"C:\\Windows\\System32\\imagesp1.dll";
 
@@ -99,10 +99,10 @@ void Icon_Install() {
     std::wstring to2 = L"C:\\Windows\\SysWOW64";
 
     // 备份目录
-    std::wstring backup1 = L"AppData/Icon/Icon_backup/System32";
-    std::wstring backup2 = L"AppData/Icon/Icon_backup/SysWOW64";
+    std::wstring backup1 = L"C:\\Windows\\macdowsOStool\\Icon_backup\\System32";
+    std::wstring backup2 = L"C:\\Windows\\macdowsOStool\\Icon_backup\\SysWOW64";
 
-    // ========== 1. 备份系统原始文件 ==========
+    //备份
     INFO_(L"[图标安装工具]备份系统原始文件");
     copyPath(res5, backup1);
     copyPath(res6, backup1);
@@ -110,16 +110,16 @@ void Icon_Install() {
     copyPath(res8, backup2);
     copyPath(res9, backup2);
 
-    // ========== 2. 关闭资源管理器 ==========
+    //
     INFO_(L"[图标安装工具]关闭文件资源管理器");
     system("taskkill /f /im explorer.exe");
     Sleep(500);
 
-    // ========== 3. 清理图标缓存 (explorer 已关闭, 无文件锁) ==========
+    //
     ClearIconCache();
     Sleep(200);
 
-    // ========== 4. 获取系统文件所有权并替换 ==========
+    //
     INFO_(L"[图标安装工具]获取系统文件所有权并替换");
 
     // System32

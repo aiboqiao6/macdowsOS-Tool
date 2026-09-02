@@ -41,6 +41,7 @@ Item {
                         model: [
                             { name: "安装 myDockFinder", desc: "macOS 风格 Dock 栏", action: function() { Backend.installMyDockFinder(); } },
                             { name: "安装系统图标", desc: "替换为 macOS 风格图标", action: function() { Backend.installIcons(); } },
+                            { name: "恢复系统图标", desc: "从备份恢复 Windows 原始图标", action: function() { Backend.restoreIcons(); } },
                             { name: "安装 Win11 主题", desc: "安装 macOS 风格主题（Win11）", action: function() { Backend.installThemeWin11(); } },
                             { name: "安装 Win10 主题", desc: "安装 macOS 风格主题（Win10）", action: function() { Backend.installThemeWin10(); } },
                             { name: "安装主题路径补丁", desc: "确保主题文件正确加载", action: function() { Backend.patchThemePath(); } },

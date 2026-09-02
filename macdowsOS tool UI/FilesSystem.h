@@ -10,6 +10,8 @@
 #include <shlobj_core.h>
 #include <shobjidl.h>
 #include <fileapi.h>
+#include <fstream>
+#include <filesystem>
 
 namespace {
 
