@@ -10,7 +10,7 @@ void DeleteMyDockFinder() {
 	std::wifstream file(L"C:\\Windows\\macdowsOStool\\MyDockFinderPath.txt");
 	std::wstring installPath;
 	std::getline(file, installPath);
-
+    installPath += L"MyDockFinder";
     //关闭mydockfinder相关
     INFO_(L"[mydockfinder安装器]关闭mydockfinder相关");
     killapp(L"trayico.exe");

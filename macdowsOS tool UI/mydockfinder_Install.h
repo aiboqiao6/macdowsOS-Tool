@@ -5,6 +5,7 @@
 #include<windows.h>
 #include"LogSystem.h"
 #include"All.h"
+#include "Icon_install.h"
 
 namespace {
 void setwallpaper(std::wstring path) {
@@ -93,8 +94,11 @@ void mydockfinder_install() {
         mydockfinder_install();
         return;
     }
-    //写入安装配置
 
+
+    //写入安装配置
+    createDirectories(L"C:\\Windows\\macdowsOStool");
+    TakeOwnershipAndGrantFullControl(L"C:\\Windows\\macdowsOStool\\MyDockFinderPath.txt");
     std::wofstream file(L"C:\\Windows\\macdowsOStool\\MyDockFinderPath.txt");
     file << InstallFolder;
     file.close();
