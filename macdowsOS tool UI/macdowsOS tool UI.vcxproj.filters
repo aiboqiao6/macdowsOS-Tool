@@ -28,6 +28,12 @@
     <Filter Include="源文件\UI">
       <UniqueIdentifier>{ce013974-b6c1-4d97-afb2-6219e0b4c98f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\Tool\WinToMac Tool\install">
+      <UniqueIdentifier>{d44cf5d6-94e6-4f5d-939d-14e0817626f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Tool\WinToMac Tool\unnist">
+      <UniqueIdentifier>{4cd69704-ecd7-46c4-8228-2f3c60a764cf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <!-- .cpp 源文件 -->
   <ItemGroup>
@@ -36,14 +42,6 @@
     </ClCompile>
   </ItemGroup>
   <!-- 头文件 -->
-  <ItemGroup>
-    <QtMoc Include="Backend.h">
-      <Filter>头文件</Filter>
-    </QtMoc>
-    <!-- 核心基础 -->
-    <!-- 工具 -->
-    <!-- WinToMac 安装 -->
-  </ItemGroup>
   <!-- QML 文件 -->
   <ItemGroup>
     <QtRcc Include="qml.qrc">
@@ -75,38 +73,14 @@
     <None Include="qml\WindowsFixPage.qml">
       <Filter>源文件\UI</Filter>
     </None>
+    <None Include="..\README-Chinese.md" />
+    <None Include="..\README-English.md" />
+    <None Include="..\README.md" />
+    <None Include="qml\BeautificationHub.qml">
+      <Filter>QML 界面</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DeleteTheme.h">
-      <Filter>头文件\Tool\WinToMac Tool</Filter>
-    </ClInclude>
-    <ClInclude Include="FinalSetting.h">
-      <Filter>头文件\Tool\WinToMac Tool</Filter>
-    </ClInclude>
-    <ClInclude Include="Icon_install.h">
-      <Filter>头文件\Tool\WinToMac Tool</Filter>
-    </ClInclude>
-    <ClInclude Include="iconback.h">
-      <Filter>头文件\Tool\WinToMac Tool</Filter>
-    </ClInclude>
-    <ClInclude Include="mydockfinder_Install.h">
-      <Filter>头文件\Tool\WinToMac Tool</Filter>
-    </ClInclude>
-    <ClInclude Include="OldNewExplorerInstall.h">
-      <Filter>头文件\Tool\WinToMac Tool</Filter>
-    </ClInclude>
-    <ClInclude Include="StartAllBack_Install.h">
-      <Filter>头文件\Tool\WinToMac Tool</Filter>
-    </ClInclude>
-    <ClInclude Include="Theme_Install_win10.h">
-      <Filter>头文件\Tool\WinToMac Tool</Filter>
-    </ClInclude>
-    <ClInclude Include="Theme_Install_win11.h">
-      <Filter>头文件\Tool\WinToMac Tool</Filter>
-    </ClInclude>
-    <ClInclude Include="Theme_patch_install.h">
-      <Filter>头文件\Tool\WinToMac Tool</Filter>
-    </ClInclude>
     <ClInclude Include="CreateSafePoint.h">
       <Filter>头文件\be</Filter>
     </ClInclude>
@@ -122,16 +96,57 @@
     <ClInclude Include="WindowsFix.h">
       <Filter>头文件\be</Filter>
     </ClInclude>
+    <ClInclude Include="FinalSetting.h">
+      <Filter>头文件\Tool\WinToMac Tool\install</Filter>
+    </ClInclude>
+    <ClInclude Include="Icon_install.h">
+      <Filter>头文件\Tool\WinToMac Tool\install</Filter>
+    </ClInclude>
+    <ClInclude Include="mydockfinder_Install.h">
+      <Filter>头文件\Tool\WinToMac Tool\install</Filter>
+    </ClInclude>
+    <ClInclude Include="StartAllBack_Install.h">
+      <Filter>头文件\Tool\WinToMac Tool\install</Filter>
+    </ClInclude>
+    <ClInclude Include="OldNewExplorerInstall.h">
+      <Filter>头文件\Tool\WinToMac Tool\install</Filter>
+    </ClInclude>
+    <ClInclude Include="Theme_Install_win10.h">
+      <Filter>头文件\Tool\WinToMac Tool\install</Filter>
+    </ClInclude>
+    <ClInclude Include="Theme_Install_win11.h">
+      <Filter>头文件\Tool\WinToMac Tool\install</Filter>
+    </ClInclude>
+    <ClInclude Include="Theme_patch_install.h">
+      <Filter>头文件\Tool\WinToMac Tool\install</Filter>
+    </ClInclude>
+    <ClInclude Include="DeleteTheme.h">
+      <Filter>头文件\Tool\WinToMac Tool\unnist</Filter>
+    </ClInclude>
+    <ClInclude Include="iconback.h">
+      <Filter>头文件\Tool\WinToMac Tool\unnist</Filter>
+    </ClInclude>
+    <ClInclude Include="DeleteMyDockFinder.h">
+      <Filter>头文件\Tool\WinToMac Tool\unnist</Filter>
+    </ClInclude>
+    <ClInclude Include="DeleteThemePatch.h">
+      <Filter>头文件\Tool\WinToMac Tool\unnist</Filter>
+    </ClInclude>
     <ClInclude Include="All.h">
-      <Filter>头文件</Filter>
+      <Filter>头文件\be</Filter>
     </ClInclude>
     <ClInclude Include="LogSystem.h">
-      <Filter>头文件</Filter>
+      <Filter>头文件\be</Filter>
     </ClInclude>
   </ItemGroup>
   <!-- 字体 -->
   <!-- 其他文件 -->
   <ItemGroup>
     <ResourceCompile Include="app.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="Backend.h">
+      <Filter>头文件\be</Filter>
+    </QtMoc>
   </ItemGroup>
 </Project>

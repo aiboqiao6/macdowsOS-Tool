@@ -8,7 +8,9 @@
 #include <stdexcept>
 
 #include "CreateSafePoint.h"
+#include "DeleteMyDockFinder.h"
 #include "DeleteTheme.h"
+#include "DeleteThemePatch.h"
 #include "FinalSetting.h"
 #include "Icon_install.h"
 #include "iconback.h"
@@ -64,7 +66,7 @@ public:
         Icon_Install();
     }
 
-    Q_INVOKABLE bool restoreIcons() {
+    Q_INVOKABLE void restoreIcons() {
         INFO_(L"[Backend] 恢复系统图标");
         Icon_Back();
     }
@@ -77,6 +79,16 @@ public:
     Q_INVOKABLE void deleteTheme() {
         INFO_(L"[Backend] 删除主题");
         Delete_theme();
+    }
+
+    Q_INVOKABLE void deleteMyDockFinder() {
+        INFO_(L"[Backend] 删除 MyDockFinder");
+        DeleteMyDockFinder();
+    }
+
+    Q_INVOKABLE void uninstallThemePatch() {
+        INFO_(L"[Backend] 删除主题补丁");
+        theme_path_uninstall();
     }
 
     Q_INVOKABLE void installStartAllBack() {

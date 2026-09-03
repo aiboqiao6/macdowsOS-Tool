@@ -40,11 +40,13 @@ Item {
                     Repeater {
                         model: [
                             { name: "安装 myDockFinder", desc: "macOS 风格 Dock 栏", action: function() { Backend.installMyDockFinder(); } },
+                            { name: "删除 myDockFinder", desc: "删除已安装的 Dock 栏及其启动项", action: function() { Backend.deleteMyDockFinder(); } },
                             { name: "安装系统图标", desc: "替换为 macOS 风格图标", action: function() { Backend.installIcons(); } },
                             { name: "恢复系统图标", desc: "从备份恢复 Windows 原始图标", action: function() { Backend.restoreIcons(); } },
                             { name: "安装 Win11 主题", desc: "安装 macOS 风格主题（Win11）", action: function() { Backend.installThemeWin11(); } },
                             { name: "安装 Win10 主题", desc: "安装 macOS 风格主题（Win10）", action: function() { Backend.installThemeWin10(); } },
                             { name: "安装主题路径补丁", desc: "确保主题文件正确加载", action: function() { Backend.patchThemePath(); } },
+                            { name: "删除主题补丁", desc: "卸载 UltraUXThemePatcher", action: function() { Backend.uninstallThemePatch(); } },
                             { name: "删除已安装主题", desc: "恢复 Windows 默认主题", action: function() { Backend.deleteTheme(); } },
                             { name: "安装 StartAllBack", desc: "Win11 开始菜单增强", action: function() { Backend.installStartAllBack(); } },
                             { name: "安装 OldNewExplorer", desc: "资源管理器增强", action: function() { Backend.installOldNewExplorer(); } },

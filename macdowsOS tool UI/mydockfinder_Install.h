@@ -144,7 +144,20 @@ void mydockfinder_install() {
     // 设置亮色壁纸为锁屏壁纸（直接使用安装目录中的壁纸）
     INFO_(L"[mydockfinder安装器]设置亮色壁纸为锁屏壁纸");
     //
-    setwallpaper(InstallFolder + L"\\MyDockFinder\\wallpaper\\Golden_Gate_Abstract\\Golden_Gate_Abstract_1.jpg");
+    MESSAGE_(L"[mydockfinder安装器]目录信息", InstallFolder);
+    if (InstallFolder[InstallFolder.size()-1] == '\\') {
+        INFO_(L"[mydockfinder安装器]根目录");
+        
+        //根目录
+        setwallpaper(InstallFolder + L"MyDockFinder\\wallpaper\\Golden_Gate_Abstract\\Golden_Gate_Abstract_1.jpg");
+    }
+    else {
+        INFO_(L"[mydockfinder安装器]非根目录");
+        //非根目录
+        setwallpaper(InstallFolder + L"\\MyDockFinder\\wallpaper\\Golden_Gate_Abstract\\Golden_Gate_Abstract_1.jpg");
+    }
+
+    
     INFO_(L"[mydockfinder安装器]退出");
 	return;
 }

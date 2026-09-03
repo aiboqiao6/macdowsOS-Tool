@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <string>
 #include "LogSystem.h"
 #include "FilesSystem.h"
@@ -6,13 +6,15 @@
 #include <Windows.h>
 #include "All.h"
 
+namespace {
+
 void DeleteMyDockFinder() {
 	std::wifstream file(L"C:\\Windows\\macdowsOStool\\MyDockFinderPath.txt");
 	std::wstring installPath;
 	std::getline(file, installPath);
     installPath += L"MyDockFinder";
-    //¹Ø±ÕmydockfinderÏà¹Ø
-    INFO_(L"[mydockfinder°²×°Æ÷]¹Ø±ÕmydockfinderÏà¹Ø");
+    
+    INFO_(L"[mydockfinderå®‰è£…å™¨]å…³é—­mydockfinderç›¸å…³");
     killapp(L"trayico.exe");
     killapp(L"dockmod64arm_update.exe");
     killapp(L"UiAccess.exe");
@@ -27,10 +29,10 @@ void DeleteMyDockFinder() {
     killapp(L"dock.exe");
     killapp(L"ApplicationFrameHost.exe");
 
-    //
+    
     std::filesystem::remove_all(installPath);
     
-    // É¾³ý¿ª»ú×ÔÆô¶¯¿ì½Ý·½Ê½
+    
     PWSTR startupPath = nullptr;
     if (SUCCEEDED(SHGetKnownFolderPath(
         FOLDERID_Startup, 0, nullptr, &startupPath))) {
@@ -40,7 +42,7 @@ void DeleteMyDockFinder() {
         CoTaskMemFree(startupPath);
     }
 
-    // É¾³ýËøÆÁ±ÚÖ½ÉèÖÃ
+    
     HKEY key = nullptr;
     if (RegOpenKeyExW(
         HKEY_LOCAL_MACHINE,
@@ -51,4 +53,6 @@ void DeleteMyDockFinder() {
         RegCloseKey(key);
     }
     return;
+}
+
 }
