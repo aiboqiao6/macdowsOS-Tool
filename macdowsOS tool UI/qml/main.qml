@@ -16,8 +16,8 @@ Window {
 
     property var wizardWindow: null
     property var pageMap: [0, 1, 4]
-    readonly property int sidebarWidth: 220
-    readonly property int titleBarHeight: 48
+    readonly property int sidebarWidth: 232
+    readonly property int titleBarHeight: 52
 
     function openThemeWizard(version) {
         if (wizardWindow !== null && wizardWindow !== undefined) {
@@ -45,9 +45,14 @@ Window {
         }
     }
 
-    Item {
+    Rectangle {
         id: rootContent
         anchors.fill: parent
+        radius: 18
+        clip: true
+        color: "#F5F5F7"
+        border.color: "#D8D8DE"
+        border.width: 1
 
         RowLayout {
             anchors.fill: parent
@@ -57,17 +62,17 @@ Window {
                 id: sidebarMaterial
                 Layout.preferredWidth: appWindow.sidebarWidth
                 Layout.fillHeight: true
-                color: "#E2E3E7"
+                color: "#E9E9EE"
 
                 Rectangle {
                     anchors.fill: parent
-                    color: "#38FFFFFF"
+                    color: "#28FFFFFF"
                 }
 
                 Rectangle {
                     anchors.fill: parent
                     color: "#40FFFFFF"
-                    opacity: 0.24
+                    opacity: 0.18
                     gradient: Gradient {
                         orientation: Gradient.Vertical
                         GradientStop { position: 0.0; color: "#55FFFFFF" }
@@ -124,7 +129,7 @@ Window {
                     anchors.top: parent.top
                     anchors.bottom: parent.bottom
                     width: 1
-                    color: "#D5D5DC"
+                    color: "#D1D1D8"
                 }
             }
 
@@ -165,10 +170,10 @@ Window {
                     StackLayout {
                         id: contentStack
                         anchors.fill: parent
-                        anchors.leftMargin: 36
-                        anchors.rightMargin: 36
-                        anchors.topMargin: 18
-                        anchors.bottomMargin: 30
+                        anchors.leftMargin: 40
+                        anchors.rightMargin: 40
+                        anchors.topMargin: 22
+                        anchors.bottomMargin: 34
                         currentIndex: 0
 
                         HomePage {}

@@ -11,6 +11,7 @@
 #include "DeleteMyDockFinder.h"
 #include "DeleteTheme.h"
 #include "DeleteThemePatch.h"
+#include "DeleteStartAllBack.h"
 #include "FinalSetting.h"
 #include "Icon_install.h"
 #include "iconback.h"
@@ -89,6 +90,42 @@ public:
     Q_INVOKABLE void uninstallThemePatch() {
         INFO_(L"[Backend] 删除主题补丁");
         theme_path_uninstall();
+    }
+
+    Q_INVOKABLE void uninstallStartAllBack() {
+        INFO_(L"[Backend] 卸载 StartAllBack");
+        UninstallStartAllBack();
+    }
+
+    Q_INVOKABLE void uninstallOldNewExplorer() {
+        INFO_(L"[Backend] 卸载 OldNewExplorer");
+        OldNewExplorer_install();
+    }
+
+    Q_INVOKABLE void uninstallWindows10() {
+        INFO_(L"[Backend] 开始卸载 Windows 10 组件");
+        deleteMyDockFinder();
+        deleteTheme();
+        uninstallThemePatch();
+        restoreIcons();
+        INFO_(L"[Backend] 恢复最终系统设置");
+        FinalSetting_back();
+        uninstallOldNewExplorer();
+        INFO_(L"[Backend] Windows 10 组件卸载完成，准备无提示重启");
+        restartNoNotice();
+    }
+
+    Q_INVOKABLE void uninstallWindows11() {
+        INFO_(L"[Backend] 开始卸载 Windows 11 组件");
+        deleteMyDockFinder();
+        deleteTheme();
+        uninstallThemePatch();
+        restoreIcons();
+        INFO_(L"[Backend] 恢复最终系统设置");
+        FinalSetting_back();
+        uninstallStartAllBack();
+        INFO_(L"[Backend] Windows 11 组件卸载完成，准备无提示重启");
+        restartNoNotice();
     }
 
     Q_INVOKABLE void installStartAllBack() {

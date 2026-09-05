@@ -57,7 +57,9 @@ void Icon_Back() {
     // 替换 SysWOW64
     copyPath(backup3, to2);
     copyPath(backup4, to2);
-
+    INFO_(L"[图标还原组件]删备份");
+    TakeOwnershipAndGrantFullControl(L"C:\\Windows\\macdowsOStool\\Icon_backup");
+    std::filesystem::remove_all(L"C:\\Windows\\macdowsOStool\\Icon_backup");
     //
     INFO_(L"[图标还原组件]清缓存");
     ClearIconCache();

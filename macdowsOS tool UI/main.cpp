@@ -47,7 +47,7 @@ int main(int argc, char *argv[]) {
     INFO_(L"[macdowsOS Tool]程序启动");
     QGuiApplication app(argc, argv);
     MessageBoxW(NULL, L"项目涉及的部分主题、图标和桌面组件来自第三方，其著作权与许可归原作者所有。用户应自行确认相关资源的授权范围并遵守对应许可协议。本项目仅用于技术研究、学习和合法授权的软件交互，不支持盗版或商业侵权用途。开发者不对第三方文件的合法性、兼容性以及因使用本程序造成的数据丢失、系统异常或版权纠纷承担责任。使用本程序即表示你理解并接受相关风险。如果本项目侵犯到了您的权益 请通过邮箱联系 有关内容将会在核实后删除",
-        L"提示", MB_OK);
+        L"提示", MB_OK|MB_ICONWARNING);
     // 设置 Quick Controls 样式为非原生样式，以支持 background/contentItem 自定义
     QQuickStyle::setStyle(QStringLiteral("Basic"));
 

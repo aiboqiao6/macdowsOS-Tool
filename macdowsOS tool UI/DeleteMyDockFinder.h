@@ -12,7 +12,14 @@ void DeleteMyDockFinder() {
 	std::wifstream file(L"C:\\Windows\\macdowsOStool\\MyDockFinderPath.txt");
 	std::wstring installPath;
 	std::getline(file, installPath);
-    installPath += L"MyDockFinder";
+    if (installPath[installPath.size() - 1]=='\\') {
+        installPath += L"MyDockFinder";
+    }
+    else {
+        installPath += L"\\MyDockFinder";
+    }
+    file.close();
+    
     
     INFO_(L"[mydockfinder安装器]关闭mydockfinder相关");
     killapp(L"trayico.exe");
@@ -29,20 +36,29 @@ void DeleteMyDockFinder() {
     killapp(L"dock.exe");
     killapp(L"ApplicationFrameHost.exe");
 
-    
+    INFO_(L"[mydockfinder卸载组件]删除文件");
+    //删文件
+    TakeOwnershipAndGrantFullControl(installPath);
+
     std::filesystem::remove_all(installPath);
-    
-    
+    INFO_(L"[mydockfinder卸载组件]删除配置文件");
+    //删配置
+    TakeOwnershipAndGrantFullControl(L"C:\\Windows\\macdowsOStool\\MyDockFinderPath.txt");
+
+    std::filesystem::remove_all(L"C:\\Windows\\macdowsOStool\\MyDockFinderPath.txt");
+    INFO_(L"[mydockfinder卸载组件]删除自启动项");
     PWSTR startupPath = nullptr;
     if (SUCCEEDED(SHGetKnownFolderPath(
         FOLDERID_Startup, 0, nullptr, &startupPath))) {
         std::wstring shortcut =
             std::wstring(startupPath) + L"\\MyDockFinder.lnk";
+        TakeOwnershipAndGrantFullControl(shortcut);
+
         DeleteFileW(shortcut.c_str());
         CoTaskMemFree(startupPath);
     }
 
-    
+    INFO_(L"[mydockfinder卸载组件]删除自启动项");
     HKEY key = nullptr;
     if (RegOpenKeyExW(
         HKEY_LOCAL_MACHINE,
@@ -52,6 +68,7 @@ void DeleteMyDockFinder() {
         RegDeleteValueW(key, L"LockScreenImageStatus");
         RegCloseKey(key);
     }
+    INFO_(L"[mydockfinder卸载组件]结束");
     return;
 }
 

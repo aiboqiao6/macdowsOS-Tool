@@ -7,7 +7,7 @@ Item {
 
     ColumnLayout {
         anchors.fill: parent
-        spacing: 18
+        spacing: 22
 
         ColumnLayout {
             Layout.fillWidth: true
@@ -30,7 +30,7 @@ Item {
             Layout.fillWidth: true
             Layout.maximumWidth: 620
             Layout.preferredHeight: 104
-            radius: 10
+            radius: 16
             color: "#FFFFFF"
             border.color: "#E1E1E6"
             border.width: 1
@@ -65,7 +65,7 @@ Item {
             Layout.fillWidth: true
             Layout.maximumWidth: 620
             Layout.preferredHeight: 72
-            radius: 10
+            radius: 16
             color: "#FFFFFF"
             border.color: "#E1E1E6"
             border.width: 1
@@ -81,7 +81,7 @@ Item {
                     spacing: 4
 
                     Label { text: "版本"; color: "#1D1D1F"; font { pixelSize: 14; weight: Font.DemiBold } }
-                    Label { text: "1.30"; color: "#86868B"; font.pixelSize: 12 }
+                    Label { text: "1.35 RC"; color: "#86868B"; font.pixelSize: 12 }
                 }
 
                 Label {

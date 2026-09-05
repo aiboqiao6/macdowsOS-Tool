@@ -27,10 +27,10 @@ Rectangle {
 
     ColumnLayout {
         anchors.fill: parent
-        anchors.leftMargin: 12
-        anchors.rightMargin: 12
-        anchors.topMargin: 8
-        anchors.bottomMargin: 14
+        anchors.leftMargin: 14
+        anchors.rightMargin: 14
+        anchors.topMargin: 10
+        anchors.bottomMargin: 16
         spacing: 0
 
         Label {
@@ -49,14 +49,14 @@ Rectangle {
                 id: generalItem
                 required property int modelData
                 Layout.fillWidth: true
-                implicitHeight: 34
+                implicitHeight: 38
                 hoverEnabled: true
 
                 readonly property bool itemSelected: root.selectedIndex === modelData
 
                 background: Rectangle {
                     anchors.fill: parent
-                    radius: 8
+                    radius: 11
                     color: generalItem.itemSelected ? "#D7E7FF" : generalItem.hovered ? "#E4E4E9" : "transparent"
                 }
 
@@ -65,8 +65,8 @@ Rectangle {
 
                     Image {
                         source: navModel.get(modelData).iconSource
-                        Layout.preferredWidth: 17
-                        Layout.preferredHeight: 17
+                        Layout.preferredWidth: 18
+                        Layout.preferredHeight: 18
                         opacity: generalItem.itemSelected ? 1 : 0.75
                         fillMode: Image.PreserveAspectFit
                     }
@@ -104,14 +104,14 @@ Rectangle {
                 id: toolItem
                 required property int modelData
                 Layout.fillWidth: true
-                implicitHeight: 34
+                implicitHeight: 38
                 hoverEnabled: true
 
                 readonly property bool itemSelected: root.selectedIndex === modelData
 
                 background: Rectangle {
                     anchors.fill: parent
-                    radius: 8
+                    radius: 11
                     color: toolItem.itemSelected ? "#D7E7FF" : toolItem.hovered ? "#E4E4E9" : "transparent"
                 }
 
@@ -120,8 +120,8 @@ Rectangle {
 
                     Image {
                         source: navModel.get(modelData).iconSource
-                        Layout.preferredWidth: 17
-                        Layout.preferredHeight: 17
+                        Layout.preferredWidth: 18
+                        Layout.preferredHeight: 18
                         opacity: toolItem.itemSelected ? 1 : 0.75
                         fillMode: Image.PreserveAspectFit
                     }
@@ -148,14 +148,14 @@ Rectangle {
         ItemDelegate {
             id: settingsItem
             Layout.fillWidth: true
-            implicitHeight: 34
+            implicitHeight: 38
             hoverEnabled: true
 
             readonly property bool itemSelected: root.selectedIndex === navModel.count
 
             background: Rectangle {
                 anchors.fill: parent
-                radius: 8
+                radius: 11
                 color: settingsItem.itemSelected ? "#D7E7FF" : settingsItem.hovered ? "#E4E4E9" : "transparent"
             }
 
@@ -164,8 +164,8 @@ Rectangle {
 
                 Image {
                     source: "qrc:/res/Setting.png"
-                    Layout.preferredWidth: 17
-                    Layout.preferredHeight: 17
+                    Layout.preferredWidth: 18
+                    Layout.preferredHeight: 18
                     opacity: settingsItem.itemSelected ? 1 : 0.75
                     fillMode: Image.PreserveAspectFit
                 }

@@ -10,8 +10,13 @@
 
 namespace {
 void FinalSetting() {
-	INFO_(L"[最终设置工具]设置桌面图标");
+	INFO_(L"[最终设置工具]隐藏桌面图标");
 	SetDesktopIconsPermanent(false);
+	return;
+}
+void FinalSetting_back() {
+	INFO_(L"[最终设置工具]显示桌面图标");
+	SetDesktopIconsPermanent(true);
 	return;
 }
 

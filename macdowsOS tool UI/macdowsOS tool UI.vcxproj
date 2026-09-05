@@ -124,6 +124,8 @@
     <ClInclude Include="All.h" />
     <ClInclude Include="CreateSafePoint.h" />
     <ClInclude Include="DeleteMyDockFinder.h" />
+    <ClInclude Include="DeleteOldNewExplorer.h" />
+    <ClInclude Include="DeleteStartAllBack.h" />
     <ClInclude Include="DeleteTheme.h" />
     <ClInclude Include="DeleteThemePatch.h" />
     <ClInclude Include="FilesSystem.h" />

@@ -21,7 +21,7 @@ Item {
             Layout.fillWidth: true
             Layout.maximumWidth: 620
             Layout.preferredHeight: 84
-            radius: 10
+            radius: 16
             color: "#FFF6F6"
             border.color: "#FFE0E0"
             border.width: 1
@@ -41,7 +41,7 @@ Item {
                     }
 
                     Label {
-                        text: "系统修复可能需要重启计算机，建议操作前创建系统还原点。"
+                        text: "系统修复可能需要重启计算机，建议操作前保存好正在编辑的文件。"
                         color: "#D70015"
                         font.pixelSize: 12
                         wrapMode: Text.WordWrap
@@ -55,7 +55,7 @@ Item {
             Layout.fillWidth: true
             Layout.maximumWidth: 620
             Layout.preferredHeight: 78
-            radius: 10
+            radius: 16
             color: "#FFFFFF"
             border.color: "#E5E5EA"
             border.width: 1
@@ -88,7 +88,7 @@ Item {
                     implicitWidth: 82
                     implicitHeight: 32
                     background: Rectangle {
-                        radius: 8
+                        radius: 11
                         color: fixBtn.down ? "#0066CC" : fixBtn.hovered ? "#2F7AF8" : "#0A84FF"
                     }
                     contentItem: Label {

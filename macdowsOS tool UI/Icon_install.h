@@ -22,14 +22,7 @@ C:\Windows\System32
 C:\Windows\SysWOW64
 */
 
-// 取得指定文件/目录的所有权并授予 Administrators 完全控制权限
-bool TakeOwnershipAndGrantFullControl(const std::wstring& filePath) {
-    std::wstring takeownCmd = L"takeown /f \"" + filePath + L"\"";
-    std::wstring icaclsCmd = L"icacls \"" + filePath + L"\" /grant Administrators:F";
-    int r1 = _wsystem(takeownCmd.c_str());
-    int r2 = _wsystem(icaclsCmd.c_str());
-    return (r1 == 0 && r2 == 0);
-}
+
 
 // 清理 Windows 图标缓存文件
 void ClearIconCache() {

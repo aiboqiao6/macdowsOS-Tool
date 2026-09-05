@@ -96,9 +96,6 @@
     <ClInclude Include="WindowsFix.h">
       <Filter>头文件\be</Filter>
     </ClInclude>
-    <ClInclude Include="FinalSetting.h">
-      <Filter>头文件\Tool\WinToMac Tool\install</Filter>
-    </ClInclude>
     <ClInclude Include="Icon_install.h">
       <Filter>头文件\Tool\WinToMac Tool\install</Filter>
     </ClInclude>
@@ -137,6 +134,15 @@
     </ClInclude>
     <ClInclude Include="LogSystem.h">
       <Filter>头文件\be</Filter>
+    </ClInclude>
+    <ClInclude Include="DeleteOldNewExplorer.h">
+      <Filter>头文件\Tool\WinToMac Tool\unnist</Filter>
+    </ClInclude>
+    <ClInclude Include="DeleteStartAllBack.h">
+      <Filter>头文件\Tool\WinToMac Tool\unnist</Filter>
+    </ClInclude>
+    <ClInclude Include="FinalSetting.h">
+      <Filter>头文件\Tool\WinToMac Tool</Filter>
     </ClInclude>
   </ItemGroup>
   <!-- 字体 -->

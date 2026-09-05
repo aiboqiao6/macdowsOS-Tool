@@ -7,7 +7,7 @@
 [![Platform](https://img.shields.io/badge/platform-Windows%2010%2F11-blue?style=flat-square&logo=windows)](https://github.com/aiboqiao6/macdowsOS-Tool)
 [![Language](https://img.shields.io/badge/language-C%2B%2B20-purple?style=flat-square&logo=c%2B%2B)](https://github.com/aiboqiao6/macdowsOS-Tool)
 [![Framework](https://img.shields.io/badge/framework-Qt%206.11%20Quick-41CD52?style=flat-square&logo=qt)](https://github.com/aiboqiao6/macdowsOS-Tool)
-[![Version](https://img.shields.io/badge/version-1.30%20RC-orange?style=flat-square)](https://github.com/aiboqiao6/macdowsOS-Tool/releases)
+[![Version](https://img.shields.io/badge/version-1.35 RC%20RC-orange?style=flat-square)](https://github.com/aiboqiao6/macdowsOS-Tool/releases)
 
 </div>
 
