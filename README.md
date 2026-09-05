@@ -9,7 +9,7 @@
 [![Platform](https://img.shields.io/badge/Platform-Windows%2010%20%7C%2011-0078D4?style=flat-square&logo=windows)](https://github.com/aiboqiao6/macdowsOS-Tool)
 [![Language](https://img.shields.io/badge/Language-C%2B%2B20-00599C?style=flat-square&logo=cplusplus)](https://github.com/aiboqiao6/macdowsOS-Tool)
 [![Framework](https://img.shields.io/badge/Framework-Qt%206%20Quick-41CD52?style=flat-square&logo=qt)](https://github.com/aiboqiao6/macdowsOS-Tool)
-[![Release](https://img.shields.io/badge/Release-1.35 RC-F5A623?style=flat-square)](https://github.com/aiboqiao6/macdowsOS-Tool/releases)
+[![Release](https://img.shields.io/badge/Release-1.35RC-F5A623?style=flat-square)](https://github.com/aiboqiao6/macdowsOS-Tool/releases)
 
 [下载发布版](https://github.com/aiboqiao6/macdowsOS-Tool/releases) · [中文文档](README-Chinese.md) · [English Guide](README-English.md) · [问题反馈](https://github.com/aiboqiao6/macdowsOS-Tool/issues)
 
