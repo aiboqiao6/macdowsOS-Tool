@@ -6,6 +6,7 @@
 #include <shellapi.h> 
 #include <objbase.h>
 #include"LogSystem.h"
+#include"All.h"
 #include"FilesSystem.h"
 
 namespace {
@@ -15,9 +16,9 @@ namespace {
 // 程序已获得管理员权限，无需提权
 void EnableThemeService_win10() {
     INFO_(L"[主题安装工具]设置主题服务为自动启动");
-    system("sc config Themes start= auto");
+    RunHiddenCommand(L"sc config Themes start= auto");
     INFO_(L"[主题安装工具]尝试启动主题服务（如已运行则自动跳过）");
-    system("sc start Themes");
+    RunHiddenCommand(L"sc start Themes");
     INFO_(L"[主题安装工具]主题服务启用完成");
 }
 // 将主题设置为开机后自动应用
@@ -114,11 +115,11 @@ void theme_install_win10() {
     LPCWSTR themeFile = L"C:\\Windows\\Resources\\Themes\\Big Sur Day.theme";
     if (GetFileAttributesW(themeFile) == INVALID_FILE_ATTRIBUTES) {
         ERROR_(L"[主题安装工具]主题文件不存在，文件复制可能失败");
-        MessageBox(NULL, (LPCTSTR)L"无法安装主题：主题文件复制失败，请以管理员权限运行本程序后重试", (LPCTSTR)L" macdowsOS tool 主题安装工具", MB_OK | MB_ICONERROR);
+        MessageBox(NULL, (LPCTSTR)L"无法安装主题：主题文件复制失败，请以管理员权限运行本程序后重试", (LPCTSTR)L" macdowsOS tool 主题安装工具", MB_OK | MB_ICONERROR | MB_TOPMOST);
         HINSTANCE result1 = ShellExecuteW(NULL, L"open", L"ms-settings:themes", NULL, NULL, SW_SHOWNORMAL);
         if ((INT_PTR)result1 <= 32) {
             ERROR_(L"[主题安装工具]无法打开系统设置");
-            MessageBox(NULL, (LPCTSTR)L"请尝试手动打开系统设置 → 个性化 → 主题", (LPCTSTR)L" macdowsOS tool 主题安装工具", MB_OK);
+            MessageBox(NULL, (LPCTSTR)L"请尝试手动打开系统设置 → 个性化 → 主题", (LPCTSTR)L" macdowsOS tool 主题安装工具", MB_OK | MB_TOPMOST);
         }
         if (comInit == S_OK) CoUninitialize();
         return;
@@ -128,16 +129,16 @@ void theme_install_win10() {
     if ((INT_PTR)result <= 32) {
         DWORD err = GetLastError();
         MESSAGE_(L"[主题安装工具]无法应用主题 错误码:", err);
-        MessageBox(NULL, (LPCTSTR)L"无法应用主题 请检查应用是否被安全软件拦截或重启当前系统后再试", (LPCTSTR)L" macdowsOS tool 主题安装工具", MB_OK | MB_ICONERROR);
+        MessageBox(NULL, (LPCTSTR)L"无法应用主题 请检查应用是否被安全软件拦截或重启当前系统后再试", (LPCTSTR)L" macdowsOS tool 主题安装工具", MB_OK | MB_ICONERROR | MB_TOPMOST);
         HINSTANCE result1 = ShellExecuteW(NULL, L"open", L"ms-settings:themes", NULL, NULL, SW_SHOWNORMAL);
         if ((INT_PTR)result1 <= 32) {
             ERROR_(L"[主题安装工具]无法打开系统设置");
-            MessageBox(NULL, (LPCTSTR)L"请尝试手动打开系统设置 → 个性化 → 主题", (LPCTSTR)L" macdowsOS tool 主题安装工具", MB_OK);
+            MessageBox(NULL, (LPCTSTR)L"请尝试手动打开系统设置 → 个性化 → 主题", (LPCTSTR)L" macdowsOS tool 主题安装工具", MB_OK | MB_TOPMOST);
         }
         else {
             Sleep(500);
             INFO_(L"[主题安装工具]已打开系统设置");
-            MessageBox(NULL, (LPCTSTR)L"请尝试搜索主题并手动应用主题", (LPCTSTR)L" macdowsOS tool 主题安装工具", MB_OK);
+            MessageBox(NULL, (LPCTSTR)L"请尝试搜索主题并手动应用主题", (LPCTSTR)L" macdowsOS tool 主题安装工具", MB_OK | MB_TOPMOST);
         }
     }
     if (comInit == S_OK) CoUninitialize();

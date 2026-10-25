@@ -30,11 +30,11 @@ void Icon_Back() {
     //检测文件在不在
     if (!fs::exists(backup1) || !fs::exists(backup2)) {
         ERROR_(L"[图标还原组件]图标备份文件缺失 图标还原退出");
-        MessageBox(NULL, (LPCTSTR)L"无法还原图标，图标备份文件缺失或损坏", (LPCTSTR)L" macdowsOS tool 图标还原组件", MB_OK | MB_ICONERROR);
+        MessageBox(NULL, (LPCTSTR)L"无法还原图标，图标备份文件缺失或损坏", (LPCTSTR)L" macdowsOS tool 图标还原组件", MB_OK | MB_ICONERROR | MB_TOPMOST);
         return;
     }
     INFO_(L"[图标还原组件]结束文件资源管理器");
-    system("taskkill /f /im explorer.exe");
+    RunHiddenCommand(L"taskkill /f /im explorer.exe");
     
     INFO_(L"[图标还原组件]获得文件所有权");
     //获取所有权
@@ -63,7 +63,7 @@ void Icon_Back() {
     //
     INFO_(L"[图标还原组件]清缓存");
     ClearIconCache();
-    system("start explorer");
+    RunHiddenCommand(L"start explorer");
     return;
 }
 

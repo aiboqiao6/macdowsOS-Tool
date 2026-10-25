@@ -21,6 +21,54 @@ Window {
     readonly property int sidebarWidth: 232
     readonly property int titleBarHeight: 52
 
+    // 仿 macOS 更新全屏遮挡窗口（自动化安装/卸载期间覆盖安装器弹窗）
+    UpdateOverlayWindow {
+        id: overlayWindow
+    }
+
+    Connections {
+        target: Backend
+        // 单组件操作（OverlayGuard）触发的显示/隐藏；
+        // 全流程安装期间以内层子操作不重置进度、不中途隐藏
+        function onOverlayRequested(show) {
+            if (show) {
+                if (!overlayWindow.visible)
+                    overlayWindow.begin(1)
+            } else if (!Backend.installationRunning && !Backend.restartPending) {
+                // 重启待定时永不隐藏：保持"正在准备重新启动…"直至 Windows 接管
+                overlayWindow.visible = false
+            }
+        }
+        // 完整安装流程：由 installation* 信号驱动
+        function onInstallationStarted(totalSteps) {
+            overlayWindow.begin(totalSteps)
+        }
+        function onInstallationStepChanged(stepName) {
+            // 步骤名仅写入日志，界面保持 Apple 原生样式（不显示步骤文字）
+        }
+        function onInstallationProgressChanged(completedSteps, totalSteps) {
+            overlayWindow.updateProgress("", completedSteps, totalSteps)
+        }
+        function onInstallationFinished(success, errorMessage) {
+            if (success) {
+                // 最后一步即将重启系统，遮挡层保持显示直至关机
+                overlayWindow.finish(true)
+            } else {
+                overlayWindow.finish(false)
+            }
+        }
+        // 重启待定（安装/卸载流程任一路径）：统一切换到"正在准备重新启动…"终态，
+        // 遮挡层此后永不隐藏，直至 Windows 接管重启
+        function onRestartPendingChanged() {
+            if (Backend.restartPending && overlayWindow.visible
+                    && !overlayWindow.restarting) {
+                overlayWindow.restarting = true
+                overlayWindow.displayRatio = 1
+                overlayWindow.timeLabel.text = "正在准备重新启动…"
+            }
+        }
+    }
+
     function openThemeWizard(version) {
         if (wizardWindow !== null && wizardWindow !== undefined) {
             wizardWindow.selectedVersion = version

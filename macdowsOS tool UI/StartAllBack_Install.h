@@ -28,7 +28,7 @@ bool StartAllBack_Config(int mode) {
             HINSTANCE r = ShellExecuteW(NULL, L"open", exePath1, NULL, NULL, SW_SHOWNORMAL);
             if ((INT_PTR)r <= 32) {
                 ERROR_(L"[StartAllBack配置器]启动配置程序失败");
-                MessageBox(NULL, (LPCTSTR)L"无法启动 StartAllBack 配置程序，请检查是否被安全软件拦截", (LPCTSTR)L" StartAllBack配置器", MB_OK | MB_ICONERROR);
+                MessageBox(NULL, (LPCTSTR)L"无法启动 StartAllBack 配置程序，请检查是否被安全软件拦截", (LPCTSTR)L" StartAllBack配置器", MB_OK | MB_ICONERROR | MB_TOPMOST);
                 if (comInit == S_OK) CoUninitialize();
                 return false;
             }
@@ -46,20 +46,20 @@ bool StartAllBack_Config(int mode) {
         // 检查当前用户路径的配置程序是否存在
         if (GetFileAttributesW(path_temp) == INVALID_FILE_ATTRIBUTES) {
             ERROR_(L"[StartAllBack配置器]未找到任何安装路径的StartAllBackCfg.exe");
-            MessageBox(NULL, (LPCTSTR)L"未找到 StartAllBack 配置程序，请确认已安装 StartAllBack", (LPCTSTR)L" StartAllBack配置器", MB_OK | MB_ICONERROR);
+            MessageBox(NULL, (LPCTSTR)L"未找到 StartAllBack 配置程序，请确认已安装 StartAllBack", (LPCTSTR)L" StartAllBack配置器", MB_OK | MB_ICONERROR | MB_TOPMOST);
             if (comInit == S_OK) CoUninitialize();
             return false;
         }
         HINSTANCE r2 = ShellExecuteW(NULL, L"open", path_temp, NULL, NULL, SW_SHOWNORMAL);
         if ((INT_PTR)r2 <= 32) {
             ERROR_(L"[StartAllBack配置器]启动配置程序失败");
-            MessageBox(NULL, (LPCTSTR)L"无法启动 StartAllBack 配置程序，请检查是否被安全软件拦截", (LPCTSTR)L" StartAllBack配置器", MB_OK | MB_ICONERROR);
+            MessageBox(NULL, (LPCTSTR)L"无法启动 StartAllBack 配置程序，请检查是否被安全软件拦截", (LPCTSTR)L" StartAllBack配置器", MB_OK | MB_ICONERROR | MB_TOPMOST);
             if (comInit == S_OK) CoUninitialize();
             return false;
         }
     }
     else {
-        MessageBox(NULL, (LPCTSTR)L"检测安装模式时出现错误，请将安装日志发送给开发者处理 StartAllBack配置程序退出", (LPCTSTR)L" StartAllBack配置器", MB_OK | MB_ICONERROR);
+        MessageBox(NULL, (LPCTSTR)L"检测安装模式时出现错误，请将安装日志发送给开发者处理 StartAllBack配置程序退出", (LPCTSTR)L" StartAllBack配置器", MB_OK | MB_ICONERROR | MB_TOPMOST);
         return false;
     }
     INFO_(L"[StartAllBack配置器]查找窗口");
@@ -82,15 +82,15 @@ bool StartAllBack_Config(int mode) {
     TurnOffOn(true, hWnd_Window, L"StartAllBack配置器", L"恢复控制面板小程序");
     TurnOffOn(true, hWnd_Window, L"StartAllBack配置器", L"选中背景显示强调色");
     INFO_(L"[StartAllBack配置器]配置完成 重启文件资源管理器");
-    system("taskkill /f /im explorer.exe");
-    system("start explorer");
+    RunHiddenCommand(L"taskkill /f /im explorer.exe");
+    RunHiddenCommand(L"start explorer");
     if (comInit == S_OK) CoUninitialize();
     return true;
 }
 bool StartAllBack_Install(int mode) {
 	INFO_(L"[StartAllBack安装器]开始");
 	INFO_(L"[StartAllBack安装器]开始安装程序");
-	system("start AppData\\StartAllBack\\Install.exe");
+	RunHiddenCommand(L"start AppData\\StartAllBack\\Install.exe");
 
     //等待应用程序
     INFO_(L"[StartAllBack安装器]等待应用程序");
@@ -111,7 +111,7 @@ bool StartAllBack_Install(int mode) {
         ClickButtonMode1(hWnd_Window, L"StartAllBack安装器", L"为当前用户安装");
     }
     else {
-        MessageBox(NULL, (LPCTSTR)L"检测安装模式时出现错误，请将安装日志发送给开发者处理 StartAllBack安装器退出", (LPCTSTR)L" StartAllBack安装器", MB_OK | MB_ICONERROR);
+        MessageBox(NULL, (LPCTSTR)L"检测安装模式时出现错误，请将安装日志发送给开发者处理 StartAllBack安装器退出", (LPCTSTR)L" StartAllBack安装器", MB_OK | MB_ICONERROR | MB_TOPMOST);
         return false;
     }
     
@@ -132,7 +132,7 @@ bool StartAllBack_Install(int mode) {
         GetLocalTime(&now_temp);
         if (now_temp.wSecond - now.wSecond >= 20) {
             ERROR_(L"[StartAllBack安装器]无法找到窗口");
-            MessageBox(NULL, (LPCTSTR)L" 无法查找到窗口 请检查组件完整性或将log.txt发送给开发者获取帮助", (LPCTSTR)L" StartAllBack安装器", MB_OK);
+            MessageBox(NULL, (LPCTSTR)L" 无法查找到窗口 请检查组件完整性或将log.txt发送给开发者获取帮助", (LPCTSTR)L" StartAllBack安装器", MB_OK | MB_TOPMOST);
         }
         //
         hWnd_Window = FindWindowW(NULL, L"安装 StartAllBack");
@@ -144,7 +144,7 @@ bool StartAllBack_Install(int mode) {
                 ERROR_(L"[StartAllBack安装器]StartAllBack不兼容当前系统");
                 SetForegroundWindow(hWnd_ERROR);
                 enter_key();
-                MessageBox(NULL, (LPCTSTR)L"StartAllBack不兼容当前系统 安装程序退出", (LPCTSTR)L" StartAllBack安装器", MB_OK | MB_ICONERROR);
+                MessageBox(NULL, (LPCTSTR)L"StartAllBack不兼容当前系统 安装程序退出", (LPCTSTR)L" StartAllBack安装器", MB_OK | MB_ICONERROR | MB_TOPMOST);
                 return false;
             }
         }

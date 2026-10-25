@@ -1,7 +1,8 @@
-﻿#include <filesystem>
+#include <filesystem>
 #include <cstdlib>
 #include <string>
 #include "LogSystem.h"
+#include "All.h"
 #include "WindowControl.h"
 
 namespace {
@@ -29,7 +30,7 @@ namespace {
         // 路径加双引号，防止空格导致路径截断
         std::wstring command =  L"\"" + path + L"\" /uninstall";
 
-        int result = _wsystem(command.c_str());
+        int result = RunHiddenCommand(command);
 
         if (result == 0) {
             INFO_(L"[StartAllBack卸载器]卸载程序启动成功");

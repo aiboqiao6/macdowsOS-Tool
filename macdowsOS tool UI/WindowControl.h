@@ -6,6 +6,10 @@
 #include"LogSystem.h"
 
 namespace {
+//遮挡层激活标志：全屏遮挡窗口显示期间为 true，
+//此时 RealisticClick 自动回退为消息级点击，避免鼠标点击被遮挡窗口拦截
+inline bool g_overlayActive = false;
+
 //回车
 void enter_key() {
     INFO_(L"[窗口控制工具]发送回车按键");
@@ -81,6 +85,13 @@ HWND FindChildControlExact(HWND hParent, const wchar_t* targetTitle) {
 void RealisticClick(HWND hwnd) {
     if (!hwnd) return;
 
+    //遮挡层激活时回退为消息级点击（对按钮功能等价，且不会被遮挡窗口拦截）
+    if (g_overlayActive) {
+        INFO_(L"[窗口控制工具]遮挡层激活 回退为消息级点击");
+        SendMessageW(hwnd, BM_CLICK, 0, 0);
+        return;
+    }
+
     // 置顶窗口
     SetForegroundWindow(GetAncestor(hwnd, GA_ROOT));
     // 获取控件位置和大小
@@ -146,7 +157,7 @@ HWND findwindow(HWND hwnd_window, std::wstring pack_name, std::wstring button_na
             GetLocalTime(&now_temp);
             if (now_temp.wSecond - now.wSecond >= 20) {
                 ERROR_(L"[" + pack_name + L"]" + L"超时未找到" + button_name);
-                MessageBox(NULL, (LPCTSTR)L" 未找到按钮，窗口可能没有出现，请重试", (LPCTSTR)L" macdowsOS tool 窗口控制工具", MB_OK);
+                MessageBox(NULL, (LPCTSTR)L" 未找到按钮，窗口可能没有出现，请重试", (LPCTSTR)L" macdowsOS tool 窗口控制工具", MB_OK | MB_TOPMOST | MB_SYSTEMMODAL);
             }
             temp = FindChildControlExact(hwnd_window, button_);
         }
@@ -166,7 +177,7 @@ HWND FindWindow_(std::wstring title, std::wstring pack_name) {
         GetLocalTime(&now_temp);
         if (now_temp.wSecond - now.wSecond >= 20) {
             ERROR_(L"[" + pack_name + L"]" + L"超时未找到" + title);
-            MessageBox(NULL, (LPCTSTR)L" 无法查找到窗口 请检查组件完整性或将log.txt发送给开发者获取帮助", (LPCTSTR)L" macdowsOS tool 窗口控制工具", MB_OK);
+            MessageBox(NULL, (LPCTSTR)L" 无法查找到窗口 请检查组件完整性或将log.txt发送给开发者获取帮助", (LPCTSTR)L" macdowsOS tool 窗口控制工具", MB_OK | MB_TOPMOST | MB_SYSTEMMODAL);
         }
         hWnd_Window = FindWindowW(NULL, temp);
     }

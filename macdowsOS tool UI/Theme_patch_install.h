@@ -1,6 +1,7 @@
 #pragma once
 #include <cstdlib>
 #include<windows.h>
+#include"All.h"
 #include"WindowControl.h"
 #include"LogSystem.h"
 
@@ -10,7 +11,7 @@ void theme_path_install() {
     HWND temp,temp1;
     //安装
     INFO_(L"[主题补丁安装工具]开始安装程序");
-    system("start AppData\\Theme\\Theme_Patcher.exe");
+    RunHiddenCommand(L"start AppData\\Theme\\Theme_Patcher.exe");
     //等待应用程序&&查找-安装
     INFO_(L"[主题补丁安装工具]等待应用程序");
     HWND hWnd_Window = FindWindow_(L"UltraUXThemePatcher 4.6.1 from https://mhoefs.eu", L"主题补丁安装工具");

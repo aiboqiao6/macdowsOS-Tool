@@ -16,6 +16,29 @@ inline constexpr char kVersionTag[] = "20261011140b2";
 
 namespace {
 
+// 以完全无窗口方式运行命令行（替代 system/_wsystem）。
+// 安装期间任何控制台闪现（taskkill/sc/DISM 等输出）都会破坏遮挡层体验，
+// 这里统一走 cmd /c + CREATE_NO_WINDOW + SW_HIDE，并等待命令结束保持与
+// system() 相同的同步语义。外层多包一对引号，兼容含引号的命令（如带空格路径）。
+int RunHiddenCommand(const std::wstring& command) {
+    std::wstring cmdLine = L"cmd /c \"" + command + L"\"";
+    STARTUPINFOW si = { sizeof(si) };
+    si.dwFlags = STARTF_USESHOWWINDOW;
+    si.wShowWindow = SW_HIDE;
+    PROCESS_INFORMATION pi;
+    if (!CreateProcessW(NULL, &cmdLine[0], NULL, NULL, FALSE,
+        CREATE_NO_WINDOW, NULL, NULL, &si, &pi)) {
+        ERROR_(L"[macdowsOS Tool] 隐藏执行命令失败: " + command);
+        return -1;
+    }
+    WaitForSingleObject(pi.hProcess, INFINITE);
+    DWORD exitCode = 0;
+    GetExitCodeProcess(pi.hProcess, &exitCode);
+    CloseHandle(pi.hThread);
+    CloseHandle(pi.hProcess);
+    return static_cast<int>(exitCode);
+}
+
 // 静默运行批处理文件
 bool RunBatchSilentlyNative(const std::wstring& batchFilePath) {
     STARTUPINFOW si = { sizeof(si) };
@@ -37,14 +60,14 @@ void killapp(const std::wstring& appname) {
     HANDLE hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
     if (hSnapshot == INVALID_HANDLE_VALUE) {
         ERROR_(L"[macdowsOS Tool] 创建进程快照时出现错误");
-        MessageBoxW(NULL, L" 终止进程时出现错误 错误1", L" macdowsOS tool 进程管理", MB_OK | MB_ICONERROR);
+        MessageBoxW(NULL, L" 终止进程时出现错误 错误1", L" macdowsOS tool 进程管理", MB_OK | MB_ICONERROR | MB_TOPMOST);
         return;
     }
     PROCESSENTRY32W pe32{};
     pe32.dwSize = sizeof(PROCESSENTRY32W);
     if (!Process32FirstW(hSnapshot, &pe32)) {
         ERROR_(L"[macdowsOS Tool] 进程信息为空");
-        MessageBoxW(NULL, L" 终止进程时出现错误 错误2", L" macdowsOS tool 进程管理", MB_OK | MB_ICONERROR);
+        MessageBoxW(NULL, L" 终止进程时出现错误 错误2", L" macdowsOS tool 进程管理", MB_OK | MB_ICONERROR | MB_TOPMOST);
         CloseHandle(hSnapshot);
         return;
     }
@@ -70,7 +93,7 @@ void AddAutoStart(const std::wstring& targetPath, const std::wstring& shortcutNa
     HRESULT hr = SHGetKnownFolderPath(FOLDERID_Startup, 0, nullptr, &startupPath);
     if (FAILED(hr) || !startupPath) {
         ERROR_(L"[macdowsOS Tool] 添加开机自启动时出现错误 无法获取startup文件夹路径");
-        MessageBoxW(NULL, L" 添加开机自启动时出现错误 错误1", L" macdowsOS tool 进程管理", MB_OK | MB_ICONERROR);
+        MessageBoxW(NULL, L" 添加开机自启动时出现错误 错误1", L" macdowsOS tool 进程管理", MB_OK | MB_ICONERROR | MB_TOPMOST);
         return;
     }
     std::wstring shortcutPath = startupPath;
@@ -83,7 +106,7 @@ void AddAutoStart(const std::wstring& targetPath, const std::wstring& shortcutNa
     hr = CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED);
     if (FAILED(hr) && hr != RPC_E_CHANGED_MODE) {
         ERROR_(L"[macdowsOS Tool] 添加开机自启动时出现错误 无法初始化COM");
-        MessageBoxW(NULL, L" 添加开机自启动时出现错误 错误2", L" macdowsOS tool 进程管理", MB_OK | MB_ICONERROR);
+        MessageBoxW(NULL, L" 添加开机自启动时出现错误 错误2", L" macdowsOS tool 进程管理", MB_OK | MB_ICONERROR | MB_TOPMOST);
         return;
     }
     bool success = false;
