@@ -1,4 +1,4 @@
-[English Guide](README-English.md) | [简体中文使用文档](README-Chinese.md)
+本项目隶属于 [macdowsOS](https://github.com/aiboqiao6/macdowsOS)
 
 <div align="center">
 
