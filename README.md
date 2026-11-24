@@ -63,3 +63,13 @@ macdowsOS Tool UI主要基于自动操作技术实现的全自动Windows仿macOS
 ## 第三方资源与免责声明
 
 项目涉及的部分主题、图标和桌面组件来自第三方，其著作权与许可归原作者所有。用户应自行确认相关资源的授权范围并遵守对应许可协议。本项目仅用于技术研究、学习和合法授权的软件交互，不支持盗版或商业侵权用途。开发者不对第三方文件的合法性、兼容性以及因使用本程序造成的数据丢失、系统异常或版权纠纷承担责任。使用本程序即表示你理解并接受相关风险。如果本项目侵犯到了您的权益 请通过邮箱联系 有关内容将会在核实后删除
+
+## Star History
+
+<a href="https://www.star-history.com/?repos=aiboqiao6%2Fmacdowsos-tool&type=date&logscale=&legend=top-left">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=aiboqiao6/macdowsos-tool&type=date&theme=dark&legend=top-left" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=aiboqiao6/macdowsos-tool&type=date&legend=top-left" />
+   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=aiboqiao6/macdowsos-tool&type=date&legend=top-left" />
+ </picture>
+</a>
