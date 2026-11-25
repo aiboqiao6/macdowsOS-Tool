@@ -5,6 +5,7 @@
         <file>qml/NavigationSidebar.qml</file>
         <file>qml/HomePage.qml</file>
         <file>qml/ThemeWizardWindow.qml</file>
+        <file>qml/UpdateOverlayWindow.qml</file>
         <file>qml/CeleCraftPage.qml</file>
         <file>qml/SettingsPage.qml</file>
         <file>qml/WindowsFixPage.qml</file>
@@ -14,6 +15,7 @@
         <file>res/WindowsFix.png</file>
         <file>res/box.png</file>
         <file>res/Setting.png</file>
+        <file>res/apple.svg</file>
         <file>res/install/icon1.jpg</file>
         <file>res/install/Icon2.png</file>
         <file>pingfang0.ttf</file>

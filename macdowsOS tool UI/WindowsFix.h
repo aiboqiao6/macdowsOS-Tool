@@ -11,7 +11,7 @@
 namespace {
 void WindowsFix() {
 	INFO_(L"[系统修复工具]进入");
-	if (MessageBox(NULL, (LPCTSTR)L"执行修复后将会导致已安装的部分美化软件失效 ", (LPCTSTR)L" macdowsOS tool 系统修复工具", MB_YESNO)==6) {
+	if (MessageBox(NULL, (LPCTSTR)L"执行修复后将会导致已安装的部分美化软件失效 ", (LPCTSTR)L" macdowsOS tool 系统修复工具", MB_YESNO | MB_TOPMOST)==6) {
 		INFO_(L"[系统修复工具]系统修复");
 		system("Dism.exe /Online /Cleanup-image /CheckHealth");
 		system("DISM.exe /Online /Cleanup-image /Scanhealth");

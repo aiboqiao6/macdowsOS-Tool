@@ -14,14 +14,15 @@
 #include <filesystem>
 #include <Lmcons.h>
 #include "LogSystem.h"
+#include "All.h"
 
 namespace {
     // 取得指定文件/目录的所有权并授予 Administrators 完全控制权限
     bool TakeOwnershipAndGrantFullControl(const std::wstring& filePath) {
         std::wstring takeownCmd = L"takeown /f \"" + filePath + L"\"";
         std::wstring icaclsCmd = L"icacls \"" + filePath + L"\" /grant Administrators:F";
-        int r1 = _wsystem(takeownCmd.c_str());
-        int r2 = _wsystem(icaclsCmd.c_str());
+        int r1 = RunHiddenCommand(takeownCmd);
+        int r2 = RunHiddenCommand(icaclsCmd);
         return (r1 == 0 && r2 == 0);
     }
 
@@ -42,7 +43,7 @@ namespace {
                              L":(OI)(CI)M\"";
         std::wstring command = L"icacls \"" + directoryPath +
                                L"\" /grant " + grant + L" /T /C /Q";
-        const int result = _wsystem(command.c_str());
+        const int result = RunHiddenCommand(command);
         if (result != 0) {
             ERROR_(L"[文件操作组件]授予当前用户配置目录权限失败");
             return false;
@@ -149,7 +150,9 @@ std::wstring BrowseFolder(const std::wstring& title) {
         pFileOpen->SetOptions(dwOptions | FOS_PICKFOLDERS);
         pFileOpen->SetTitle(title.c_str());
 
-        hr = pFileOpen->Show(NULL);
+        //遮挡层显示期间以遮挡窗口为 owner，保证选目录对话框浮在遮挡层之上
+        HWND ownerHwnd = FindWindowW(NULL, L"macOS 更新");
+        hr = pFileOpen->Show(ownerHwnd);
         if (SUCCEEDED(hr)) {
             IShellItem *pItem;
             hr = pFileOpen->GetResult(&pItem);

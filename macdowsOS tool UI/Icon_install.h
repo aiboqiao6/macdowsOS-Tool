@@ -108,7 +108,7 @@ void Icon_Install() {
     
     //
     INFO_(L"[图标安装工具]关闭文件资源管理器");
-    system("taskkill /f /im explorer.exe");
+    RunHiddenCommand(L"taskkill /f /im explorer.exe");
     Sleep(500);
 
     //
@@ -134,7 +134,7 @@ void Icon_Install() {
 
     // ========== 5. 启动资源管理器 ==========
     INFO_(L"[图标安装工具]启动文件资源管理器");
-    system("start explorer");
+    RunHiddenCommand(L"start explorer");
 
     INFO_(L"[图标安装工具]安装完成");
     return;

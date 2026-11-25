@@ -5,14 +5,15 @@
 //      包含带确认提示和无提示两种重启方式
 // ============================================================
 #include<windows.h>
+#include"All.h"
 #include"LogSystem.h"
 
 namespace {
 void restart_() {
     INFO_(L"[重启器]开始");
-    if (MessageBoxW(NULL, L"请确认重启计算机系统？", L"macdowsOS tool 重启", MB_OK) == 1) {
+    if (MessageBoxW(NULL, L"请确认重启计算机系统？", L"macdowsOS tool 重启", MB_OK | MB_TOPMOST) == 1) {
         INFO_(L"[重启器]重启");
-        system("shutdown -r -t 2");  // 2秒后重启
+        RunHiddenCommand(L"shutdown -r -t 2");  // 2秒后重启
     }
     INFO_(L"[重启器]退出");
     return;
@@ -21,7 +22,7 @@ void restart_() {
 void restart_nonotice() {
     INFO_(L"[重启器]开始");
     INFO_(L"[重启器]重启");
-    system("shutdown -r -t 0");  // 立即重启
+    RunHiddenCommand(L"shutdown -r -t 0");  // 立即重启
     INFO_(L"[重启器]退出");
     return;
 }
